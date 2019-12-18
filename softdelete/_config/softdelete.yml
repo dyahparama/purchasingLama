@@ -1,0 +1,11 @@
+---
+Name: softdelete
+---
+SilverStripe\Admin\ModelAdmin:
+  softdelete_from_list: true
+  extensions:
+    - SoftDeleteModelAdmin
+SilverStripe\Admin\SecurityAdmin:
+  softdelete_from_list: true
+  extensions:
+    - SoftDeleteSecurityAdmin

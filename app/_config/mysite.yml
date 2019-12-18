@@ -1,0 +1,63 @@
+---
+Name: myproject
+---
+SilverStripe\Core\Manifest\ModuleManifest:
+  project: app
+SilverStripe\Admin\LeftAndMain:
+  extensions:
+    - Extensions\LeftAndMainExtension
+  extra_requirements_javascript:
+    - app/js/Admin.js
+
+SilverStripe\Forms\DateField:
+  default_datepicker_format: dd MM yyyy
+  default_datepicker_polyfill: all
+
+SilverStripe\SiteConfig\SiteConfig:
+  extensions:
+    - Extensions\SettingExtension
+
+Departemen:
+  softdelete_from_list: true
+  extensions:
+    - SoftDeletable
+
+HakAkses:
+  softdelete_from_list: true
+  extensions:
+    - SoftDeletable
+
+Jabatan:
+  softdelete_from_list: true
+  extensions:
+    - SoftDeletable
+
+Pegawai:
+  softdelete_from_list: true
+  extensions:
+    - SoftDeletable
+
+User:
+  softdelete_from_list: true
+  extensions:
+    - SoftDeletable
+
+JenisBarang:
+  softdelete_from_list: true
+  extensions:
+    - SoftDeletable
+
+StrukturCabang:
+  softdelete_from_list: true
+  extensions:
+    - SoftDeletable
+
+Supplier:
+  softdelete_from_list: true
+  extensions:
+    - SoftDeletable
+
+Satuan:
+  softdelete_from_list: true
+  extensions:
+    - SoftDeletable

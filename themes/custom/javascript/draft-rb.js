@@ -1,0 +1,225 @@
+$("#penawaran").dropzone({
+    autoProcessQueue: false,
+    parallelUploads: 10,
+    addRemoveLinks: true
+    // renameFile:function(fileName){
+    //   return new Date().getTime();
+    // }
+});
+$(document).ready(function() {
+    let dateNow = $("#tgl-draft").data("now");
+    $("#tgl-draft").datepicker({ format: "dd/mm/yy" });
+    $("#tgl-draft").datepicker("setDate", dateNow);
+
+    $(".jabatan-cabang").change(function(e) {
+        let id = $(this).val();
+        $.ajax({
+            url: "draf-rb/GetKepalaCabang",
+            type: "post", //form method
+            data: {
+                id: id
+            },
+            dataType: "json",
+            beforeSend: function() {},
+            success: function(result) {
+                $("#kepala-cabang").val(result);
+            },
+            complete: function(result) {},
+            error: function(xhr, Status, err) {}
+        });
+    });
+
+    $("#add-detail").click(function(e) {
+        $(".select2-container").addClass("z-index-1");
+        $(".select2-modal")
+            .next()
+            .removeClass("z-index-1");
+        $(".select2-modal")
+            .next()
+            .css("width", "100%");
+        $.ajax({
+            url: "draf-rb/saveMasterDRB",
+            type: "post", //form method
+            data: $("#form-drb").serialize(),
+            dataType: "json",
+            beforeSend: function() {},
+            success: function(result) {},
+            complete: function(result) {},
+            error: function(xhr, Status, err) {}
+        });
+    });
+    $(".close-modal").click(function(e) {
+        setTimeout(() => {
+            $(".select2-container").removeClass("z-index-1");
+        }, 500);
+    });
+
+    $("#save-detail").click(function(e) {
+        let data = {
+            "jenis-brg": $("#jenis-brg").val(),
+            "deskripsi-kebutuhan": $("#deskripsi-kebutuhan").val(),
+            jumlah: $("#jumlah").val(),
+            satuan: $("#satuan").val(),
+            "supplier-lokal": $("#supplier-lokal").val(),
+            spesifikasi: $("#spesifikasi").val(),
+            "kode-inventaris": $("#kode-inventaris").val(),
+            nomor: $("#nomor").val()
+        };
+        let newId;
+        $.ajax({
+            url: "draf-rb/saveDetailDRB",
+            type: "post", //form method
+            data: data,
+            dataType: "json",
+            beforeSend: function() {},
+            success: function(result) {
+                newId = result;
+            },
+            complete: function(result) {
+                Dropzone.forElement("#penawaran").on("sending", function(
+                    file,
+                    xhr,
+                    formData
+                ) {
+                    formData.append("id", newId);
+                });
+                Dropzone.forElement("#penawaran").processQueue();
+
+                Dropzone.forElement("#penawaran").on("queuecomplete", function(
+                    file
+                ) {});
+                location.reload();
+            },
+            error: function(xhr, Status, err) {}
+        });
+    });
+    $("#forwardTo").click(function(e) {
+        let data = {
+            kode: $("#nomor").val()
+        };
+        $.ajax({
+            url: "/draf-rb/forwardTo",
+            type: "post", //form method
+            data: data,
+            dataType: "json",
+            beforeSend: function() {},
+            success: function(result) {
+                location.reload();
+            },
+            complete: function(result) {
+                location.reload();
+            },
+            error: function(xhr, Status, err) {}
+        });
+    });
+    $(".delete-detail").click(function(e) {
+        let id = $(this).data("id");
+        $.ajax({
+            url: "draf-rb/deleteDetail",
+            type: "post", //form method
+            data: {id},
+            dataType: "json",
+            beforeSend: function() {},
+            success: function(result) {
+              location.reload();
+            },
+            complete: function(result) {
+                location.reload();
+            },
+            error: function(xhr, Status, err) {}
+        });
+    });
+
+    $(".modal-select2-show").click(function(e) {
+        $(".select2-container").addClass("z-index-1");
+        $(".select2-modal")
+            .next()
+            .removeClass("z-index-1");
+        $(".select2-modal")
+            .next()
+            .css("width", "100%");
+    });
+
+    $(".update-detail").click(function (e) {
+        let id= $(this).data("id");
+        let data = {
+            "jenis-brg": $("#jenis-brg-"+id).val(),
+            "deskripsi-kebutuhan": $("#deskripsi-kebutuhan-"+id).val(),
+            jumlah: $("#jumlah-"+id).val(),
+            satuan: $("#satuan-"+id).val(),
+            "supplier-lokal": $("#supplier-lokal-"+id).val(),
+            spesifikasi: $("#spesifikasi-"+id).val(),
+            "kode-inventaris": $("#kode-inventaris-"+id).val(),
+            id: id
+        };
+        $.ajax({
+            url: "/draf-rb/updateDetail",
+            type: "post", //form method
+            data: data,
+            dataType: "json",
+            beforeSend: function() {},
+            success: function(result) {
+              location.reload();
+            },
+            complete: function(result) {
+                location.reload();
+            },
+            error: function(xhr, Status, err) {}
+        });
+    });
+    $("#load-draft").click(function (e) {
+        if (!isNaN($("#draft-lama").val())) {
+            $.ajax({
+                url: "/draf-rb/loadDraft",
+                type: "post", //form method
+                data: {
+                    id:$("#draft-lama").val(),
+                },
+                dataType: "json",
+                beforeSend: function() {},
+                success: function(result) {
+                  location.reload();
+                },
+                complete: function(result) {
+                    location.reload();
+                },
+                error: function(xhr, Status, err) {}
+            });
+        }
+    });
+
+    $('input[type=radio][name=respond]').change(function() {
+        if (this.value == 'forward') {
+            $("#forward-to").show();
+        }else{
+            $("#forward-to").hide();
+        }
+    });
+
+    $("#approve-forwardTo").click(function (e) { 
+        let data={
+            note : $("#note-approver").val(),
+            respond :  $("input[name='respond']:checked").val(),
+            forward : $("#select-forward-to").val(),
+            from : $("#user-now").val(),
+            draft: $("#nomor").val()
+        }
+        //console.log(data);
+        $.ajax({
+            url: "/draf-rb/approve",
+            type: "post", //form method
+            data: data,
+            dataType: "json",
+            beforeSend: function() {},
+            success: function(result) {
+              //location.reload();
+            },
+            complete: function(result) {
+             //location.reload();
+            },
+            error: function(xhr, Status, err) {}
+        });
+    });    
+});
+
+cuk

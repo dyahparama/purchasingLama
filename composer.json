@@ -1,0 +1,46 @@
+{
+    "name": "silverstripe/installer",
+    "type": "silverstripe-recipe",
+    "description": "The SilverStripe Framework Installer",
+    "require": {
+        "php": ">=5.6.0",
+        "silverstripe/recipe-plugin": "^1.2",
+        "silverstripe/recipe-cms": "4.4.4@stable",
+        "silverstripe-themes/simple": "~3.2.0",
+        "lekoala/silverstripe-softdelete": "^2.0",
+        "unclecheese/display-logic": "dev-master",
+        "symbiote/silverstripe-gridfieldextensions": "^3.2",
+        "sendgrid/sendgrid": "^7.4",
+        "silverware/datepicker": "^1.0",
+        "sheadawson/silverstripe-dependentdropdownfield": "^2.0",
+        "sheadawson/silverstripe-zenvalidator": "dev-master"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^5.7"
+    },
+    "extra": {
+        "resources-dir": "_resources",
+        "project-files-installed": [
+            "app/.htaccess",
+            "app/_config.php",
+            "app/_config/mysite.yml",
+            "app/src/Page.php",
+            "app/src/PageController.php"
+        ],
+        "public-files-installed": [
+            ".htaccess",
+            "index.php",
+            "install-frameworkmissing.html",
+            "install.php",
+            "web.config"
+        ],
+        "expose": [
+            "themes/custom/css"
+          ]
+    },
+    "config": {
+        "process-timeout": 600
+    },
+    "prefer-stable": true,
+    "minimum-stability": "dev"
+}
