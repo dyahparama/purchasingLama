@@ -1,5 +1,28 @@
 var table;
+var uri_segment = window.location.pathname.split('/')[1];
 var column_name = $(document).find('#datatable1 > thead > tr');
+var cur_status = $(document).find('#cur_status').text();
+let id_pemohon = 0;
+
+function getData(jenis, status){
+	var data = function () {
+	    var tmp = null;
+	    $.ajax({
+	        'async': false,
+	        'type': "POST",
+	        'global': false,
+	        'dataType': 'json',
+	        'url': uri_segment+"/getData",
+	        'data': {'jenis': jenis, 'cur_status': status},
+	        'success': function (data) {
+	            tmp = data.msg;
+	        }
+	    });
+	    return tmp;
+	}();
+
+	return data;
+}
 
 $(document).ready(function(){
 	var substringMatcher = function(strs) {
@@ -24,26 +47,71 @@ $(document).ready(function(){
 	  };
 	};
 
-	var states = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California',
-	  'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii',
-	  'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana',
-	  'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota',
-	  'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire',
-	  'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota',
-	  'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island',
-	  'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont',
-	  'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'
-	];
+	// ---- list data ---
+	/**get kdrb**/
+	var kdrb = getData('kddrb');
 
+	/**get cabang**/
+	var cabang = getData('cbg');
+
+	/**get pemohon**/
+	var pemohon = getData('pemohon', cur_status);
+
+	/**get jenis barang**/
+	var jbarang = getData('jbarang');
+
+	/**get status**/
+	var mstatus = getData('mstatus');
+
+	// ---- end of list data ---
+
+	// fill data into form filter
+	/**kode draft rb autcomplete**/
 	$('#kodeDraftRb').typeahead({
-	  hint: true,
-	  highlight: true,
-	  minLength: 1
-	},
-	{
-	  name: 'states',
-	  source: substringMatcher(states)
+		  hint: true,
+		  highlight: true,
+		  minLength: 1
+		},
+		{
+		  name: 'kdrb',
+		  source: substringMatcher(kdrb)
 	});
+
+	/**fill cabang/jabatan dropdown (select2)**/
+	$.each(cabang, function(idx, data){
+		var newOption = new Option(data, idx, false, false);
+		$('#jabcab').append(newOption).trigger('change');
+	});
+
+
+	/**fill pemohon dropdown**/
+	$.each(pemohon, function(idx, data){
+		var newOption = new Option(data, idx, false, false);
+		$('#pemohon').append(newOption).trigger('change');
+		id_pemohon = idx;
+	});
+
+	if (cur_status == 'Me') {
+		$('#pemohon').val(id_pemohon).trigger('change');
+		$("#pemohon").prop("disabled", true);
+	}
+
+	/**fill jenis barang dropdown**/
+	$.each(jbarang, function(idx, data){
+		var newOption = new Option(data, idx, false, false);
+		$('#jbarang').append(newOption).trigger('change');
+	});
+
+	/**fill status dropdown**/
+	$.each(mstatus, function(idx, data){
+		var newOption = new Option(data, idx, false, false);
+		$('#status').append(newOption).trigger('change');
+	});
+
+
+	// end of fill data into form filter
+
+
 
 	table = $('#datatable1').DataTable({
 		'language': {

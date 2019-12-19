@@ -28,6 +28,12 @@ class AddOn
         return $arr;
     }
 
+    public static function getSpecColumn($arr = [], $col = '')
+    {
+        $temp = array_column($arr, $col);
+        return $temp;
+    }
+
     public static function groupBySum($data, $object, $sum, $display = null)
     {
         $arr = array();
@@ -67,6 +73,14 @@ class AddOn
                     }
                 }
             }
+        }
+        return $arr;
+    }
+
+    public static function getOneField($data, $column) {
+        $arr = array();
+        foreach ($data as $val) {
+            $arr[] = $val->$column;
         }
         return $arr;
     }

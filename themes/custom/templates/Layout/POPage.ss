@@ -82,45 +82,50 @@
                                         </thead>
                                         <tbody id="table-body">
                                             <tr class="table-row">
-                                                <td>
-                                                    <select id="jenis-brg" name="jenis[]"
-                                                        class="form-control select2-modal jenis-barang" data-plugin="select2">
+                                                <td class="jenis-barang">
+                                                    <select name="jenis[]"
+                                                        class="form-control select2-modal" data-plugin="select2">
                                                         <option>Pilih Jenis Barang</option>
-                                                        <% loop $JenisBarang %>
+                                                        <%-- <% loop $JenisBarang %>
                                                         <option value="$ID">{$Nama}</option>
-                                                        <% end_loop %>
+                                                        <% end_loop %> --%>
                                                     </select>
                                                 </td>
                                                 <td>
                                                     <textarea class="form-control" name="deskripsi[]"></textarea>
                                                 </td>
                                                 <td>
-                                                    <input name="jumlah[]" class="jumlah-po form-control" type="number"
+                                                    <input name="jumlah[]" class="jumlah-po form-control jumlah-po-val" type="number"
                                                         value="0" autocomplete="off">
                                                 </td>
                                                 <td>
-                                                    <input name="satuan[]" class="form-control" type="number" value="0"
+                                                    <select name="satuan[]"
+                                                        class="form-control">
+                                                        <option>Pilih Satuan</option>
+                                                        <% loop $Satuan %>
+                                                        <option value="$ID">{$Nama}</option>
+                                                        <% end_loop %>
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                    <input name="harga[]" class="form-control harga-po-val" type="text"
                                                         autocomplete="off">
                                                 </td>
                                                 <td>
-                                                    <input name="harga[]" class="form-control" type="text" value="0"
+                                                    <input name="diskon[]" class="form-control diskon-po-val" type="text"
                                                         autocomplete="off">
                                                 </td>
                                                 <td>
-                                                    <input name="diskon[]" class="form-control" type="text" value="0"
+                                                    <input name="diskon2[]" class="form-control diskon2-po-val" type="text"
                                                         autocomplete="off">
                                                 </td>
                                                 <td>
-                                                    <input name="diskon2[]" class="form-control" type="text" value="0"
-                                                        autocomplete="off">
-                                                </td>
-                                                <td>
-                                                    <input name="subtotal[]" class="form-control" type="text" value="0"
-                                                        autocomplete="off" readonly>
+                                                    <input name="subtotal[]" class="form-control subtotal-po-val" type="text"
+                                                        value="0" autocomplete="off" readonly>
                                                 </td>
                                                 <td>
                                                     <input name="inventaris[]" class="form-control" type="text"
-                                                        value="0" autocomplete="off">
+                                                        autocomplete="off">
                                                 </td>
                                                 <td>
                                                     <button
@@ -132,7 +137,8 @@
                                             </tr>
                                             <tr id="row-total">
                                                 <td colspan="7">Jumlah</td>
-                                                <td><input name="total" class="form-control" type="text" value="0" autocomplete="off" readonly></td>
+                                                <td><input id="total-akhir-po" name="total" class="form-control" type="text" value="0"
+                                                    autocomplete="off" readonly></td>
                                                 <td></td>
                                                 <td></td>
                                             </tr>
@@ -172,14 +178,19 @@
                                                         data-plugin="datepicker" type="text">
                                                 </td>
                                                 <td>
-                                                    <input name="deskripsi[]" class="form-control" type="number"
-                                                        value="0" autocomplete="off">
+                                                    <select name="jenis[]"
+                                                        class="form-control">
+                                                        <option>Pilih Jenis</option>
+                                                        <option value="DP">DP</option>
+                                                        <option value="LPB">LPB</option>
+                                                        <option value="Pelunasan">Pelunasan</option>
+                                                    </select>
                                                 </td>
                                                 <td>
                                                     <textarea class="form-control" name="deskripsi[]"></textarea>
                                                 </td>
                                                 <td>
-                                                    <input name="deskripsi[]" class="form-control" type="number"
+                                                    <input name="total-termin-po" class="form-control jumlah-termin" type="number"
                                                         value="0" autocomplete="off">
                                                 </td>
                                                 <td>
@@ -189,6 +200,12 @@
                                                         Delete
                                                     </button>
                                                 </td>
+                                            </tr>
+                                            <tr id="row-total-termin">
+                                                <td colspan="3">Jumlah</td>
+                                                <td><input id="total-akhir-termin-po" name="total" class="form-control" type="text" value="0"
+                                                    autocomplete="off" readonly></td>
+                                                <td></td>
                                             </tr>
                                         </tbody>
                                     </table>

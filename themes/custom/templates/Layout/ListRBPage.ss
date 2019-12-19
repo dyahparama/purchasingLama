@@ -2,17 +2,23 @@
 <div class="page-content">
 	<%-- panel filter --%>
 	<!-- Panel Select 2 -->
-    <div class="panel">
+    <div class="panel panel-transparent">
       <div class="panel-heading">
         <h3 class="panel-title">
-        	Filter
+        	Filter - <span id="cur_status">$cur_status</span>
         </h3>
+        <div class="panel-actions panel-actions-keep">
+          <a class="panel-action icon md-minus" aria-controls="exampleTransparentBody" aria-expanded="true" data-toggle="panel-collapse" href="#exampleTransparentBody" aria-hidden="true"></a>
+          <a class="panel-action icon md-close" data-toggle="panel-close" aria-hidden="true"></a>
+        </div>
       </div>
       <div class="panel-body container-fluid">
+        <%-- form filter --%>
+        <form autocomplete="off" method="POST">
         <div class="row row-lg">
           <div class="col-md-6 col-xl-4">
             <!-- Example Basic -->
-            <div class="example-wrap">
+            <div>
               <p>Kode Draft RB</p>
               <div class="example">
               	<input type="text" class="form-control" name="kodeDraftRb" id="kodeDraftRb" placeholder="Kode Draft RB">
@@ -23,71 +29,12 @@
 
           <div class="col-md-6 col-xl-4">
             <!-- Example Multi Balue -->
-            <div class="example-wrap">
+            <div>
               <p>Tanggal RB</p>
               <div class="example">
-                <select class="form-control" multiple data-plugin="select2">
-                  <optgroup label="Alaskan/Hawaiian Time Zone">
-                    <option value="AK">Alaska</option>
-                    <option value="HI">Hawaii</option>
-                  </optgroup>
-                  <optgroup label="Pacific Time Zone">
-                    <option value="CA">California</option>
-                    <option value="NV">Nevada</option>
-                    <option value="OR">Oregon</option>
-                    <option value="WA">Washington</option>
-                  </optgroup>
-                  <optgroup label="Mountain Time Zone">
-                    <option value="AZ">Arizona</option>
-                    <option value="CO">Colorado</option>
-                    <option value="ID">Idaho</option>
-                    <option value="MT">Montana</option>
-                    <option value="NE">Nebraska</option>
-                    <option value="NM">New Mexico</option>
-                    <option value="ND">North Dakota</option>
-                    <option value="UT">Utah</option>
-                    <option value="WY">Wyoming</option>
-                  </optgroup>
-                  <optgroup label="Central Time Zone">
-                    <option value="AL">Alabama</option>
-                    <option value="AR">Arkansas</option>
-                    <option value="IL">Illinois</option>
-                    <option value="IA">Iowa</option>
-                    <option value="KS">Kansas</option>
-                    <option value="KY">Kentucky</option>
-                    <option value="LA">Louisiana</option>
-                    <option value="MN">Minnesota</option>
-                    <option value="MS">Mississippi</option>
-                    <option value="MO">Missouri</option>
-                    <option value="OK">Oklahoma</option>
-                    <option value="SD">South Dakota</option>
-                    <option value="TX">Texas</option>
-                    <option value="TN">Tennessee</option>
-                    <option value="WI">Wisconsin</option>
-                  </optgroup>
-                  <optgroup label="Eastern Time Zone">
-                    <option value="CT">Connecticut</option>
-                    <option value="DE">Delaware</option>
-                    <option value="FL">Florida</option>
-                    <option value="GA">Georgia</option>
-                    <option value="IN">Indiana</option>
-                    <option value="ME">Maine</option>
-                    <option value="MD">Maryland</option>
-                    <option value="MA">Massachusetts</option>
-                    <option value="MI">Michigan</option>
-                    <option value="NH">New Hampshire</option>
-                    <option value="NJ">New Jersey</option>
-                    <option value="NY">New York</option>
-                    <option value="NC">North Carolina</option>
-                    <option value="OH">Ohio</option>
-                    <option value="PA">Pennsylvania</option>
-                    <option value="RI">Rhode Island</option>
-                    <option value="SC">South Carolina</option>
-                    <option value="VT">Vermont</option>
-                    <option value="VA">Virginia</option>
-                    <option value="WV">West Virginia</option>
-                  </optgroup>
-                </select>
+                <input class="form-control" id="tgl-draft" name="tgl"
+                data-date-format="dd/mm/yyyy" data-now="$Now.format('d/m/Y')" data-plugin="datepicker"
+                type="text">
               </div>
             </div>
             <!-- End Example Multi Balue -->
@@ -95,72 +42,11 @@
 
           <div class="col-md-6 col-xl-4">
             <!-- Example Placeholders -->
-            <div class="example-wrap">
+            <div>
               <p>Jabatan / Cabang</p>
               <div class="example">
-                <select class="form-control" data-plugin="select2" data-placeholder="Select a State"
-                  data-allow-clear="true">
+                <select class="form-control" id="jabcab" name="pegawaipercab" data-plugin="select2" data-placeholder="Pilih jabatan/cabang" data-allow-clear="true">
                   <option></option>
-                  <optgroup label="Alaskan/Hawaiian Time Zone">
-                    <option value="AK">Alaska</option>
-                    <option value="HI">Hawaii</option>
-                  </optgroup>
-                  <optgroup label="Pacific Time Zone">
-                    <option value="CA">California</option>
-                    <option value="NV">Nevada</option>
-                    <option value="OR">Oregon</option>
-                    <option value="WA">Washington</option>
-                  </optgroup>
-                  <optgroup label="Mountain Time Zone">
-                    <option value="AZ">Arizona</option>
-                    <option value="CO">Colorado</option>
-                    <option value="ID">Idaho</option>
-                    <option value="MT">Montana</option>
-                    <option value="NE">Nebraska</option>
-                    <option value="NM">New Mexico</option>
-                    <option value="ND">North Dakota</option>
-                    <option value="UT">Utah</option>
-                    <option value="WY">Wyoming</option>
-                  </optgroup>
-                  <optgroup label="Central Time Zone">
-                    <option value="AL">Alabama</option>
-                    <option value="AR">Arkansas</option>
-                    <option value="IL">Illinois</option>
-                    <option value="IA">Iowa</option>
-                    <option value="KS">Kansas</option>
-                    <option value="KY">Kentucky</option>
-                    <option value="LA">Louisiana</option>
-                    <option value="MN">Minnesota</option>
-                    <option value="MS">Mississippi</option>
-                    <option value="MO">Missouri</option>
-                    <option value="OK">Oklahoma</option>
-                    <option value="SD">South Dakota</option>
-                    <option value="TX">Texas</option>
-                    <option value="TN">Tennessee</option>
-                    <option value="WI">Wisconsin</option>
-                  </optgroup>
-                  <optgroup label="Eastern Time Zone">
-                    <option value="CT">Connecticut</option>
-                    <option value="DE">Delaware</option>
-                    <option value="FL">Florida</option>
-                    <option value="GA">Georgia</option>
-                    <option value="IN">Indiana</option>
-                    <option value="ME">Maine</option>
-                    <option value="MD">Maryland</option>
-                    <option value="MA">Massachusetts</option>
-                    <option value="MI">Michigan</option>
-                    <option value="NH">New Hampshire</option>
-                    <option value="NJ">New Jersey</option>
-                    <option value="NY">New York</option>
-                    <option value="NC">North Carolina</option>
-                    <option value="OH">Ohio</option>
-                    <option value="PA">Pennsylvania</option>
-                    <option value="RI">Rhode Island</option>
-                    <option value="SC">South Carolina</option>
-                    <option value="VT">Vermont</option>
-                    <option value="VA">Virginia</option>
-                    <option value="WV">West Virginia</option>
-                  </optgroup>
                 </select>
               </div>
             </div>
@@ -169,70 +55,11 @@
 
           <div class="col-md-6 col-xl-4">
             <!-- Example Minimum Input -->
-            <div class="example-wrap">
+            <div>
               <p>Pemohon</p>
               <div class="example">
-                <select class="form-control" data-plugin="select2" data-minimum-input-length="2">
-                  <optgroup label="Alaskan/Hawaiian Time Zone">
-                    <option value="AK">Alaska</option>
-                    <option value="HI">Hawaii</option>
-                  </optgroup>
-                  <optgroup label="Pacific Time Zone">
-                    <option value="CA">California</option>
-                    <option value="NV">Nevada</option>
-                    <option value="OR">Oregon</option>
-                    <option value="WA">Washington</option>
-                  </optgroup>
-                  <optgroup label="Mountain Time Zone">
-                    <option value="AZ">Arizona</option>
-                    <option value="CO">Colorado</option>
-                    <option value="ID">Idaho</option>
-                    <option value="MT">Montana</option>
-                    <option value="NE">Nebraska</option>
-                    <option value="NM">New Mexico</option>
-                    <option value="ND">North Dakota</option>
-                    <option value="UT">Utah</option>
-                    <option value="WY">Wyoming</option>
-                  </optgroup>
-                  <optgroup label="Central Time Zone">
-                    <option value="AL">Alabama</option>
-                    <option value="AR">Arkansas</option>
-                    <option value="IL">Illinois</option>
-                    <option value="IA">Iowa</option>
-                    <option value="KS">Kansas</option>
-                    <option value="KY">Kentucky</option>
-                    <option value="LA">Louisiana</option>
-                    <option value="MN">Minnesota</option>
-                    <option value="MS">Mississippi</option>
-                    <option value="MO">Missouri</option>
-                    <option value="OK">Oklahoma</option>
-                    <option value="SD">South Dakota</option>
-                    <option value="TX">Texas</option>
-                    <option value="TN">Tennessee</option>
-                    <option value="WI">Wisconsin</option>
-                  </optgroup>
-                  <optgroup label="Eastern Time Zone">
-                    <option value="CT">Connecticut</option>
-                    <option value="DE">Delaware</option>
-                    <option value="FL">Florida</option>
-                    <option value="GA">Georgia</option>
-                    <option value="IN">Indiana</option>
-                    <option value="ME">Maine</option>
-                    <option value="MD">Maryland</option>
-                    <option value="MA">Massachusetts</option>
-                    <option value="MI">Michigan</option>
-                    <option value="NH">New Hampshire</option>
-                    <option value="NJ">New Jersey</option>
-                    <option value="NY">New York</option>
-                    <option value="NC">North Carolina</option>
-                    <option value="OH">Ohio</option>
-                    <option value="PA">Pennsylvania</option>
-                    <option value="RI">Rhode Island</option>
-                    <option value="SC">South Carolina</option>
-                    <option value="VT">Vermont</option>
-                    <option value="VA">Virginia</option>
-                    <option value="WV">West Virginia</option>
-                  </optgroup>
+                <select class="form-control" id="pemohon" name="pemohonid" data-plugin="select2" data-placeholder="Pilih Pemohon" data-allow-clear="true">
+                  <option></option>
                 </select>
               </div>
             </div>
@@ -241,135 +68,13 @@
 
           <div class="col-md-6 col-xl-4">
             <!-- Example Disabled -->
-            <div class="example-wrap">
+            <div>
               <p>Jenis Permintaan</p>
               <div class="example">
-                <select class="form-control" data-plugin="select2" disabled>
-                  <optgroup label="Alaskan/Hawaiian Time Zone">
-                    <option value="AK">Alaska</option>
-                    <option value="HI">Hawaii</option>
-                  </optgroup>
-                  <optgroup label="Pacific Time Zone">
-                    <option value="CA">California</option>
-                    <option value="NV">Nevada</option>
-                    <option value="OR">Oregon</option>
-                    <option value="WA">Washington</option>
-                  </optgroup>
-                  <optgroup label="Mountain Time Zone">
-                    <option value="AZ">Arizona</option>
-                    <option value="CO">Colorado</option>
-                    <option value="ID">Idaho</option>
-                    <option value="MT">Montana</option>
-                    <option value="NE">Nebraska</option>
-                    <option value="NM">New Mexico</option>
-                    <option value="ND">North Dakota</option>
-                    <option value="UT">Utah</option>
-                    <option value="WY">Wyoming</option>
-                  </optgroup>
-                  <optgroup label="Central Time Zone">
-                    <option value="AL">Alabama</option>
-                    <option value="AR">Arkansas</option>
-                    <option value="IL">Illinois</option>
-                    <option value="IA">Iowa</option>
-                    <option value="KS">Kansas</option>
-                    <option value="KY">Kentucky</option>
-                    <option value="LA">Louisiana</option>
-                    <option value="MN">Minnesota</option>
-                    <option value="MS">Mississippi</option>
-                    <option value="MO">Missouri</option>
-                    <option value="OK">Oklahoma</option>
-                    <option value="SD">South Dakota</option>
-                    <option value="TX">Texas</option>
-                    <option value="TN">Tennessee</option>
-                    <option value="WI">Wisconsin</option>
-                  </optgroup>
-                  <optgroup label="Eastern Time Zone">
-                    <option value="CT">Connecticut</option>
-                    <option value="DE">Delaware</option>
-                    <option value="FL">Florida</option>
-                    <option value="GA">Georgia</option>
-                    <option value="IN">Indiana</option>
-                    <option value="ME">Maine</option>
-                    <option value="MD">Maryland</option>
-                    <option value="MA">Massachusetts</option>
-                    <option value="MI">Michigan</option>
-                    <option value="NH">New Hampshire</option>
-                    <option value="NJ">New Jersey</option>
-                    <option value="NY">New York</option>
-                    <option value="NC">North Carolina</option>
-                    <option value="OH">Ohio</option>
-                    <option value="PA">Pennsylvania</option>
-                    <option value="RI">Rhode Island</option>
-                    <option value="SC">South Carolina</option>
-                    <option value="VT">Vermont</option>
-                    <option value="VA">Virginia</option>
-                    <option value="WV">West Virginia</option>
-                  </optgroup>
-                </select>
-              </div>
-
-              <div class="example">
-                <select class="form-control" multiple data-plugin="select2" disabled>
-                  <optgroup label="Alaskan/Hawaiian Time Zone">
-                    <option value="AK">Alaska</option>
-                    <option value="HI">Hawaii</option>
-                  </optgroup>
-                  <optgroup label="Pacific Time Zone">
-                    <option value="CA">California</option>
-                    <option value="NV">Nevada</option>
-                    <option value="OR">Oregon</option>
-                    <option value="WA">Washington</option>
-                  </optgroup>
-                  <optgroup label="Mountain Time Zone">
-                    <option value="AZ">Arizona</option>
-                    <option value="CO">Colorado</option>
-                    <option value="ID">Idaho</option>
-                    <option value="MT">Montana</option>
-                    <option value="NE">Nebraska</option>
-                    <option value="NM">New Mexico</option>
-                    <option value="ND">North Dakota</option>
-                    <option value="UT">Utah</option>
-                    <option value="WY">Wyoming</option>
-                  </optgroup>
-                  <optgroup label="Central Time Zone">
-                    <option value="AL">Alabama</option>
-                    <option value="AR">Arkansas</option>
-                    <option value="IL">Illinois</option>
-                    <option value="IA">Iowa</option>
-                    <option value="KS">Kansas</option>
-                    <option value="KY">Kentucky</option>
-                    <option value="LA">Louisiana</option>
-                    <option value="MN">Minnesota</option>
-                    <option value="MS">Mississippi</option>
-                    <option value="MO">Missouri</option>
-                    <option value="OK">Oklahoma</option>
-                    <option value="SD">South Dakota</option>
-                    <option value="TX">Texas</option>
-                    <option value="TN">Tennessee</option>
-                    <option value="WI">Wisconsin</option>
-                  </optgroup>
-                  <optgroup label="Eastern Time Zone">
-                    <option value="CT">Connecticut</option>
-                    <option value="DE">Delaware</option>
-                    <option value="FL">Florida</option>
-                    <option value="GA">Georgia</option>
-                    <option value="IN">Indiana</option>
-                    <option value="ME">Maine</option>
-                    <option value="MD">Maryland</option>
-                    <option value="MA">Massachusetts</option>
-                    <option value="MI">Michigan</option>
-                    <option value="NH">New Hampshire</option>
-                    <option value="NJ">New Jersey</option>
-                    <option value="NY">New York</option>
-                    <option value="NC">North Carolina</option>
-                    <option value="OH">Ohio</option>
-                    <option value="PA">Pennsylvania</option>
-                    <option value="RI">Rhode Island</option>
-                    <option value="SC">South Carolina</option>
-                    <option value="VT">Vermont</option>
-                    <option value="VA">Virginia</option>
-                    <option value="WV">West Virginia</option>
-                  </optgroup>
+                <select class="form-control" id="jenisper" name="jenisper" data-plugin="select2" data-placeholder="Pilih Jenis Permintaan" data-allow-clear="true">
+                  <option></option>
+                  <option value="Event">Event</option>
+                  <option value="Non Event">Non Event</option>
                 </select>
               </div>
             </div>
@@ -378,133 +83,26 @@
 
           <div class="col-md-6 col-xl-4">
             <!-- Example Color -->
-            <div class="example-wrap">
+            <div>
               <p>Jenis Barang</p>
               <div class="example">
                 <div class="select2-primary">
-                  <select class="form-control" multiple="multiple" data-plugin="select2">
-                    <option value="1" selected>First tag</option>
-                    <option value="2">Second tag</option>
-                    <option value="3" selected>Third tag</option>
-                    <option value="4">Fourth tag</option>
-                    <option value="5">Fifth tag</option>
+                  <select class="form-control" id="jbarang" name="jbarang" data-plugin="select2" data-placeholder="Pilih Jenis Barang" data-allow-clear="true">
+                    <option></option>
                   </select>
                 </div>
               </div>
 
-              <div class="example">
-                <div class="select2-success">
-                  <select class="form-control" multiple="multiple" data-plugin="select2">
-                    <option value="1" selected>First tag</option>
-                    <option value="2">Second tag</option>
-                    <option value="3" selected>Third tag</option>
-                    <option value="4">Fourth tag</option>
-                    <option value="5">Fifth tag</option>
-                  </select>
-                </div>
-              </div>
-
-              <div class="example">
-                <div class="select2-warning">
-                  <select class="form-control" multiple="multiple" data-plugin="select2">
-                    <option value="1" selected>First tag</option>
-                    <option value="2">Second tag</option>
-                    <option value="3" selected>Third tag</option>
-                    <option value="4">Fourth tag</option>
-                    <option value="5">Fifth tag</option>
-                  </select>
-                </div>
-              </div>
-
-              <div class="example">
-                <div class="select2-danger">
-                  <select class="form-control" multiple="multiple" data-plugin="select2">
-                    <option value="1" selected>First tag</option>
-                    <option value="2">Second tag</option>
-                    <option value="3" selected>Third tag</option>
-                    <option value="4">Fourth tag</option>
-                    <option value="5">Fifth tag</option>
-                  </select>
-                </div>
-              </div>
-
-              <div class="example">
-                <div class="select2-info">
-                  <select class="form-control" multiple="multiple" data-plugin="select2">
-                    <option value="1" selected>First tag</option>
-                    <option value="2">Second tag</option>
-                    <option value="3" selected>Third tag</option>
-                    <option value="4">Fourth tag</option>
-                    <option value="5">Fifth tag</option>
-                  </select>
-                </div>
-              </div>
             </div>
             <!-- End Example Color -->
           </div>
 
           <div class="col-md-6 col-xl-4">
             <!-- Example Color -->
-            <div class="example-wrap">
+            <div>
               <p>Deskripsi Kebutuhan</p>
               <div class="example">
-                <div class="select2-primary">
-                  <select class="form-control" multiple="multiple" data-plugin="select2">
-                    <option value="1" selected>First tag</option>
-                    <option value="2">Second tag</option>
-                    <option value="3" selected>Third tag</option>
-                    <option value="4">Fourth tag</option>
-                    <option value="5">Fifth tag</option>
-                  </select>
-                </div>
-              </div>
-
-              <div class="example">
-                <div class="select2-success">
-                  <select class="form-control" multiple="multiple" data-plugin="select2">
-                    <option value="1" selected>First tag</option>
-                    <option value="2">Second tag</option>
-                    <option value="3" selected>Third tag</option>
-                    <option value="4">Fourth tag</option>
-                    <option value="5">Fifth tag</option>
-                  </select>
-                </div>
-              </div>
-
-              <div class="example">
-                <div class="select2-warning">
-                  <select class="form-control" multiple="multiple" data-plugin="select2">
-                    <option value="1" selected>First tag</option>
-                    <option value="2">Second tag</option>
-                    <option value="3" selected>Third tag</option>
-                    <option value="4">Fourth tag</option>
-                    <option value="5">Fifth tag</option>
-                  </select>
-                </div>
-              </div>
-
-              <div class="example">
-                <div class="select2-danger">
-                  <select class="form-control" multiple="multiple" data-plugin="select2">
-                    <option value="1" selected>First tag</option>
-                    <option value="2">Second tag</option>
-                    <option value="3" selected>Third tag</option>
-                    <option value="4">Fourth tag</option>
-                    <option value="5">Fifth tag</option>
-                  </select>
-                </div>
-              </div>
-
-              <div class="example">
-                <div class="select2-info">
-                  <select class="form-control" multiple="multiple" data-plugin="select2">
-                    <option value="1" selected>First tag</option>
-                    <option value="2">Second tag</option>
-                    <option value="3" selected>Third tag</option>
-                    <option value="4">Fourth tag</option>
-                    <option value="5">Fifth tag</option>
-                  </select>
-                </div>
+                <textarea class="form-control" name="deskripsi" id="deskripsi" rows="2"></textarea>
               </div>
             </div>
             <!-- End Example Color -->
@@ -512,71 +110,36 @@
 
           <div class="col-md-6 col-xl-4">
             <!-- Example Color -->
-            <div class="example-wrap">
+            <div>
               <p>Status</p>
               <div class="example">
                 <div class="select2-primary">
-                  <select class="form-control" multiple="multiple" data-plugin="select2">
-                    <option value="1" selected>First tag</option>
-                    <option value="2">Second tag</option>
-                    <option value="3" selected>Third tag</option>
-                    <option value="4">Fourth tag</option>
-                    <option value="5">Fifth tag</option>
+                  <select class="form-control" id="status" name="statusid" data-plugin="select2" data-placeholder="Pilih Status" data-allow-clear="true">
+                    <option></option>
                   </select>
                 </div>
               </div>
 
+            </div>
+            <!-- End Example Color -->
+          </div>
+
+          <div class="col-md-6 col-xl-4">
+            <!-- Example Color -->
+            <div>
+              <br>
               <div class="example">
-                <div class="select2-success">
-                  <select class="form-control" multiple="multiple" data-plugin="select2">
-                    <option value="1" selected>First tag</option>
-                    <option value="2">Second tag</option>
-                    <option value="3" selected>Third tag</option>
-                    <option value="4">Fourth tag</option>
-                    <option value="5">Fifth tag</option>
-                  </select>
+                <div class="select2-primary" style="text-align: center;">
+                  <button type="submit" class="btn btn-raised btn-primary btn-block waves-effect waves-classic">Filter</button>
                 </div>
               </div>
 
-              <div class="example">
-                <div class="select2-warning">
-                  <select class="form-control" multiple="multiple" data-plugin="select2">
-                    <option value="1" selected>First tag</option>
-                    <option value="2">Second tag</option>
-                    <option value="3" selected>Third tag</option>
-                    <option value="4">Fourth tag</option>
-                    <option value="5">Fifth tag</option>
-                  </select>
-                </div>
-              </div>
-
-              <div class="example">
-                <div class="select2-danger">
-                  <select class="form-control" multiple="multiple" data-plugin="select2">
-                    <option value="1" selected>First tag</option>
-                    <option value="2">Second tag</option>
-                    <option value="3" selected>Third tag</option>
-                    <option value="4">Fourth tag</option>
-                    <option value="5">Fifth tag</option>
-                  </select>
-                </div>
-              </div>
-
-              <div class="example">
-                <div class="select2-info">
-                  <select class="form-control" multiple="multiple" data-plugin="select2">
-                    <option value="1" selected>First tag</option>
-                    <option value="2">Second tag</option>
-                    <option value="3" selected>Third tag</option>
-                    <option value="4">Fourth tag</option>
-                    <option value="5">Fifth tag</option>
-                  </select>
-                </div>
-              </div>
             </div>
             <!-- End Example Color -->
           </div>
         </div>
+        <%-- end of filter form --%>
+        </form>
       </div>
     </div>
     <!-- End Panel Select 2 -->

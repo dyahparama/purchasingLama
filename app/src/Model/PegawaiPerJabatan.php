@@ -54,4 +54,10 @@ class PegawaiPerJabatan extends DataObject
         'NoTelp',
      ];
 
+     public function getPegawaiJabatan()
+     {
+         return $this->Jabatan->Nama . '/' . $this->Cabang->Nama;  
+     }
+
+
 }

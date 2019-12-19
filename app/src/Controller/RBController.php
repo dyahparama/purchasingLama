@@ -10,12 +10,24 @@ use SilverStripe\ORM\DB;
 
 class RBController extends PageController
 {
-    public function index(HTTPRequest $request) {
+    public function index(HTTPRequest $request)
+    {
+        // var_dump(json_encode(AddOn::getOneField(Supplier::get(), "Nama")));die;
         Requirements::themedCSS('custom');
-        $data = array("aaa" => "Aaaa");
-        return $this->customise($data)
+        if (isset($_REQUEST['id']) &&  $_REQUEST['id'] != "") {
+            $id = $_REQUEST['id'];
+            $data = array(
+                "SupplierList" => json_encode(AddOn::getOneField(Supplier::get(), "Nama")),
+                "RB" => DraftRB::get()->byID($id),
+                "DetailRB" => DraftRBDetail::get()->where("DraftRBID = 1"),
+                "mgeJS" =>"rb"
+            );
+            return $this->customise($data)
                 ->renderWith(array(
                     'RBPage', 'Page',
                 ));
+
+
+        }
     }
 }

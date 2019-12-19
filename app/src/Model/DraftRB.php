@@ -12,7 +12,8 @@ class DraftRB extends DataObject
         'Alasan'=>'Text',
         'Respond'=>'Enum(array("Reject","Approve","Forward"), "Forward")',
         'Notes'=>'Text',
-        'NomorProyek'=>'Varchar(50)'
+        'NomorProyek'=>'Varchar(50)',
+        'TglSubmit'=>'Date'
     ];
     private static $indexes = [
         'Kode' =>[
@@ -23,6 +24,7 @@ class DraftRB extends DataObject
     private static $has_one = [
         'Pemohon' => User::class,
         'ForwardTo'=> User::class,
+        'ApproveTo'=> User::class,
         'PegawaiPerJabatan' => PegawaiPerJabatan::class,
         'Status' => StatusPermintaanBarang::class
     ];

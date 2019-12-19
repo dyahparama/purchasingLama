@@ -72,10 +72,10 @@ class User extends DataObject
         $user = $user->leftJoin("user", "\"pegawai\".\"ID\" <> \"user\".\"ID\"")->where("user.ID <> pegawai.ID");
 
         if (!$this->ID) {
-            $dropdown = new DropdownField('PegawaiID', 'Kepala Cabang', $user->map('ID', 'Nama'));
+            $dropdown = new DropdownField('PegawaiID', 'Pegawai', $user->map('ID', 'Nama'));
             $dropdown->setEmptyString("Pilih Pegawai");
         } else
-            $dropdown = new ReadonlyField("KacabID", "Kepala Cabang", $this->Pegawai()->Nama);
+            $dropdown = new ReadonlyField("KacabID", "Pegawai", $this->Pegawai()->Nama);
         $fields->addFieldToTab("Root.Main", $dropdown);
 
         $fields->addFieldToTab("Root.Main", new EmailField('Email', 'Email'));

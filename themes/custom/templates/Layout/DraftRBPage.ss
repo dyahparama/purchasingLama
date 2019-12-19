@@ -5,7 +5,6 @@
 			<h3 class="panel-title">
 				Input Draf Request Barang
 			</h3>
-			 <% require css($resourceURL('themes/custom/css/custom-copy.css')) %> 
 		</header>
 		<div class="panel-body container-fluid">
 			<div class="row row-lg">
@@ -46,7 +45,7 @@
 											<input class="form-control" id="tgl-draft" name="tgl"
 												data-date-format="dd/mm/yyyy" data-now="$dateNow"
 												value="<% if $dateNow %>$dateNow<% end_if %>" data-plugin="datepicker"
-												type="text">
+												type="text" required="">
 										</div>
 									</div>
 								</div>
@@ -54,14 +53,14 @@
 									<label class="col-md-3 col-form-label">*Pemohon :</label>
 									<div class="col-md-9">
 										<input class="form-control" name="pemohon" type="text" value="$pemohon" readonly
-											autocomplete="off">
+											autocomplete="off" required="">
 									</div>
 								</div>
 								<div class="form-group form-material row">
 									<label class="col-md-3 col-form-label">*Jabatan/Cabang :</label>
 									<div class="col-md-9">
 										<select class="form-control jabatan-cabang" name="jabatan-cabang"
-											data-plugin="select2">
+											data-plugin="select2" required="">
 											<option>Pilih Jabatan/Cabang</option>
 											<% loop $jabatan %>
 											<option <% if $ID == $Top.pegawaiJabatan %>selected <% end_if %>value="$ID">
@@ -75,13 +74,13 @@
 									<div class="col-md-9">
 										<input id="kepala-cabang"
 											value="<% if $kepalaCabang %>$kepalaCabang<% end_if %>" class="form-control"
-											type="text" readonly autocomplete="off">
+											type="text" readonly autocomplete="off" required="">
 									</div>
 								</div>
 								<div class="form-group form-material row">
 									<label class="col-md-3 col-form-label">*Jenis Permintaan :</label>
 									<div class="col-md-9">
-										<select class="form-control" name="jenis" data-plugin="select2">
+										<select class="form-control" name="jenis" data-plugin="select2" required="">
 											<option>Pilih Event</option>
 											<option <% if $jenis=="Event" %>selected<% end_if %> value="Event">Event</>
 											<option <% if $jenis=="Non Event" %>selected<% end_if %> value="Non Event">
@@ -98,7 +97,7 @@
 											</span>
 											<input class="form-control" value="<% if $deadline %>$deadline<% end_if %>"
 												name="tgl-butuh" data-date-format="dd/mm/yyyy" data-plugin="datepicker"
-												type="text">
+												type="text" required="">
 										</div>
 									</div>
 								</div>
@@ -106,7 +105,7 @@
 									<label class="col-md-3 col-form-label">*Alasan Permintaan:</label>
 									<div class="col-md-9">
 										<textarea name="alasan"
-											class="form-control"><% if $alasan %>$alasan<% end_if %></textarea>
+											class="form-control" required><% if $alasan %>$alasan<% end_if %></textarea>
 									</div>
 								</div>
 								<div class="form-group form-material row">
@@ -114,7 +113,7 @@
 									<div class="col-md-9">
 										<input class="form-control"
 											value="$nomorProyek" name="nomor-proyek"
-											type="text" autocomplete="off">
+											type="text" autocomplete="off" required="">
 									</div>
 								</div>
 
@@ -212,7 +211,7 @@
 																		<select id="jenis-brg-{$ID}"
 																			class="form-control select2-modal"
 																			data-plugin="select2">
-																			$Top.renderOptionEditDetailJenis($ID)
+																			$Top.renderOptionEditDetailJenis($ID,$Jenis.ID)
 																		</select>
 																	</div>
 																</div>

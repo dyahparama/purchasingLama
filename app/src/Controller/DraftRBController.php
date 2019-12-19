@@ -48,7 +48,7 @@ class DraftRBController extends PageController
             $kepalaCabang = false;
             $detail = new ArrayList();
             $oldData = new ArrayList();
-            $cek = DraftRB::get()->where("PemohonID = '". $_SESSION['user_id'] ."' AND ForwardToID = 0")->limit(1);
+            $cek = DraftRB::get()->where("PemohonID = '" . $_SESSION['user_id'] . "' AND ForwardToID = 0")->limit(1);
             if (!empty($cek->count())) {
                 $cek = $cek->first();
                 $kode = $cek->Kode;
@@ -76,7 +76,17 @@ class DraftRBController extends PageController
             $user = User::get()->byID($_SESSION['user_id']);
             $pemohon = $user->Pegawai()->Nama;
             $jabatan = $user->Pegawai()->Jabatans();
-            $jenisBrng = JenisBarang::get();
+            if(count($detail)!=0){
+                foreach ($detail as $key) {
+                    $cobajenis = $key->Jenis()->ID;
+                    break;
+                }
+                // echo $cobajenis;
+                $jenisBrng = JenisBarang::get()->byID($cobajenis);
+            }
+            else{
+                $jenisBrng = JenisBarang::get();
+            }
             $satuan = Satuan::get();
             $data = [
                 "PageTitle" => "Draft RB",
@@ -95,6 +105,7 @@ class DraftRBController extends PageController
                 "kepalaCabang" => $kepalaCabang,
                 "detail" => $detail,
                 "oldDraft" => $oldData,
+                "mgeJS" =>"draft-rb"
             ];
             return $this->customise($data)
                 ->renderWith(array(
@@ -107,10 +118,10 @@ class DraftRBController extends PageController
     public function ApprovePage(HTTPRequest $request)
     {
 
-        $drb = DraftRB::get()->first();
-        $get = $this::getNextTarget($drb);
-var_dump($get);
-die;
+        // $drb = DraftRB::get()->first();
+        // $get = $this::getNextTarget($drb);
+        // var_dump($get);
+        // die;
         //===============================================
         $ID = $request->params()["ID"];
         Requirements::themedCSS('custom');
@@ -123,8 +134,10 @@ die;
         $jabatan = PegawaiPerJabatan::get()->byID($drb->PegawaiPerJabatanID);
         $kepalaCabang = $jabatan->Cabang()->Kacab()->Pegawai()->Nama;
         $jabatanPerCabang = $jabatan->Jabatan()->Nama . "/" . $jabatan->Cabang()->Nama;
-        $pegawai = User::get();
+        $pegawai = User::get()->where("ID <> {$_SESSION['user_id']}");
         $detail = $drb->Detail();
+        $history = HistoryApproval::get()->where("DraftRBID = {$drb->ID}");
+        $isCan = $this->getApprover($drb);
         $data = [
             "PageTitle" => "Approval Draft RB",
             "kode" => $drb->Kode,
@@ -141,17 +154,17 @@ die;
             "pegawai" => $pegawai,
             "status" => $drb->Status()->Status,
             "userNow" => $_SESSION['user_id'],
+            "canApprove"=>$isCan["canApprove"],
+            "canForward"=>$isCan["canForward"],
+            "history" => $history,
+            
+            "mgeJS" =>"draft-rb"
         ];
         return $this->customise($data)
             ->renderWith(array(
                 'DraftRBApprovePage', 'Page',
             ));
         return $this->redirect(Director::absoluteBaseURL());
-    }
-
-    public function listRb()
-    {
-
     }
 
     public function GenerateKode($param)
@@ -175,7 +188,6 @@ die;
         $drb = DraftRB::get()->where("Kode = '" . $_POST["nomor"] . "'")->limit(1);
         if (empty($drb->count())) {
             $drb = DraftRB::create();
-            $drb->Created = date("Y/m/d H:i:s");
         }
         $drb = $drb->first();
         $drb->Kode = $_POST["nomor"];
@@ -187,7 +199,7 @@ die;
         $drb->Notes = $_POST["note"];
         $drb->NomorProyek = $_POST["nomor-proyek"];
         $drb->PegawaiPerJabatanID = $_POST["jabatan-cabang"];
-        $drb->LastEdited = date("Y/m/d H:i:s");
+        $drb->TglSubmit = date("Y/m/d");
         $drb->write();
     }
 
@@ -238,12 +250,19 @@ die;
         $detail->delete();
     }
 
-    public function renderOptionEditDetailJenis($ID)
+    public function renderOptionEditDetailJenis($ID,$JenisID)
     {
-        $jenisBrng = JenisBarang::get();
+        $detail = DraftRBDetail::get()->byID($ID);
+        $draftnya = DraftRB::get()->byID($detail->DraftRB()->ID);
+        if(count($draftnya->Detail())>1){
+            $jenisBrng = JenisBarang::get()->byID($detail->Jenis()->ID);
+        }
+        else{
+            $jenisBrng = JenisBarang::get();
+        }
         $option = "<option>Pilih Jenis Barang</option>";
         foreach ($jenisBrng as $key) {
-            if ($ID == $key->ID) {
+            if ($JenisID == $key->ID) {
 
                 $option .= "<option selected value='{$key->ID}'>{$key->Nama}</option>";
             } else {
@@ -348,27 +367,18 @@ die;
 
     public function approve()
     {
+        $drb = DraftRB::get()->where("Kode = '" . $_POST["draft"] . "'")->limit(1)->first();
         switch ($_POST["respond"]) {
             case 'approve':
-                $drb = DraftRB::get()->where("Kode = '". $_POST["draft"] ."'")->limit(1)->first();
-                $history = HistoryApproval::create();
-                $history->Note = $_POST["note"];
-                $history->ApprovedByID =  $_POST["from"];
-                $history->DraftRBID = $drb->ID;
-                $history->Status = $drb->Status()->ID +1;
-                $history->write();
-                $drb->StatusID = $drb->StatusID+1;
-                $drb->write();
+                $this::ApproveDrb($_POST["note"], $drb, $_POST["from"]);
                 break;
             case 'reject':
-                # code...
+                $this::rejectDRB($_POST["note"], $drb, $_POST["from"]);
                 break;
-            case 'approval':
-                # code...
+            case 'forward':
+                $this::forwardDrb($_POST["note"], $drb, $_POST["from"], $_POST["forward"]);
                 break;
-
             default:
-                # code...
                 break;
         }
     }

@@ -56,12 +56,14 @@ class Satuan extends DataObject
 
     public function onBeforeWrite()
     {
-        $obj = Satuan::get()
-            ->filter([
-                'Kode' => $this->Kode,
-            ])->Count();
-        if (!empty($obj)) {
-            throw new ValidationException("Kode must be unique");
+        if (!$this->ID) {
+            $obj = Satuan::get()
+                ->filter([
+                    'Kode' => $this->Kode,
+                ])->Count();
+            if (!empty($obj)) {
+                throw new ValidationException("Kode must be unique");
+            }
         }
         parent::onBeforeWrite();
     }

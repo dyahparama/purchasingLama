@@ -20,6 +20,8 @@ class POController extends PageController
             "RB" => DraftRB::get(),
             "Supplier" => Supplier::get(),
             "JenisBarang" => JenisBarang::get(),
+            "Satuan" => Satuan::get(),
+            "mgeJS" =>"po"
         );
         return $this->customise($data)
                 ->renderWith(array(

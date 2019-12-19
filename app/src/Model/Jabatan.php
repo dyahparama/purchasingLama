@@ -8,7 +8,7 @@ class Jabatan extends DataObject
 {
     private static $db = [
         'Kode' => 'Varchar(5)',
-        'Nama' => 'Varchar(15)',
+        'Nama' => 'Varchar(50)',
     ];
     private static $indexes = [
         'Kode' => [

@@ -23,7 +23,7 @@
 									</div>
 									<label class="col-md-3 col-form-label">Status Permintaan :</label>
 									<div class="col-md-3">
-										<input class="form-control" id="nomor" name="nomor" type="text" value="$status"
+										<input class="form-control" name="nomor" type="text" value="$status"
 											readonly autocomplete="off">
 									</div>
 								</div>
@@ -104,7 +104,9 @@
 												<th>Penawaran</th>
 												<th>Spesifikasi Barang</th>
 												<th>Kode Inventaris</th>
+												<% if $canApprove %>
 												<th>Aksi</th>
+												<% end_if %>
 											</tr>
 										</thead>
 										<tbody>
@@ -173,6 +175,7 @@
 										</tbody>
 									</table>
 								</div>
+								<% if $canForward %>
 								<div class="form-group form-material row">
 									<label class="col-md-3 col-form-label">Note :</label>
 									<div class="col-md-9">
@@ -182,9 +185,11 @@
 										</div>
 									</div>
 								</div>
+								
 								<div class="form-group form-material row">
 									<label class="col-md-3 col-form-label">Respond :</label>
 									<div class="col-md-4">
+										<% if $canApprove %>
 										<div class="radio-custom radio-primary">
 											<input type="radio" id="RadioApprove" name="respond" value="approve">
 											<label for="RadioApprove">Approve</label>
@@ -193,6 +198,7 @@
 											<input type="radio" id="RadioReject" name="respond" value="reject">
 											<label for="RadioReject">Reject</label>
 										</div>
+										<% end_if %>
 										<div class="radio-custom radio-primary">
 											<input type="radio" id="RadioForward" name="respond" checked="" value="forward">
 											<label for="RadioForward">Forward</label>
@@ -212,6 +218,7 @@
 										</div>
 									</div>
 								</div>
+								
 								<div class="form-group form-material row">
 									<div class="col-md-9">
 										<button class="btn btn-primary" id="approve-forwardTo" type="button">
@@ -219,6 +226,7 @@
 										</button>
 									</div>
 								</div>
+								<% end_if %>
 							</form>
 						</div>
 					</div>
@@ -240,9 +248,23 @@
 								</tr>
 							</thead>
 							<tbody>
-								<% loop $detail %>
+								<% loop $history %>
 								<tr>
-									
+									<td>
+										$ApprovedBy.Pegawai.Nama
+									</td>
+									<td>
+										$Top.getJabatanFromStatus($Status.ID)		
+									</td>
+									<td>
+										$Top.getTglTerima($ID)
+									</td>
+									<td>
+										$Top.getTglApprove($Created)
+									</td>
+									<td>
+										$Note
+									</td>
 								</tr>
 								<% end_loop %>
 							</tbody>

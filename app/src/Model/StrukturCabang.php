@@ -33,7 +33,7 @@ class StrukturCabang extends DataObject
 {
     private static $db = [
         'Kode' => 'Varchar(10)',
-        'Nama' => 'Varchar(15)',
+        'Nama' => 'Varchar(50)',
         'Jenis' => 'Enum(array("Lokal","Regional","Pusat"), "Lokal")'
     ];
     private static $indexes = [
@@ -83,7 +83,8 @@ class StrukturCabang extends DataObject
         'settingApproval'
     ];
 
-    public function statusKadep() {
+    public function statusKadep()
+    {
         $value = "-";
         if ($this->Jenis != "Lokal") {
             $status = 1;
@@ -104,12 +105,25 @@ class StrukturCabang extends DataObject
         return $value;
     }
 
-    public function settingApproval() {
+    public function settingApproval()
+    {
         $html = HTMLValue::create("-");
         if ($this->Jenis != "Lokal") {
             $html = HTMLValue::create("<a class='no-event' target='_blank' href='admin/edit-approver/StrukturCabang/EditForm/field/StrukturCabang/item/{$this->ID}/edit'>Setting Kadep Approver</a>");
         }
         return $html;
+    }
+
+    public function onAfterWrite()
+    {
+        parent::onAfterWrite();
+        if ($this->Jenis == "Regional") {
+            DB::query("UPDATE strukturcabang SET RegionalID = {$this->ID} WHERE ID = {$this->ID}");
+        }
+
+        if ($this->Jenis == "Pusat") {
+            DB::query("UPDATE strukturcabang SET PusatID = {$this->ID}, RegionalID = {$this->ID} WHERE ID = {$this->ID}");
+        }
     }
 
     public function onBeforeWrite()
@@ -152,7 +166,7 @@ class StrukturCabang extends DataObject
 
     public function getCMSFields()
     {
-        $datesSource = function($val) {
+        $datesSource = function ($val) {
             return StrukturCabang::get()->where("Jenis = 'Pusat'")->map('ID', 'Nama');
         };
 
@@ -197,10 +211,12 @@ class StrukturCabang extends DataObject
 
             $dropdwonRegional = new DropdownField('RegionalID', 'Regional ', StrukturCabang::get()->where("Jenis = 'Regional'")->map('ID', 'Nama'));
             $dropdwonRegional->setEmptyString("Pilih Cabang Regional");
-            $fields->addFieldToTab("Root.Main",
-            Wrapper::create($dropdwonRegional)
-            ->displayIf('Jenis')->isEqualTo('Lokal')
-            ->end());
+            $fields->addFieldToTab(
+                "Root.Main",
+                Wrapper::create($dropdwonRegional)
+                    ->displayIf('Jenis')->isEqualTo('Lokal')
+                    ->end()
+            );
             // $dropdwonRegional->validateIf('Jenis')->isEqualTo('Lokal');
 
             // $dropdwonPusat = new DropdownField('PusatID', 'Pusat', StrukturCabang::get()->where("Jenis = 'Pusat'")->map('ID', 'Nama'));
@@ -208,17 +224,21 @@ class StrukturCabang extends DataObject
             $fields->addFieldsToTab("Root.Main", new HiddenField("Pusat2ID", "Pusat", $this->PusatID));
             $val = $this->Pusat()->Nama ? $this->Pusat()->Nama : '-';
             $textPusat = new ReadonlyField("PusatNama", 'Pusat', $val);
-            $fields->addFieldToTab("Root.Main",
-            Wrapper::create($textPusat)
-            ->displayIf('Jenis')->isEqualTo('Lokal')
-            ->end());
+            $fields->addFieldToTab(
+                "Root.Main",
+                Wrapper::create($textPusat)
+                    ->displayIf('Jenis')->isEqualTo('Lokal')
+                    ->end()
+            );
 
             $dropdwonPusat = new DropdownField('PusatID', 'Pusat', StrukturCabang::get()->where("Jenis = 'Pusat'")->map('ID', 'Nama'));
             $dropdwonPusat->setEmptyString("Pilih Cabang Pusat");
-            $fields->addFieldToTab("Root.Main",
-            Wrapper::create($dropdwonPusat)
-            ->displayIf('Jenis')->isEqualTo('Regional')
-            ->end());
+            $fields->addFieldToTab(
+                "Root.Main",
+                Wrapper::create($dropdwonPusat)
+                    ->displayIf('Jenis')->isEqualTo('Regional')
+                    ->end()
+            );
 
             $dropdwonKecab = new DropdownField('KacabID', 'Kepala Cabang', $user->map('ID', 'Nama'));
             $dropdwonKecab->setEmptyString("Pilih Kepala Cabang");
@@ -228,32 +248,35 @@ class StrukturCabang extends DataObject
             $dropdwonApprover->setEmptyString("Pilih Approver");
             $fields->addFieldToTab("Root.Main", $dropdwonApprover);
 
-            $grid = new GridField(
-                'BarangGrid',
-                'Detail Barang',
-                StrukturCabang::get()->where("PusatID = {$this->ID} OR RegionalID = {$this->ID}"),
-                GridFieldConfig::create()
-                    ->addComponent(new GridFieldButtonRow('before'))
-                    ->addComponent(new GridFieldToolbarHeader())
-                    ->addComponent(new GridFieldTitleHeader())
-                    ->addComponent(new GridFieldDataColumns())
-            );
+            if ($this->ID) {
+                $grid = new GridField(
+                    'BarangGrid',
+                    'Struktur Cabang',
+                    StrukturCabang::get()->where("PusatID = {$this->ID} OR RegionalID = {$this->ID}"),
+                    GridFieldConfig::create()
+                        ->addComponent(new GridFieldButtonRow('before'))
+                        ->addComponent(new GridFieldToolbarHeader())
+                        ->addComponent(new GridFieldTitleHeader())
+                        ->addComponent(new GridFieldDataColumns())
+                );
 
-            $grid->getConfig()->getComponentByType(GridFieldDataColumns::class)->setDisplayFields(array(
-                'Kode' => 'Kode',
-                'Nama' => 'Nama',
-                'Jenis' => 'Jenis',
-                'Kacab.Pegawai.Nama' => 'Kepala Cabang',
-                'Approver.Pegawai.Nama' => 'Purchasing Approval'
-            ));
+                $grid->getConfig()->getComponentByType(GridFieldDataColumns::class)->setDisplayFields(array(
+                    'Kode' => 'Kode',
+                    'Nama' => 'Nama',
+                    'Jenis' => 'Jenis',
+                    'Kacab.Pegawai.Nama' => 'Kepala Cabang',
+                    'Approver.Pegawai.Nama' => 'Purchasing Approval'
+                ));
 
-            $fields->addFieldsToTab("Root.Main", $grid);
+                $fields->addFieldsToTab("Root.Main", $grid);
+            }
         }
 
         return $fields;
     }
 
-    public function getCMSValidator() {
+    public function getCMSValidator()
+    {
         if (strpos($_SERVER['REQUEST_URI'], 'edit-approver')) {
             return new RequiredFields(array());
         } else {

@@ -14,7 +14,7 @@ $(document).ready(function() {
     $(".jabatan-cabang").change(function(e) {
         let id = $(this).val();
         $.ajax({
-            url: "draf-rb/GetKepalaCabang",
+            url: "/draf-rb/GetKepalaCabang",
             type: "post", //form method
             data: {
                 id: id
@@ -38,7 +38,7 @@ $(document).ready(function() {
             .next()
             .css("width", "100%");
         $.ajax({
-            url: "draf-rb/saveMasterDRB",
+            url: "/draf-rb/saveMasterDRB",
             type: "post", //form method
             data: $("#form-drb").serialize(),
             dataType: "json",
@@ -55,6 +55,16 @@ $(document).ready(function() {
     });
 
     $("#save-detail").click(function(e) {
+        $('#form-drb').validate({
+            messages: {
+                pemohon: {
+                    required: "Kolom pemohon harus diisi"
+                },
+                'kepala-cabang': {
+                    required: "Kolom atasan harus diisi"
+                }
+            }
+        });
         let data = {
             "jenis-brg": $("#jenis-brg").val(),
             "deskripsi-kebutuhan": $("#deskripsi-kebutuhan").val(),
@@ -67,7 +77,7 @@ $(document).ready(function() {
         };
         let newId;
         $.ajax({
-            url: "draf-rb/saveDetailDRB",
+            url: "/draf-rb/saveDetailDRB",
             type: "post", //form method
             data: data,
             dataType: "json",
@@ -115,7 +125,7 @@ $(document).ready(function() {
     $(".delete-detail").click(function(e) {
         let id = $(this).data("id");
         $.ajax({
-            url: "draf-rb/deleteDetail",
+            url: "/draf-rb/deleteDetail",
             type: "post", //form method
             data: {id},
             dataType: "json",
@@ -196,7 +206,7 @@ $(document).ready(function() {
         }
     });
 
-    $("#approve-forwardTo").click(function (e) { 
+    $("#approve-forwardTo").unbind("click").click(function (e) {
         let data={
             note : $("#note-approver").val(),
             respond :  $("input[name='respond']:checked").val(),
@@ -219,7 +229,68 @@ $(document).ready(function() {
             },
             error: function(xhr, Status, err) {}
         });
-    });    
+    });
 });
+// (function(){
+//     $('#form-drb').formValidation({
+//       framework: "bootstrap4",
+//       button: {
+//         selector: '#save-detail',
+//         disabled: 'disabled'
+//       },
+//       icon: null,
+//       fields: {
+//         pemohon: {
+//           validators: {
+//             notEmpty: {
+//               message: 'Nama pemohon is required'
+//             }
+//           }
+//         },
+//         kepala_cabang: {
+//           validators: {
+//             notEmpty: {
+//               message: 'Nama atasan is required'
+//             }
+//           }
+//         },
+//         tgl: {
+//           validators: {
+//             notEmpty: {
+//               message: 'Tanggal is required'
+//             },
+//             date: {
+//               format: 'DD/MM/YYYY'
+//             }
+//           }
+//         },
+//         jabatan_cabang: {
+//           validators: {
+//             notEmpty: {
+//               message: 'Please Select Jabatan'
+//             }
+//           }
+//         },
+//         jenis: {
+//           validators: {
+//             notEmpty: {
+//               message: 'Please Select jenis'
+//             }
+//           }
+//         }
+//       },
+//       err: {
+//         clazz: 'invalid-feedback'
+//       },
+//       control: {
+//         // The CSS class for valid control
+//         valid: 'is-valid',
 
-cuk
+//         // The CSS class for invalid control
+//         invalid: 'is-invalid'
+//       },
+//       row: {
+//         invalid: 'has-danger'
+//       }
+//     });
+// });

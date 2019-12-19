@@ -7,8 +7,8 @@ use SilverStripe\ORM\ValidationException;
 class Departemen extends DataObject
 {
     private static $db = [
-        'Kode' => 'Varchar(5)',
-        'Nama' => 'Varchar(15)',
+        'Kode' => 'Varchar(10)',
+        'Nama' => 'Varchar(50)',
     ];
     private static $indexes = [
         'Kode' => [

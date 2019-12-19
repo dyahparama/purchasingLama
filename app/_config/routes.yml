@@ -10,3 +10,6 @@ SilverStripe\Control\Director:
     'helper': 'HelperController'
     'rb': 'RBController'
     'po': 'POController'
+    'ta': 'MyTaskController'
+    'rj': 'RejectedController'
+    'prfl': 'ProfileController'

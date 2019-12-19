@@ -11,10 +11,10 @@
             // echo "<pre>";
             // var_dump(ModelData::TableHeader(array('Nama', 'Tes')));die;
 	    	$data = [
+	    		'cur_status' => 'Me',
 	    		'user' => 'User',
-                'url'  => 'searchcosting',
-                'TitleColumn' => ModelData::TableHeader(array('Nama', 'Approver')),
-                'Data' => ModelData::TableData(StrukturCabang::get(), array('Nama', 'Approver.Pegawai.Nama'))
+	    		'mgeJS' => 'list-rb',
+                'url'  => 'searchcosting'
 	    	];
 
 	    	return $this->customise($data)
@@ -25,23 +25,60 @@
 
 	    function getData(){
 	    	$jenis = isset($_REQUEST['jenis']) ? $_REQUEST['jenis'] : '';
+	    	$cur_status = isset($_REQUEST['cur_status']) ? $_REQUEST['cur_status'] : 'Me';
 	    	$msg = [];
+	    	$data = [];
+
+	    	$user_logged_id = $_SESSION['user_id'];
+			$pegawai = User::get()->byID($user_logged_id);
+			$jabatan = PegawaiPerJabatan::get()->
+				where("PegawaiID = ".$pegawai->PegawaiID);
 
 	    	if (!empty($jenis)) {
 	    		switch ($jenis) {
 	    			case 'kddrb':
-	    				$msg = DraftRB::get()->toNestedArray();
+	    				$data = AddOn::getSpecColumn(DraftRB::get()->toNestedArray(), 'Kode');
 	    				break;
-	    			case 'kddrb':
-	    				$msg = DraftRB::get()->toNestedArray();
+	    			case 'cbg':
+	    				$data = $jabatan->map('ID', 'PegawaiJabatan')->toArray();
+	    				break;
+    				case 'pemohon':
+    					$temp = [
+    						$pegawai->ID => $jabatan->first()->Pegawai->Nama
+    					];
+
+						if($cur_status == 'Teams'){
+	    					$teams = PegawaiPerJabatan::get()->where("CabangID = " . $jabatan->first()->CabangID . " AND DepartemenID = " . $jabatan->first()->DepartemenID);
+	    					foreach ($teams as $team) {
+	    						$temp[$team->Pegawai()->ID] = $team->Pegawai()->Nama;
+	    					}
+    					}
+
+    					$data = $temp;
+
+	    				break;
+    				case 'jbarang':
+	    				$data = JenisBarang::get()->map('ID', 'Nama')->toArray();
+	    				break;
+    				case 'mstatus':
+	    				$data = StatusPermintaanBarang::get()->map('ID', 'Status')->toArray();
 	    				break;
 	    			default:
-	    				# code...
+	    				$data = 'Jenis tidak ada';
 	    				break;
 	    		}
+	    		$msg = [
+	    			'status' => TRUE,
+	    			'msg' => $data
+	    		];
+	    	}else{
+	    		$msg = [
+	    			'status' => FALSE,
+	    			'msg' => 'Jenis cannot be empty'
+	    		];
 	    	}
 
-	    	return $msg;
+	    	echo json_encode($msg);
 	    }
 
 	    /**

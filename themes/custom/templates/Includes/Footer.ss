@@ -59,8 +59,7 @@
     <script src="/_resources/themes/custom/global/js/Plugin/dropify.js"></script>
 
     <script src="/_resources/themes/custom/assets/examples/js/dashboard/v1.js"></script>
-    <script src="/_resources/themes/custom/javascript/draft-rb.js"></script>
-    <script src="/_resources/themes/custom/javascript/po.js"></script>
+    <!-- <script src="/_resources/themes/custom/javascript/po.js"></script> -->
 
 
     <!-- Datatables -->
@@ -82,4 +81,4 @@
     <%-- typeahead  --%>
     <script src="/_resources/themes/custom/global/vendor/typeahead-js/bloodhound.min.js"></script>
     <script src="/_resources/themes/custom/global/vendor/typeahead-js/typeahead.jquery.min.js"></script>
-    <script src="/_resources/themes/custom/javascript/list-rb.js"></script>
+    <script src="/_resources/themes/custom/javascript/{$mgeJS}.js"></script>

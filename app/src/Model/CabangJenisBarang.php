@@ -53,4 +53,8 @@ class CabangJenisBarang extends DataObject
         }
         return $fields;
     }
+
+    function getJenisBarang(){
+        return $this->JenisBarang()->Nama;
+    }
 }
