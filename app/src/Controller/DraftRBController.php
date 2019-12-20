@@ -29,6 +29,8 @@ class DraftRBController extends PageController
     public function init()
     {
         parent::init();
+        if (!UserController::cekSession())
+            return $this->redirect(Director::absoluteBaseURL()."user/login");
     }
 
     public function index(HTTPRequest $request)
@@ -131,7 +133,7 @@ class DraftRBController extends PageController
             $drb = DraftRB::get()->byID($ID);
 
         }
-        $jabatan = PegawaiPerJabatan::get()->byID($drb->PegawaiPerJabatanID);
+        $jabatan = PegawaiPerJabatan::get()->byID($drb->PegawaiPerJabatan()->ID);
         $kepalaCabang = $jabatan->Cabang()->Kacab()->Pegawai()->Nama;
         $jabatanPerCabang = $jabatan->Jabatan()->Nama . "/" . $jabatan->Cabang()->Nama;
         $pegawai = User::get()->where("ID <> {$_SESSION['user_id']}");
@@ -188,8 +190,9 @@ class DraftRBController extends PageController
         $drb = DraftRB::get()->where("Kode = '" . $_POST["nomor"] . "'")->limit(1);
         if (empty($drb->count())) {
             $drb = DraftRB::create();
+        }else{
+            $drb = $drb->first();
         }
-        $drb = $drb->first();
         $drb->Kode = $_POST["nomor"];
         $drb->Tgl = $this->dateFormat($_POST["tgl"], "/", "-");
         $drb->PemohonID = $_SESSION['user_id'];
@@ -241,6 +244,9 @@ class DraftRBController extends PageController
         $kepalaCabang = $kepalaCabang->Cabang()->Kacab()->Pegawai()->ID;
 
         $cek->ForwardToID = $kepalaCabang;
+        $cek->ApproveToID = $kepalaCabang;
+        $cek->TglSubmit = date("Y/m/d");
+        $cek->StatusID = 1;
         $cek->write();
     }
 

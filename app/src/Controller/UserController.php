@@ -66,7 +66,7 @@ class UserController extends ContentController
             // $_SESSION['user_nama'] = $user->Nama;
             $_SESSION['user_id'] = $user->ID;
             $_SESSION['user_email'] = $user->Email;
-            return $this->redirect(Director::absoluteBaseURL());
+            return $this->redirect(Director::absoluteBaseURL()."ta/");
         }
         $_SESSION['error_login'] = "1";
         return $this->redirect(Director::absoluteBaseURL()."user/login");

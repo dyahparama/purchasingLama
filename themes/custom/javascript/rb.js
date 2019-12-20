@@ -37,10 +37,65 @@ $(".close-modal").click(function (e) {
     }, 500);
 });
 
+$(document).on('keyup', '.harga-detail, .jumlah-detail', function() {
+    let parentRow = $(this).parent().parent()
+    let parentTable = $(this).parent().parent().parent()
+
+    // if ($(this).hasClass('jumlah-detail')) {
+    //     let jumlahTemp = 0
+    //     let jumlahRow = parentRow.find('.jumlah-detail').val() ? parentRow.find('.jumlah-detail').val() : 0
+    //     let jumlahTotal = parentRow.find('.total-jumlah').val() ? parentRow.find('.total-jumlah').val() : 0
+    //     parentTable.find('.jumlah-detail').each(function(){
+    //         jumlahTemp += parseInt($(this).val())
+    //     })
+    //     if (jumlahTemp > jumlahTotal) {
+    //         alert("Jumlah tidak boleh lebih dari " + jumlahTotal)
+    //         parentRow.find('.jumlah-detail').val(jumlahTotal - (jumlahTemp - jumlahRow))
+    //     }
+    // }
+
+    let jumlah = parentRow.find('.jumlah-detail').val() ? parentRow.find('.jumlah-detail').val() : 0
+    let harga = parentRow.find('.harga-detail').val() ? parentRow.find('.harga-detail').val() : 0
+    parentRow.find('.subtotal-detail').val(jumlah * harga)
+
+    let subTotalAkhir = 0
+    parentTable.find('.subtotal-detail').each(function(){
+        subTotalAkhir += parseInt($(this).val())
+    })
+    parentTable.find('.subtotal-akhir').val(subTotalAkhir)
+
+    let grandTotal = 0
+    $(document).find('.subtotal-akhir').each(function(){
+        grandTotal += parseInt($(this).val())
+    })
+    $('#grand-total').val(grandTotal)
+})
+
+$(document).on('change', '.supplier-nama', function(){
+    if ($(this).val()) {
+        let parent = $(this).parent().parent().parent()
+        $.ajax({
+            url: "rb/getKodeSupplier",
+            type: "post", //form method
+            data: {
+                nama: $(this).val()
+            },
+            dataType: "text",
+            beforeSend: function () { },
+            success: function (result) {
+                console.log(result)
+                parent.find('.supplier-kode').val(result)
+            },
+            complete: function (result) { },
+            error: function (xhr, Status, err) { }
+        })
+    }
+})
+
 $(document).on('click', '.delete-row', function () {
     // alert($('#table-body tr').length)
     let parent = $(this).parent().parent().parent().parent()
-    console.log(parent.html())
+    // console.log(parent.html())
     if (parent.find('tbody tr').length > 2) {
         // alert("Detailsss")
         let c = confirm("Apakah yakin akan menghapus data?")

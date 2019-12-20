@@ -1,26 +1,26 @@
 var dataRB = []
 var countSelect = 1
-$('#add-detail-po').on('click', function () {
-    $('#table-body').append('<tr>' + $('#table-body tr.table-row:last').html() + '</tr>')
-    $('#table-body tr.table-row:last td').each(function () {
-        $(this).val("")
-    })
-    $('#row-total').appendTo('#table-body')
+// $('#add-detail-po').on('click', function () {
+//     $('#table-body').append('<tr>' + $('#table-body tr.table-row:last').html() + '</tr>')
+//     $('#table-body tr.table-row:last td').each(function () {
+//         $(this).val("")
+//     })
+//     $('#row-total').appendTo('#table-body')
 
-    let html = '<select name="jenis[]" class="form-control select2-modal" data-plugin="select2"><option>Pilih Jenis Barang</option>'
-    $.each(dataRB, function (key, value) {
-        html += '<option value="' + key + '">' + value['Jenis_Nama'] + '</option>'
-    })
-    html += '</select>'
+//     let html = '<select name="jenis[]" class="form-control select2-modal" data-plugin="select2"><option>Pilih Jenis Barang</option>'
+//     $.each(dataRB, function (key, value) {
+//         html += '<option value="' + key + '">' + value['Jenis_Nama'] + '</option>'
+//     })
+//     html += '</select>'
 
-    $('.jenis-barang:last').html(html)
+//     $('.jenis-barang:last').html(html)
 
-    $('.jenis-barang select').each(function () {
-        // $(this).html(html)
-        // $(this).select2('destroy')
-        $(this).select2()
-    })
-})
+//     $('.jenis-barang select').each(function () {
+//         // $(this).html(html)
+//         // $(this).select2('destroy')
+//         $(this).select2()
+//     })
+// })
 
 $(document).on('click', '.delete-row', function () {
     // alert($('#table-body tr').length)
@@ -48,8 +48,10 @@ $(document).on('click', '.delete-row-termin', function () {
     // alert($('#table-body tr').length)
     if ($('#table-termin tr').length > 2) {
         let c = confirm("Apakah yakin akan menghapus data?")
-        if (c)
+        if (c) {
             $(this).parent().parent().remove()
+            countTermin($(this))
+        }
     }
     else {
         alert("Termin harus ada")
@@ -131,12 +133,71 @@ $(document).on('keyup', '.harga-po-val, .jumlah-po-val, .diskon-po-val, .diskon2
     $('#total-akhir-po').val(totalakhir)
 })
 
-$(document).on('keyup', '.jumlah-termin', function () {
+function countTermin(el) {
     let totalakhir = 0
     $('.jumlah-termin').each(function () {
         totalakhir += parseInt($(this).val())
     })
     $('#total-akhir-termin-po').val(totalakhir)
+}
+
+$(document).on('keyup', '.jumlah-termin', function () {
+    countTermin($(this))
 })
+
+$(document).on('change', '#nama-supplier', function () {
+    if ($(this).val()) {
+        let html = ""
+        let result = ['1', '2']
+        $.each(result, function (key, value) {
+            let id = 1
+            html += '<tr>'
+            html += '<td><input name="jenis_barang[' + id + '][]" class="form-control" readonly value=""></td>'
+            html += '<td><input name="nama_barang[' + id + '][]" class="form-control" readonly value=""></td>'
+            html += '<td><input name="jumlah[' + id + '][]" class="form-control" readonly value=""></td>'
+            html += '<td><input name="jumlah[' + id + '][]" class="form-control" readonly value=""></td>'
+            html += '<td><input name="jumlah[' + id + '][]" class="form-control" readonly value=""></td>'
+            html += '<td><input name="jumlah[' + id + '][]" class="form-control" readonly value=""></td>'
+            html += '<td><input name="jumlah[' + id + '][]" class="form-control" readonly value=""></td>'
+            html += '<td><input name="jumlah[' + id + '][]" class="form-control" readonly value=""></td>'
+            html += '<td><input name="jumlah[' + id + '][]" class="form-control" readonly value=""></td>'
+            html += '</tr>'
+        })
+        $('#table-body').html(html)
+        // $.ajax({
+        //     url: "po/getDetailBarang",
+        //     type: "post", //form method
+        //     data: {
+        //         nama_supplier: "tes",
+        //         id_po: "2"
+        //     },
+        //     dataType: "json",
+        //     beforeSend: function () { },
+        //     success: function (result) {
+        //         let html = ""
+        //         $.each(result, function (key, value) {
+        //             let id = 1
+        //             html += '<tr>'
+        //             html += '<td><input name="jenis_barang['+id+'][]" class="form-control" readonly value=""></td>'
+        //             html += '<td><input name="nama_barang['+id+'][]" class="form-control" readonly value=""></td>'
+        //             html += '<td><input name="jumlah['+id+'][]" class="form-control" readonly value=""></td>'
+        //             html += '<td><input name="jumlah['+id+'][]" class="form-control" readonly value=""></td>'
+        //             html += '<td><input name="jumlah['+id+'][]" class="form-control" readonly value=""></td>'
+        //             html += '<td><input name="jumlah['+id+'][]" class="form-control" readonly value=""></td>'
+        //             html += '<td><input name="jumlah['+id+'][]" class="form-control" readonly value=""></td>'
+        //             html += '<td><input name="jumlah['+id+'][]" class="form-control" readonly value=""></td>'
+        //             html += '<td><input name="jumlah['+id+'][]" class="form-control" readonly value=""></td>'
+        //             html += '</tr>'
+        //         })
+        //         $('#table-body').html(html)
+        //     },
+        //     complete: function (result) { },
+        //     error: function (xhr, Status, err) { }
+        // })
+    }
+})
+
+
+
 
 

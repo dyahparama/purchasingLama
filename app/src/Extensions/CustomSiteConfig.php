@@ -2,6 +2,7 @@
 
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\TextField;
+use SilverStripe\Forms\DropdownField;
 // use SilverStripe\Forms\TextAreaField;
 use SilverStripe\ORM\DataExtension;
 use SilverStripe\Forms\GridField\GridField;
@@ -16,13 +17,25 @@ use Symbiote\GridFieldExtensions\GridFieldExtensions;
 use SilverStripe\Forms\GridField\GridFieldDataColumns;
 use Silverstripe\Forms\GridField\GridFieldComponent;
 
+
 class CustomSiteConfig extends DataExtension
 {
 
     private static $db = [
         'sendgrid_apikey'     => 'Text',
         'email_from'        => 'Text',
-        'email_from_name'    => 'Text'
+        'email_from_name'    => 'Text',
+        'NominalTPS' => 'Double',
+        'NominalPimpinan' => 'Double'
+    ];
+
+    private static $has_one = [
+        'KepalaPembelian' => User::class,
+        'AsistenPembelian' => User::class,
+        'KepalaFinance' => User::class,
+        'AsistenFinance' => User::class,
+        'StafPencarianHarga' => Jabatan::class,
+        'DepartemenPencairanHarga' => Departemen::class
     ];
 
     private static $has_many = [
@@ -44,6 +57,39 @@ class CustomSiteConfig extends DataExtension
             new TextField("sendgrid_apikey", "Sendgrid API KEY")
         );
 
+        $user = User::userList();
+
+        $dropdown = new DropdownField('KepalaPembelianID', 'Kepala Pembelian', $user->map('ID', 'Nama'));
+        $dropdown->setEmptyString("Pilih Kepala Pembelian");
+        $fields->addFieldToTab("Root.Jabatan Khusus", $dropdown);
+
+        $dropdown = new DropdownField('AsistenPembelianID', 'Asisten Kepala Pembelian', $user->map('ID', 'Nama'));
+        $dropdown->setEmptyString("Pilih Asisten Kepala Pembelian");
+        $fields->addFieldToTab("Root.Jabatan Khusus", $dropdown);
+
+        $dropdown = new DropdownField('KepalaFinanceID', 'Kepala Finance', $user->map('ID', 'Nama'));
+        $dropdown->setEmptyString("Pilih Kepala Finance");
+        $fields->addFieldToTab("Root.Jabatan Khusus", $dropdown);
+
+        $dropdown = new DropdownField('AsistenFinanceID', 'Asisten Kepala Finance', $user->map('ID', 'Nama'));
+        $dropdown->setEmptyString("Pilih Asisten Kepala Pembelian");
+        $fields->addFieldToTab("Root.Jabatan Khusus", $dropdown);
+
+        $dropdown = new DropdownField('StafPencarianHargaID', 'Staff Pencarian Harga dan Vendor', Jabatan::get()->map('ID', 'Nama'));
+        $dropdown->setEmptyString("Pilih Jabatan");
+        $fields->addFieldToTab("Root.Jabatan Khusus", $dropdown);
+
+        $dropdown = new DropdownField('DepartemenPencairanHargaID', 'Departemen Pencarian Harga dan Vendor', Departemen::get()->map('ID', 'Nama'));
+        $dropdown->setEmptyString("Pilih Departemen");
+        $fields->addFieldToTab("Root.Jabatan Khusus", $dropdown);
+
+        $text = new TextField("NominalTPS", "Nominal Approval TPS");
+        $fields->addFieldsToTab("Root.Approval Khusus", $text);
+
+        $text = new TextField("NominalPimpinan", "Nominal Approval Pimpinan");
+        $fields->addFieldsToTab("Root.Approval Khusus", $text);
+
+
         $grid = new GridField(
             'BarangGrid',
             'Detail Barang',
@@ -53,8 +99,8 @@ class CustomSiteConfig extends DataExtension
                 ->addComponent(new GridFieldToolbarHeader())
                 ->addComponent(new GridFieldTitleHeader())
                 ->addComponent(new GridFieldEditableColumns())
-                // ->addComponent(new GridFieldDeleteAction())
-                // ->addComponent(new GridFieldAddNewInlineButton())
+            // ->addComponent(new GridFieldDeleteAction())
+            // ->addComponent(new GridFieldAddNewInlineButton())
         );
 
         $grid->getConfig()->getComponentByType(GridFieldEditableColumns::class)->setDisplayFields(array(

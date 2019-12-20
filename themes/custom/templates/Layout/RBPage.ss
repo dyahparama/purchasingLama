@@ -3,7 +3,7 @@
     <div class="panel">
         <header class="panel-heading">
             <h3 class="panel-title">
-                Input Draf Request Barang
+                Input Request Barang
             </h3>
         </header>
         <div class="panel-body container-fluid">
@@ -12,19 +12,21 @@
                     <!-- Example Horizontal Form -->
                     <div class="example-wrap">
                         <div class="example">
-                            <form id="form-drb">
+                            <form action="/rb/doSubmitRB" method="post">
+                                <input class="form-control" name="RBID" type="hidden"
+                                            value="{$RB.ID}" readonly autocomplete="off">
                                 <div class="form-group form-material row">
                                     <label class="col-md-3 col-form-label">*Kode RB :</label>
                                     <div class="col-md-9">
                                         <input class="form-control" id="nomor" name="nomor" type="text"
-                                            value="<Auto Generate>" readonly autocomplete="off">
+                                            value="{$RB.Kode}" readonly autocomplete="off">
                                     </div>
                                 </div>
                                 <div class="form-group form-material row">
                                     <label class="col-md-3 col-form-label">Kode Draft RB :</label>
                                     <div class="col-md-9">
                                         <input class="form-control" id="nomor" name="kode" type="text"
-                                            value="{$RB.Kode}" readonly autocomplete="off">
+                                            value="{$DraftRB.Kode}" readonly autocomplete="off">
                                     </div>
                                 </div>
                                 <div class="form-group form-material row">
@@ -45,14 +47,14 @@
                                     <label class="col-md-3 col-form-label">Pemohon :</label>
                                     <div class="col-md-9">
                                         <input class="form-control" id="nomor" name="Pemohon" type="text"
-                                            value="{$RB.Pemohon.Pegawai.Nama}" readonly autocomplete="off">
+                                            value="{$DraftRB.Pemohon.Pegawai.Nama}" readonly autocomplete="off">
                                     </div>
                                 </div>
                                 <div class="form-group form-material row">
                                     <label class="col-md-3 col-form-label">Jabatan/Cabang :</label>
                                     <div class="col-md-9">
                                         <input class="form-control" id="nomor" name="Pemohon" type="text"
-                                            value="{$RB.PegawaiPerJabatan.Jabatan.Nama}/{$RB.PegawaiPerJabatan.Cabang.Nama}"
+                                            value="{$DraftRB.PegawaiPerJabatan.Jabatan.Nama}/{$DraftRB.PegawaiPerJabatan.Cabang.Nama}"
                                             readonly autocomplete="off">
                                     </div>
                                 </div>
@@ -60,7 +62,7 @@
                                     <label class="col-md-3 col-form-label">Kepala Cabang :</label>
                                     <div class="col-md-9">
                                         <input class="form-control" id="nomor" name="Pemohon" type="text"
-                                            value="{$RB.PegawaiPerJabatan.Cabang.Kacab.Pegawai.Nama}" readonly
+                                            value="{$DraftRB.PegawaiPerJabatan.Cabang.Kacab.Pegawai.Nama}" readonly
                                             autocomplete="off">
                                     </div>
                                 </div>
@@ -68,30 +70,30 @@
                                     <label class="col-md-3 col-form-label">Jenis Permintaan :</label>
                                     <div class="col-md-9">
                                         <input class="form-control" id="nomor" name="Pemohon" type="text"
-                                            value="{$RB.Jenis}" readonly autocomplete="off">
+                                            value="{$DraftRB.Jenis}" readonly autocomplete="off">
                                     </div>
                                 </div>
                                 <div class="form-group form-material row">
                                     <label class="col-md-3 col-form-label">Tanggal Dibutuhkan :</label>
                                     <div class="col-md-9">
                                         <input class="form-control" id="nomor" name="Pemohon" type="text"
-                                            value="{$RB.Deadline.format('dd/MM/yyyy')}" readonly autocomplete="off">
+                                            value="{$DraftRB.Deadline.format('dd/MM/yyyy')}" readonly autocomplete="off">
                                     </div>
                                 </div>
                                 <div class="form-group form-material row">
                                     <label class="col-md-3 col-form-label">Alasan Permintaan :</label>
                                     <div class="col-md-9">
                                         <textarea class="form-control" id="nomor" name="Pemohon" type="text"
-                                            value="{$RB.Alasan}" readonly autocomplete="off"></textarea>
+                                            value="{$DraftRB.Alasan}" readonly autocomplete="off"></textarea>
                                     </div>
                                 </div>
                                 <div class="form-group form-material row">
-                                        <label class="col-md-3 col-form-label">Nomor Proyek :</label>
-                                        <div class="col-md-9">
-                                            <input class="form-control" id="nomor" name="Pemohon" type="text"
-                                                value="{$RB.NomorProyek}" readonly autocomplete="off">
-                                        </div>
+                                    <label class="col-md-3 col-form-label">Nomor Proyek :</label>
+                                    <div class="col-md-9">
+                                        <input class="form-control" id="nomor" name="Pemohon" type="text"
+                                            value="{$DraftRB.NomorProyek}" readonly autocomplete="off">
                                     </div>
+                                </div>
                                 <div class="example table-responsive">
                                     <table class="table table-striped">
                                         <thead>
@@ -118,6 +120,7 @@
                                                 </td>
                                                 <td>
                                                     $Jumlah
+                                                    <input type="hidden" val="jumlah" class="jumlah_total_{$ID}">
                                                 </td>
                                                 <td>
                                                     $Satuan.Nama
@@ -149,6 +152,13 @@
                                             <% end_loop %>
                                         </tbody>
                                     </table>
+                                </div>
+                                <div class="form-group form-material row">
+                                    <label class="col-md-3 col-form-label">Grand Total :</label>
+                                    <div class="col-md-9">
+                                        <input id="grand-total" class="form-control" id="nomor" name="Pemohon"
+                                            type="text" value="" readonly autocomplete="off">
+                                    </div>
                                 </div>
                                 <div class="form-group form-material row">
                                     <label class="col-md-3 col-form-label">Note :</label>
@@ -191,11 +201,102 @@
                                 </div>
                                 <div class="form-group form-material row">
                                     <div class="col-md-9">
-                                        <button class="btn btn-primary" id="forwardTo" type="button">
-                                            Submit
-                                        </button>
+                                        <button type="submit" class="btn-primary btn">Submit</button>
                                     </div>
                                 </div>
+
+                                <% loop $DetailRB %>
+                                <div id="modal-detail_$ID" class="modal fade example-modal-lg" aria-hidden="true"
+                                    aria-labelledby="exampleOptionalLarge" role="dialog" tabindex="-1"
+                                    data-backdrop="static">
+                                    <div class="modal-dialog modal-simple modal-lg">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h4 class="modal-title" id="exampleOptionalLarge">Detail Barang</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="table-responsive">
+                                                    <div class="col-md-3">
+                                                        <button
+                                                            class="btn btn-block btn-primary waves-effect waves-classic add-detail"
+                                                            type="button">
+                                                            Add Detail
+                                                        </button>
+                                                    </div>
+                                                    <table class="table-striped table">
+                                                        <thead>
+                                                            <tr>
+                                                                <th class="th-detail">Supplier</th>
+                                                                <th class="th-detail">Kode Supplier</th>
+                                                                <th class="th-detail">Jumlah</th>
+                                                                <th class="th-detail">Harga Satuan</th>
+                                                                <th class="th-detail">Subtotal</th>
+                                                                <th class="th-detail">Keterangan</th>
+                                                                <th></th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr class="table-row">
+                                                                <td class="supplier">
+                                                                    <input type="text"
+                                                                        class="form-control tt-input typeahead supplier-nama"
+                                                                        placeholder="Supplier" autocomplete="off"
+                                                                        spellcheck="false" dir="auto"
+                                                                        style="position: relative; vertical-align: top; background-color: transparent;"
+                                                                        name="nama_supplier[$ID][]">
+                                                                </td>
+                                                                <td>
+                                                                    <input name="kode_supplier[$ID][]"
+                                                                        class="form-control supplier-kode" type="text"
+                                                                        autocomplete="off" readonly>
+                                                                </td>
+                                                                <td>
+                                                                    <input name="jumlah[$ID][]"
+                                                                        class="form-control jumlah-detail" type="number"
+                                                                        value="0" autocomplete="off">
+                                                                </td>
+                                                                <td>
+                                                                    <input name="harga[$ID][]"
+                                                                        class="form-control harga-detail" type="number"
+                                                                        value="0" autocomplete="off">
+                                                                </td>
+                                                                <td>
+                                                                    <input name="subtotal[$ID][]"
+                                                                        class="form-control subtotal-detail" type="text"
+                                                                        autocomplete="off" readonly>
+                                                                </td>
+                                                                <td>
+                                                                    <textarea name="keterangan[$ID][]"
+                                                                        class="form-control"></textarea>
+                                                                </td>
+                                                                <td>
+                                                                    <button
+                                                                        class="btn btn-danger delete-row btn-xs waves-effect waves-classic modal-select2-show waves-effect waves-classic"
+                                                                        type="button">
+                                                                        Delete
+                                                                    </button>
+                                                                </td>
+                                                            </tr>
+                                                            <tr class="row-total">
+                                                                <td colspan="4">Jumlah</td>
+                                                                <td><input name="total"
+                                                                        class="form-control subtotal-akhir" type="text"
+                                                                        value="0" autocomplete="off" readonly></td>
+                                                                <td></td>
+                                                                <td></td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-primary close-modal"
+                                                    data-modal="modal-detail_$ID">Save</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <% end_loop %>
                             </form>
                         </div>
                     </div>
@@ -205,84 +306,4 @@
         </div>
     </div>
 </div>
-
-<% loop $DetailRB %>
-<div id="modal-detail_$ID" class="modal fade example-modal-lg" aria-hidden="true" aria-labelledby="exampleOptionalLarge"
-    role="dialog" tabindex="-1" data-backdrop="static">
-    <div class="modal-dialog modal-simple modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="exampleOptionalLarge">Detail Barang</h4>
-            </div>
-            <div class="modal-body">
-                <div class="table-responsive">
-                    <div class="col-md-3">
-                        <button class="btn btn-block btn-primary waves-effect waves-classic add-detail" type="button">
-                            Add Detail
-                        </button>
-                    </div>
-                    <table class="table-striped table">
-                        <thead>
-                            <tr>
-                                <th class="th-detail">Supplier</th>
-                                <th class="th-detail">Kode Supplier</th>
-                                <th class="th-detail">Jumlah</th>
-                                <th class="th-detail">Harga Satuan</th>
-                                <th class="th-detail">Subtotal</th>
-                                <th class="th-detail">Keterangan</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="table-row">
-                                <td class="supplier">
-                                    <input type="text" class="form-control tt-input typeahead supplier-nama"
-                                        placeholder="Supplier" autocomplete="off" spellcheck="false" dir="auto"
-                                        style="position: relative; vertical-align: top; background-color: transparent;">
-                                </td>
-                                <td>
-                                    <input name="subtotal[]" class="form-control subtotal-po-val" type="text"
-                                        autocomplete="off" readonly>
-                                </td>
-                                <td>
-                                    <input name="jumlah[]" class="jumlah-po form-control jumlah-po-val" type="number"
-                                        value="0" autocomplete="off">
-                                </td>
-                                <td>
-                                    <input name="jumlah[]" class="jumlah-po form-control jumlah-po-val" type="number"
-                                        value="0" autocomplete="off">
-                                </td>
-                                <td>
-                                    <input name="subtotal[]" class="form-control subtotal-po-val" type="text"
-                                        autocomplete="off" readonly>
-                                </td>
-                                <td>
-                                    <textarea class="form-control" name="deskripsi[]"></textarea>
-                                </td>
-                                <td>
-                                    <button
-                                        class="btn btn-danger delete-row btn-xs waves-effect waves-classic modal-select2-show waves-effect waves-classic"
-                                        type="button">
-                                        Delete
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr class="row-total">
-                                <td colspan="4">Jumlah</td>
-                                <td><input name="total" class="form-control total-akhir-po" type="text" value="0"
-                                        autocomplete="off" readonly></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary close-modal" data-modal="modal-detail_$ID">Save</button>
-            </div>
-        </div>
-    </div>
-</div>
-<% end_loop %>
 <div id="stored-val" data-val='$SupplierList'></div>

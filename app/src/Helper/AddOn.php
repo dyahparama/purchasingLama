@@ -77,12 +77,40 @@ class AddOn
         return $arr;
     }
 
-    public static function getOneField($data, $column) {
+    public static function getOneField($data, $column)
+    {
         $arr = array();
         foreach ($data as $val) {
             $arr[] = $val->$column;
         }
         return $arr;
+    }
+
+    public static function groupConcat($data = [], $colNameRelation = '', $sep = ', ')
+    {
+        $arr = [];
+        foreach ($data as $row) {
+            // $tolool = $colNameRelation;
+            // var_dump($tolool);
+            // echo $row->$tolool . "</br>";
+            // // var_dump($row->{$colNameRelation});
+            // $temp_arr[] = $row->$colNameRelation;
+            if (strpos($colNameRelation, '.')) {
+                $strArr = explode('.', $colNameRelation);
+                $tempVal = $row;
+                for ($i = 1; $i <= count($strArr); $i++) {
+                    if ($i < count($strArr)) {
+                        $tempVal = $tempVal->{$strArr[$i - 1]}();
+                    } else {
+                        $tempVal = $tempVal->{$strArr[$i - 1]};
+                    }
+                }
+                $arr[] = $tempVal;
+            } else {
+                $arr[] = $row->$colNameRelation;
+            }
+        }
+        return implode($sep, $arr);
     }
 
     public static function convertObjToArray($obj)
@@ -314,5 +342,14 @@ class AddOn
         ];
 
         return isset($mime_map[$mime]) ? $mime_map[$mime] : false;
+    }
+    public static function GenerateKode($param)
+    {
+        $arr = explode("-", $param);
+        $count = $arr[1] + 1;
+        while (strlen($count) < 5) {
+            $count = "0" . $count;
+        }
+        return $count;
     }
 }

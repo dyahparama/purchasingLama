@@ -6,9 +6,11 @@ $("#penawaran").dropzone({
     //   return new Date().getTime();
     // }
 });
+
 $(document).ready(function() {
     let dateNow = $("#tgl-draft").data("now");
     $("#tgl-draft").datepicker({ format: "dd/mm/yy" });
+
     $("#tgl-draft").datepicker("setDate", dateNow);
 
     $(".jabatan-cabang").change(function(e) {
@@ -30,23 +32,35 @@ $(document).ready(function() {
     });
 
     $("#add-detail").click(function(e) {
-        $(".select2-container").addClass("z-index-1");
-        $(".select2-modal")
-            .next()
-            .removeClass("z-index-1");
-        $(".select2-modal")
-            .next()
-            .css("width", "100%");
-        $.ajax({
-            url: "/draf-rb/saveMasterDRB",
-            type: "post", //form method
-            data: $("#form-drb").serialize(),
-            dataType: "json",
-            beforeSend: function() {},
-            success: function(result) {},
-            complete: function(result) {},
-            error: function(xhr, Status, err) {}
+        let pass = true;
+        let data = $("#form-drb").serializeArray();
+        data.forEach(element => {
+            if (element.value == "" && element.name != "note") {
+                pass = false;
+            }
         });
+        if (pass) {
+            $("#exampleNiftyFadeScale").modal("show");
+            $(".select2-container").addClass("z-index-1");
+            $(".select2-modal")
+                .next()
+                .removeClass("z-index-1");
+            $(".select2-modal")
+                .next()
+                .css("width", "100%");
+            $.ajax({
+                url: "/draf-rb/saveMasterDRB",
+                type: "post", //form method
+                data: $("#form-drb").serialize(),
+                dataType: "json",
+                beforeSend: function() {},
+                success: function(result) {},
+                complete: function(result) {},
+                error: function(xhr, Status, err) {}
+            });
+        } else {
+            alert("data belum lengkap");
+        }
     });
     $(".close-modal").click(function(e) {
         setTimeout(() => {
@@ -55,83 +69,90 @@ $(document).ready(function() {
     });
 
     $("#save-detail").click(function(e) {
-        $('#form-drb').validate({
-            messages: {
-                pemohon: {
-                    required: "Kolom pemohon harus diisi"
-                },
-                'kepala-cabang': {
-                    required: "Kolom atasan harus diisi"
-                }
+        let pass = true;
+        let data2 = $("#form-modal-add-detail").serializeArray();
+        console.log(data2);
+        data2.forEach(element => {
+            if (element.value == "") {
+                pass = false;
             }
         });
-        let data = {
-            "jenis-brg": $("#jenis-brg").val(),
-            "deskripsi-kebutuhan": $("#deskripsi-kebutuhan").val(),
-            jumlah: $("#jumlah").val(),
-            satuan: $("#satuan").val(),
-            "supplier-lokal": $("#supplier-lokal").val(),
-            spesifikasi: $("#spesifikasi").val(),
-            "kode-inventaris": $("#kode-inventaris").val(),
-            nomor: $("#nomor").val()
-        };
-        let newId;
-        $.ajax({
-            url: "/draf-rb/saveDetailDRB",
-            type: "post", //form method
-            data: data,
-            dataType: "json",
-            beforeSend: function() {},
-            success: function(result) {
-                newId = result;
-            },
-            complete: function(result) {
-                Dropzone.forElement("#penawaran").on("sending", function(
-                    file,
-                    xhr,
-                    formData
-                ) {
-                    formData.append("id", newId);
-                });
-                Dropzone.forElement("#penawaran").processQueue();
+        if (pass) {
+            let data = {
+                "jenis-brg": $("#jenis-brg").val(),
+                "deskripsi-kebutuhan": $("#deskripsi-kebutuhan").val(),
+                jumlah: $("#jumlah").val(),
+                satuan: $("#satuan").val(),
+                "supplier-lokal": $("#supplier-lokal").val(),
+                spesifikasi: $("#spesifikasi").val(),
+                "kode-inventaris": $("#kode-inventaris").val(),
+                nomor: $("#nomor").val()
+            };
+            let newId;
+            $.ajax({
+                url: "/draf-rb/saveDetailDRB",
+                type: "post", //form method
+                data: data,
+                dataType: "json",
+                beforeSend: function() {},
+                success: function(result) {
+                    newId = result;
+                },
+                complete: function(result) {
+                    Dropzone.forElement("#penawaran").on("sending", function(
+                        file,
+                        xhr,
+                        formData
+                    ) {
+                        formData.append("id", newId);
+                    });
+                    Dropzone.forElement("#penawaran").processQueue();
 
-                Dropzone.forElement("#penawaran").on("queuecomplete", function(
-                    file
-                ) {});
-                location.reload();
-            },
-            error: function(xhr, Status, err) {}
-        });
+                    Dropzone.forElement("#penawaran").on(
+                        "queuecomplete",
+                        function(file) {}
+                    );
+                    location.reload();
+                },
+                error: function(xhr, Status, err) {}
+            });
+        } else {
+            alert("data belum lengkap");
+        }
     });
     $("#forwardTo").click(function(e) {
-        let data = {
-            kode: $("#nomor").val()
-        };
-        $.ajax({
-            url: "/draf-rb/forwardTo",
-            type: "post", //form method
-            data: data,
-            dataType: "json",
-            beforeSend: function() {},
-            success: function(result) {
-                location.reload();
-            },
-            complete: function(result) {
-                location.reload();
-            },
-            error: function(xhr, Status, err) {}
-        });
+        if ($(".data-detail").length) {
+            let data = {
+                kode: $("#nomor").val()
+            };
+            $.ajax({
+                url: "/draf-rb/forwardTo",
+                type: "post", //form method
+                data: data,
+                dataType: "json",
+                beforeSend: function() {},
+                success: function(result) {
+                    location.reload();
+                },
+                complete: function(result) {
+                    location.reload();
+                },
+                error: function(xhr, Status, err) {}
+            });
+        } else {
+            alert("detail belum diisi");
+        }
     });
     $(".delete-detail").click(function(e) {
         let id = $(this).data("id");
         $.ajax({
             url: "/draf-rb/deleteDetail",
             type: "post", //form method
-            data: {id},
+            data: { id },
             dataType: "json",
             beforeSend: function() {},
             success: function(result) {
-              location.reload();
+                location.reload();
             },
             complete: function(result) {
                 location.reload();
@@ -150,16 +171,16 @@ $(document).ready(function() {
             .css("width", "100%");
     });
 
-    $(".update-detail").click(function (e) {
-        let id= $(this).data("id");
+    $(".update-detail").click(function(e) {
+        let id = $(this).data("id");
         let data = {
-            "jenis-brg": $("#jenis-brg-"+id).val(),
-            "deskripsi-kebutuhan": $("#deskripsi-kebutuhan-"+id).val(),
-            jumlah: $("#jumlah-"+id).val(),
-            satuan: $("#satuan-"+id).val(),
-            "supplier-lokal": $("#supplier-lokal-"+id).val(),
-            spesifikasi: $("#spesifikasi-"+id).val(),
-            "kode-inventaris": $("#kode-inventaris-"+id).val(),
+            "jenis-brg": $("#jenis-brg-" + id).val(),
+            "deskripsi-kebutuhan": $("#deskripsi-kebutuhan-" + id).val(),
+            jumlah: $("#jumlah-" + id).val(),
+            satuan: $("#satuan-" + id).val(),
+            "supplier-lokal": $("#supplier-lokal-" + id).val(),
+            spesifikasi: $("#spesifikasi-" + id).val(),
+            "kode-inventaris": $("#kode-inventaris-" + id).val(),
             id: id
         };
         $.ajax({
@@ -169,7 +190,7 @@ $(document).ready(function() {
             dataType: "json",
             beforeSend: function() {},
             success: function(result) {
-              location.reload();
+                location.reload();
             },
             complete: function(result) {
                 location.reload();
@@ -177,18 +198,18 @@ $(document).ready(function() {
             error: function(xhr, Status, err) {}
         });
     });
-    $("#load-draft").click(function (e) {
+    $("#load-draft").click(function(e) {
         if (!isNaN($("#draft-lama").val())) {
             $.ajax({
                 url: "/draf-rb/loadDraft",
                 type: "post", //form method
                 data: {
-                    id:$("#draft-lama").val(),
+                    id: $("#draft-lama").val()
                 },
                 dataType: "json",
                 beforeSend: function() {},
                 success: function(result) {
-                  location.reload();
+                    location.reload();
                 },
                 complete: function(result) {
                     location.reload();
@@ -198,99 +219,38 @@ $(document).ready(function() {
         }
     });
 
-    $('input[type=radio][name=respond]').change(function() {
-        if (this.value == 'forward') {
+    $("input[type=radio][name=respond]").change(function() {
+        if (this.value == "forward") {
             $("#forward-to").show();
-        }else{
+        } else {
             $("#forward-to").hide();
         }
     });
 
-    $("#approve-forwardTo").unbind("click").click(function (e) {
-        let data={
-            note : $("#note-approver").val(),
-            respond :  $("input[name='respond']:checked").val(),
-            forward : $("#select-forward-to").val(),
-            from : $("#user-now").val(),
-            draft: $("#nomor").val()
-        }
-        //console.log(data);
-        $.ajax({
-            url: "/draf-rb/approve",
-            type: "post", //form method
-            data: data,
-            dataType: "json",
-            beforeSend: function() {},
-            success: function(result) {
-              //location.reload();
-            },
-            complete: function(result) {
-             //location.reload();
-            },
-            error: function(xhr, Status, err) {}
+    $("#approve-forwardTo")
+        .unbind("click")
+        .click(function(e) {
+            let data = {
+                note: $("#note-approver").val(),
+                respond: $("input[name='respond']:checked").val(),
+                forward: $("#select-forward-to").val(),
+                from: $("#user-now").val(),
+                draft: $("#nomor").val()
+            };
+            //console.log(data);
+            $.ajax({
+                url: "/draf-rb/approve",
+                type: "post", //form method
+                data: data,
+                dataType: "json",
+                beforeSend: function() {},
+                success: function(result) {
+                    //location.reload();
+                },
+                complete: function(result) {
+                    //location.reload();
+                },
+                error: function(xhr, Status, err) {}
+            });
         });
-    });
 });
-// (function(){
-//     $('#form-drb').formValidation({
-//       framework: "bootstrap4",
-//       button: {
-//         selector: '#save-detail',
-//         disabled: 'disabled'
-//       },
-//       icon: null,
-//       fields: {
-//         pemohon: {
-//           validators: {
-//             notEmpty: {
-//               message: 'Nama pemohon is required'
-//             }
-//           }
-//         },
-//         kepala_cabang: {
-//           validators: {
-//             notEmpty: {
-//               message: 'Nama atasan is required'
-//             }
-//           }
-//         },
-//         tgl: {
-//           validators: {
-//             notEmpty: {
-//               message: 'Tanggal is required'
-//             },
-//             date: {
-//               format: 'DD/MM/YYYY'
-//             }
-//           }
-//         },
-//         jabatan_cabang: {
-//           validators: {
-//             notEmpty: {
-//               message: 'Please Select Jabatan'
-//             }
-//           }
-//         },
-//         jenis: {
-//           validators: {
-//             notEmpty: {
-//               message: 'Please Select jenis'
-//             }
-//           }
-//         }
-//       },
-//       err: {
-//         clazz: 'invalid-feedback'
-//       },
-//       control: {
-//         // The CSS class for valid control
-//         valid: 'is-valid',
-
-//         // The CSS class for invalid control
-//         invalid: 'is-invalid'
-//       },
-//       row: {
-//         invalid: 'has-danger'
-//       }
-//     });
-// });

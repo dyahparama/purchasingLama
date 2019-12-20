@@ -1,20 +1,37 @@
 <?php
 	use SilverStripe\Control\HTTPRequest;
 	use SilverStripe\View\Requirements;
+	use SilverStripe\ORM\ArrayList;
 
 	class TestController extends PageController
 	{
-	    private static $allowed_actions = ['getData'];
+	    private static $allowed_actions = ['getData', 'searchdrb'];
+
+	    public function init()
+	    {
+	    	parent::init();
+
+	    	if (!isset($_SESSION['user_id'])) {
+	    		$_SESSION['error_login'] = "1";
+	    		return $this->redirect('user/login');
+	    	}
+
+	    }
 
 	    public function index(HTTPRequest $request)
 	    {
             // echo "<pre>";
             // var_dump(ModelData::TableHeader(array('Nama', 'Tes')));die;
-	    	$data = [
-	    		'cur_status' => 'Me',
+			$curStat = "Me";
+			$data = [
+	    		'cur_status' => $curStat,
 	    		'user' => 'User',
+	    		'Columns' => new ArrayList($this->getCustomColumns('drb')), 
 	    		'mgeJS' => 'list-rb',
-                'url'  => 'searchcosting'
+				'url'  => 'searchcosting',
+				'siteParent'=>"Draft RB",
+				'siteChild'=>$curStat,
+				'linkNew'=>"/draf-rb"
 	    	];
 
 	    	return $this->customise($data)
@@ -88,35 +105,59 @@
 			$columns = array();
 
 			switch ($config) {
-				case 'costing':
+				case 'drb':
 					$columns = array(
 						array(
-							'ColumnTb' => 'No. Permintaan Costing',
-							'ColumnDb' => 'buktitreqcosting',
-							'Type' => 'Number',
-							'Required' => true
-						),
-						array(
-							'ColumnTb' => 'Tgl Costing',
-							'ColumnDb' => 'tgltreqcosting',
+							'ColumnTb' => 'Tanggal',
+							'ColumnDb' => 'Tgl',
 							'Type' => 'Date',
 							'Required' => true
 						),
 						array(
-							'ColumnTb' => 'Customer',
-							'ColumnDb' => 'nmmcust',
+							'ColumnTb' => 'Kode Draft RB',
+							'ColumnDb' => 'Kode',
 							'Type' => 'Varchar',
 							'Required' => true
 						),
 						array(
-							'ColumnTb' => 'Jumlah Produk',
-							'ColumnDb' => 'jmlproduk',
-							'Type' => 'Number',
+							'ColumnTb' => 'Tgl Deadline',
+							'ColumnDb' => 'Deadline',
+							'Type' => 'Date',
 							'Required' => true
 						),
 						array(
-							'ColumnTb' => 'Keterangan',
-							'ColumnDb' => 'keterangan',
+							'ColumnTb' => 'Jabatan/Cabang/Kepala Cabang',
+							'ColumnDb' => 'jcabang',
+							'Type' => 'Varchar',
+							'Required' => true
+						),
+						array(
+							'ColumnTb' => 'Pemohon',
+							'ColumnDb' => 'pemohon',
+							'Type' => 'Varchar',
+							'Required' => true
+						),
+						array(
+							'ColumnTb' => 'Jenis Permintaan',
+							'ColumnDb' => 'Jenis',
+							'Type' => 'Varchar',
+							'Required' => true
+						),
+						array(
+							'ColumnTb' => 'Jenis Barang',
+							'ColumnDb' => 'jbarang',
+							'Type' => 'Varchar',
+							'Required' => true
+						),
+						array(
+							'ColumnTb' => 'Deskripsi Kebutuhan',
+							'ColumnDb' => 'deskripsi',
+							'Type' => 'Varchar',
+							'Required' => true
+						),
+						array(
+							'ColumnTb' => 'Status',
+							'ColumnDb' => 'status',
 							'Type' => 'Varchar',
 							'Required' => true
 						)
@@ -130,9 +171,11 @@
 			return $columns;
 		}
 
-		function searchcosting() {
+		function searchdrb() {
 		    // ============ filter bawaan datatable
-			$pk = 'idtreqcosting';
+			$pk = 'ID';
+
+			$filter_record = (isset($_REQUEST['filter_record'])) ? $_REQUEST['filter_record'] : '';
 			$start = (isset($_REQUEST['start'])) ? $_REQUEST['start'] : 0;
 			$length = (isset($_REQUEST['length'])) ? $_REQUEST['length'] : 10;
 			$search = (isset($_REQUEST['search']['value'])) ? $_REQUEST['search']['value'] : '';
@@ -142,84 +185,72 @@
 		    // ============ end filter
 
 		    // SETTING INI
-			$columns = $this->getCustomColumns('costing');
-			// Tampilkan semua data tanpa where
+			$columns = $this->getCustomColumns('drb');
+			$params_array = [];
+			parse_str($filter_record, $params_array);
 
-			$result = CostingModel::getcosting($start, $length, $columns[$fieldsort]['ColumnDb'], $typesort);
+			$result = DraftRB::get();
+				// ->limit($length, $start)
+				// ->sort($columns[$fieldsort]['ColumnDb'] . ' ' . $typesort);
 
-			$count_all = CostingModel::count_costing();
-			// Tampilkan data dengan filter
-			if ($search){
-				$result = CostingModel::getcosting($start, $length, $columns[$fieldsort]['ColumnDb'], $typesort, $search);
-				$count_all = CostingModel::count_costing($search);
-			}
+			// count all data (by filter otherwise)
+			$count_all = DraftRB::get()->count();
 
 			$arr = array();
-			foreach ($result['listData'] as $row) {
+			foreach ($result as $row) {
 				$temp = array();
 
 				$idx = 0;
+
+				$id = $row->{$pk};
+
 				foreach ($columns as $col) {
-					if ($col['Type'] == 'Date'){
-						$temp[] = $this->getDateFormat($row->$col['ColumnDb']);
-					}
-					elseif ($idx == 3)
-						$temp[] = $row->$col['ColumnDb']." produk";
+					$drafrb_det = DraftRBDetail::get()->where("DraftRBID = ".$row->ID);
+
+					if ($col['ColumnDb'] == 'jcabang') {
+						$jab = $row->PegawaiPerJabatan()->Jabatan()->Nama;
+						$cab = $row->PegawaiPerJabatan()->Cabang()->Nama;
+						$kacab = $row->PegawaiPerJabatan()->Cabang()->Kacab()->Pegawai()->Nama;
+
+						$temp[] = ($jab . "/" .$cab . "/" .$kacab);	
+					}elseif ($col['ColumnDb'] == 'pemohon') {
+						$pemohon = $row->Pemohon()->Pegawai()->Nama;
+						$temp[] = $pemohon;	
+					}elseif ($col['ColumnDb'] == 'jbarang') {
+						$temp[] = AddOn::groupConcat($drafrb_det, 'Jenis.Nama');
+					}elseif ($col['ColumnDb'] == 'deskripsi') {
+						$temp[] = AddOn::groupConcat($drafrb_det, 'Deskripsi');
+					}elseif ($col['ColumnDb'] == 'status') {
+						$status = $row->Status()->Status;
+						$temp[] = $status;	
+					}elseif($col['Type'] == 'Date')
+						$temp[] = date('d-m-Y', strtotime($row->{$col['ColumnDb']}));
 					else
-						$temp[] = $row->$col['ColumnDb'];
+						$temp[] = $row->{$col['ColumnDb']};
 
 					$idx++;
 				}
 
-				$id = $row->$pk;
 
-				$view_link = $this->Link().'viewreqcost/'.$id;
-				$edit_link = $this->Link().'editreqcost/'.$id;
+				$view_link = $this->Link().'view/'.$id;
 				$delete_link = $this->Link().'deletereqcost/'.$id;
-/*
-				$temp[] = '<a href="'.$view_link.'" style="font-size:80%;" class="text-info"><i class="btn btn-info fa fa-2x fa-eye"></i></a>
-				<a href="'.$edit_link.'" style="font-size:80%;" class="text-primary"><i class="btn btn-primary fa fa-2x fa-edit"></i></a>
-				<a href="'.$view_link.'?print" target = "_blank" style="font-size:80%;" class="text-info"><i class="btn btn-info fa fa-2x fa-print"></i></a>
-				<a href="'.$delete_link.'" style="font-size:80%;" class="text-danger delete"><i class="btn btn-danger fa fa-2x fa-close"></i></a>
-				';*/
 
-				if ($row->isapprovedirektur != NULL && $row->isapprovemarketing != NULL) {
-					$temp[] = '
-					<div class="btn-group">
-					  <a href="'.$view_link.'" type="button" class="btn btn-default"><i class="text-info fa fa-eye"></i> View</a>
-					  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-					    <span class="caret"></span>
-					    <span class="sr-only">Toggle Dropdown</span>
-					  </button>
-					  <ul class="dropdown-menu" role="menu">
-					    <li><a href="'.$view_link.'?print" target = "_blank" class="print"><i class="text-info fa fa-print"></i> Print</a></li>
-					  </ul>
-					</div>
-					';
-				}else{
-					$temp[] = '
-					<div class="btn-group">
-					  <a href="'.$view_link.'" type="button" class="btn btn-default"><i class="text-info fa fa-eye"></i> View</a>
-					  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-					    <span class="caret"></span>
-					    <span class="sr-only">Toggle Dropdown</span>
-					  </button>
-					  <ul class="dropdown-menu" role="menu">
-					    <li><a href="'.$view_link.'?print" target = "_blank" class="print"><i class="text-info fa fa-print"></i> Print</a></li>
-					    <li role="separator" class="divider"></li>
-					    <li><a href="'.$edit_link.'" class="edit"><i class="text-primary fa fa-edit"></i> Edit</a></li>
-					    <li><a href="'.$delete_link.'" class="delete"><i class="text-danger fa fa-close"></i> Delete</a></li>
-					  </ul>
-					</div>
-					';
-				}
+				$temp[] = '
+				<div class="btn-group">
+				  <a href="'.$view_link.'" type="button" class="btn btn-default view"><i class="text-info fa fa-eye"></i> View</a>
+				  <a href="'.$delete_link.'" type="button" class="btn btn-danger delete"><i class="text-info fa fa-eye"></i> Delete</a> 					 
+				</div>
+				';
 
 				$arr[] = $temp;
 			}
+
+			// die;
 			$result = array(
 				'data' => $arr,
-				'recordsTotal' => $count_all['count'],
-				'recordsFiltered' => $count_all['count'],
+				'params_arr' => $params_array,
+				'recordsTotal' => $count_all,
+				'recordsFiltered' => $count_all,
 				'sql' => $result['sql']
 			);
 			return json_encode($result);

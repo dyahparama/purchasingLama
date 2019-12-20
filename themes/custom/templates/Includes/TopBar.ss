@@ -50,7 +50,7 @@
 
 		<!-- Navbar Toolbar Right -->
 		<ul class="nav navbar-toolbar navbar-right navbar-toolbar-right">
-		  <li class="nav-item dropdown">
+		  <!-- <li class="nav-item dropdown">
 			<a class="nav-link" data-toggle="dropdown" href="javascript:void(0)" data-animation="scale-up"
 			  aria-expanded="false" role="button">
 			  <span class="flag-icon flag-icon-us"></span>
@@ -67,24 +67,24 @@
 			  <a class="dropdown-item" href="javascript:void(0)" role="menuitem">
 				<span class="flag-icon flag-icon-nl"></span> Dutch</a>
 			</div>
-		  </li>
+		  </li> -->
 		  <li class="nav-item dropdown">
 			<a class="nav-link navbar-avatar" data-toggle="dropdown" href="#" aria-expanded="false"
 			  data-animation="scale-up" role="button">
 			  <span class="avatar avatar-online">
-				<img src="/_resources/themes/custom/global/portraits/5.jpg" alt="...">
+				<img src="/_resources/themes/custom/assets/images/no-profile.png" alt="...">
 				<i></i>
 			  </span>
 			</a>
 			<div class="dropdown-menu" role="menu">
-			  <a class="dropdown-item" href="javascript:void(0)" role="menuitem"><i class="icon md-account" aria-hidden="true"></i> Profile</a>
-			  <a class="dropdown-item" href="javascript:void(0)" role="menuitem"><i class="icon md-card" aria-hidden="true"></i> Billing</a>
-			  <a class="dropdown-item" href="javascript:void(0)" role="menuitem"><i class="icon md-settings" aria-hidden="true"></i> Settings</a>
+			  <a class="dropdown-item" href="/prfl" role="menuitem"><i class="icon md-account" aria-hidden="true"></i> Profile</a>
+			  <!-- <a class="dropdown-item" href="javascript:void(0)" role="menuitem"><i class="icon md-card" aria-hidden="true"></i> Billing</a>
+			  <a class="dropdown-item" href="javascript:void(0)" role="menuitem"><i class="icon md-settings" aria-hidden="true"></i> Settings</a> -->
 			  <div class="dropdown-divider" role="presentation"></div>
 			  <a class="dropdown-item" href="user/dologout" role="menuitem"><i class="icon md-power" aria-hidden="true"></i> Logout</a>
 			</div>
 		  </li>
-		  <li class="nav-item dropdown">
+		  <!-- <li class="nav-item dropdown">
 			<a class="nav-link" data-toggle="dropdown" href="javascript:void(0)" title="Notifications"
 			  aria-expanded="false" data-animation="scale-up" role="button">
 			  <i class="icon md-notifications" aria-hidden="true"></i>
@@ -166,8 +166,8 @@
 				</a>
 			  </div>
 			</div>
-		  </li>
-		  <li class="nav-item dropdown">
+		  </li> -->
+		  <!-- <li class="nav-item dropdown">
 			<a class="nav-link" data-toggle="dropdown" href="javascript:void(0)" title="Messages"
 			  aria-expanded="false" data-animation="scale-up" role="button">
 			  <i class="icon md-email" aria-hidden="true"></i>
@@ -262,13 +262,13 @@
 				</a>
 			  </div>
 			</div>
-		  </li>
-		  <li class="nav-item" id="toggleChat">
+		  </li> -->
+		  <!-- <li class="nav-item" id="toggleChat">
 			<a class="nav-link" data-toggle="site-sidebar" href="javascript:void(0)" title="Chat"
 			  data-url="site-sidebar.tpl">
 			  <i class="icon md-comment" aria-hidden="true"></i>
 			</a>
-		  </li>
+		  </li> -->
 		</ul>
 		<!-- End Navbar Toolbar Right -->
 	  </div>

@@ -121,6 +121,7 @@
 													<a href="{$Link}$FileFileName">$Name</a><% end_loop %></td>
 												<td>$Spesifikasi</td>
 												<td>$KodeInventaris</td>
+												<% if $canApprove %>
 												<td>
 													<button data-target="#editModal-{$ID}" data-toggle="modal"
 														class="btn btn-info btn-xs waves-effect waves-classic modal-select2-show"
@@ -128,6 +129,7 @@
 														Edit
 													</button>
 												</td>
+												<% end_if %>
 											</tr>
 											<div class="modal fade modal-fade-in-scale-up" id="editModal-{$ID}"
 												aria-hidden="true" aria-labelledby="exampleModalTitle" role="dialog"

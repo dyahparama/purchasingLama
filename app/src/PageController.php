@@ -5,6 +5,7 @@ namespace {
     use SilverStripe\CMS\Controllers\ContentController;
     use SilverStripe\Control\Director;
     use SilverStripe\Control\HTTPRequest;
+    use Silverstripe\SiteConfig\SiteConfig;
     use SilverStripe\View\Requirements;
 
     class PageController extends ContentController
@@ -90,7 +91,7 @@ namespace {
                     break;
                 case 5:
                     $targetStatus = 6;
-                    $target = "staf pembelian";
+                    $target = 0;
                     return (["user" => $target, "status" => $targetStatus]);
                     break;
 
@@ -98,6 +99,7 @@ namespace {
                     break;
             }
         }
+
         public static function cekSudahApprove($nextUser, $drb)
         {
             if (in_array($nextUser, ["staf pembelian"])) {
@@ -125,6 +127,18 @@ namespace {
                 $drb->ApproveToID = $target["user"];
                 $drb->ForwardToID = $target["user"];
                 $drb->write();
+                if ($drb->Status()->ID == 6) {
+                    $RB = RB::get()->sort("ID", "DESC")->limit(1);
+                    if ($drafRB->count()) {
+                        $kode = "RB-" . AddOn::GenerateKode($drafRB->first()->Kode);
+                    } else {
+                        $kode = "RB-00001";
+                    }
+                    $newRB = RB::create();
+                    $newRB->Kode = $kode;
+                    $newRB->write();
+                    $stop = true;
+                }
                 if (!self::cekSudahApprove($target["user"], $drb)) {
                     $stop = true;
                 }
@@ -193,22 +207,22 @@ namespace {
 
         public static function getTglTerima($HistoryID)
         {
-            $history= HistoryApproval::get()->byID($HistoryID);
-            if ($history->Status()->ID<=2) {
-                
-                $date =  $history->DraftRB()->TglSubmit;
-            }else{
-               $status = $history->Status()->ID - 1;
-               $date = HistoryApproval::get()->where("StatusID = {$status} AND DraftRBID = {$history->DraftRB()->ID}")->first()->Created;
-               $date = explode(" ",$date);
-               $date = $date[0];
+            $history = HistoryApproval::get()->byID($HistoryID);
+            if ($history->Status()->ID <= 2) {
+
+                $date = $history->DraftRB()->TglSubmit;
+            } else {
+                $status = $history->Status()->ID - 1;
+                $date = HistoryApproval::get()->where("StatusID = {$status} AND DraftRBID = {$history->DraftRB()->ID}")->first()->Created;
+                $date = explode(" ", $date);
+                $date = $date[0];
             }
             return (new self)->dateFormat($date, "-", "/");
         }
 
         public static function getTglApprove($date)
         {
-            $date = explode(" ",$date);
+            $date = explode(" ", $date);
             $date = $date[0];
             return (new self)->dateFormat($date, "-", "/");
         }
@@ -217,18 +231,143 @@ namespace {
         {
             $canApprove = false;
             $canForward = false;
-            $approver=$drb->ApproveTo()->ID;
-            $forwardTo=$drb->ForwardTo()->ID;
-            // var_dump($approver);
-            // die;
-            if( $_SESSION['user_id'] == $approver && $_SESSION['user_id'] == $forwardTo ){
+            $approver = $drb->ApproveTo()->ID;
+            $forwardTo = $drb->ForwardTo()->ID;
+
+            if ($drb->Status()->ID == 1) {
+                $assisten = $drb->PegawaiPerJabatan()->Cabang()->Approver()->ID;
+                if ($assisten == $_SESSION['user_id']) {
+                    $canApprove = true;
+                    $canForward = true;
+                }
+            }
+            if ($drb->Status()->ID == 3) {
+                $assisten = $drb->PegawaiPerJabatan()->Cabang()->Regional()->Approver()->ID;
+                if ($assisten == $_SESSION['user_id']) {
+                    $canApprove = true;
+                    $canForward = true;
+                }
+            }
+            if ($drb->Status()->ID == 4) {
+                $assisten = $drb->Detail()->first()->Jenis()->Approver()->ID;
+                if ($assisten == $_SESSION['user_id']) {
+                    $canApprove = true;
+                    $canForward = true;
+                }
+            }
+            if ($_SESSION['user_id'] == $approver && $_SESSION['user_id'] == $forwardTo) {
                 $canApprove = true;
                 $canForward = true;
             }
             if ($_SESSION['user_id'] == $forwardTo) {
                 $canForward = true;
             }
-            return ["canForward"=>$canForward,"canApprove"=>$canApprove];
+            return ["canForward" => $canForward, "canApprove" => $canApprove];
         }
+
+        public static function getNextTargetRB($rb)
+        {
+            $siteconfig = SiteConfig::current_site_config();
+            $drb = $rb->DraftRB();
+            $total = $rb->Total;
+            $nominalTPS = $siteconfig->NominalTPS;
+            $nominalPimpinan = $siteconfig->NominalPimpinan;
+            $kepalaPusat = $drb->PegawaiPerJabatan()->Cabang()->Pusat()->Kacab()->ID;
+
+            switch ($status) {
+                case 6:
+                    $targetStatus = 7;
+                    $target = $siteconfig->KepalaPembelian()->ID;
+                    return (["user" => $target, "status" => $targetStatus]);
+                    break;
+                case 7:
+                    if ($total >= $nominalTPS) {
+                        $targetStatus = 8;
+                        $target = "0";
+                    } else {
+                        $targetStatus = 9;
+                        $target = $siteconfig->KepalaFinance()->ID;
+                    }
+                    return (["user" => $target, "status" => $targetStatus]);
+                    break;
+                case 8:
+                    $targetStatus = 9;
+                    $target = $siteconfig->KepalaFinance()->ID;
+                    return (["user" => $target, "status" => $targetStatus]);
+                    break;
+                case 9:
+                    if ($total >= $nominalPimpinan) {
+                        $targetStatus = 10;
+                        $target = $kepalaPusat;
+                    } else {
+                        $targetStatus = 11;
+                        $target = $kepalaPusat;
+                    }
+
+                    return (["user" => $target, "status" => $targetStatus]);
+                    break;
+                case 10:
+                    $targetStatus = 11;
+                    $target = $kepalaPusat;
+
+                    return (["user" => $target, "status" => $targetStatus]);
+                    break;
+
+                default:
+                    break;
+            }
+        }
+        public static function cekSudahApproveRB($nextUser, $rb)
+        {
+            $siteconfig = SiteConfig::current_site_config();
+            $drb = $rb->DraftRB();
+            $nominalTPS = $siteconfig->NominalTPS;
+            $nominalPimpinan = $siteconfig->NominalPimpinan;
+            $userTps=[];
+            $history=[];
+            $kepalaPusat = $drb->PegawaiPerJabatan()->Cabang()->Pusat()->Kacab()->ID;
+            if($drb->Status()->ID == 7 && $rb->Total >= $nominalTPS){
+                $timTps = Pegawai::get()->where("IsTPS = 1");
+                $historyRB = HistoryApproval::get()->where("Status > 6 AND Status < 10");
+                foreach ($timTps as $key) {
+                    $userTps [] =$key->User()->ID;
+                }
+                foreach ($historyRB as $key) {
+                    $history[]= $key->ApprovedBy()->ID;
+                }
+                $irisan = array_intersect($history,$userTps);
+                if (count($irisan)) {
+                    return true;
+                }
+            }
+            $history = HistoryApproval::get()->where("Status > 6 AND Status < 10")->where("ApprovedByID = {$nextUser} AND DraftRBID = $drb->ID")->count();
+            if (empty($history)) {
+                return false;
+            }
+            return true;
+        }
+
+        public static function ApproveRB($note, $rb, $approver)
+        {
+            $drb=$rb->DraftRB();
+            $stop = false;
+            while ($stop == false) {
+                $target = self::getNextTargetRB($drb);
+                $history = HistoryApproval::create();
+                $history->Note = $note;
+                $history->ApprovedByID = $approver;
+                $history->DraftRBID = $drb->ID;
+                $history->StatusID = $target["status"];
+                $history->write();
+                $drb->StatusID = $target["status"];
+                $drb->ApproveToID = $target["user"];
+                $drb->ForwardToID = $target["user"];
+                $drb->write();
+                if (!self::cekSudahApproveRB($target["user"], $drb)) {
+                    $stop = true;
+                }
+            }
+        }
+
     }
 }

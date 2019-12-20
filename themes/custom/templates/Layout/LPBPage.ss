@@ -23,13 +23,15 @@
                                 <div class="form-group form-material row">
                                     <label class="col-md-3 col-form-label">Kode RB :</label>
                                     <div class="col-md-9">
-                                        <select id="kode-rb-po" class="form-control" name="kode-rb"
-                                            data-plugin="select2">
-                                            <option>Pilih RB</option>
-                                            <% loop $RB %>
-                                            <option value="$ID">{$Kode}</option>
-                                            <% end_loop %>
-                                        </select>
+                                        <input class="form-control" id="nomor" name="nomor" type="text"
+                                            value="<Auto Generate>" readonly autocomplete="off">
+                                    </div>
+                                </div>
+                                <div class="form-group form-material row">
+                                    <label class="col-md-3 col-form-label">Kode Draft RB :</label>
+                                    <div class="col-md-9">
+                                        <input class="form-control" id="nomor" name="nomor" type="text"
+                                            value="<Auto Generate>" readonly autocomplete="off">
                                     </div>
                                 </div>
                                 <div class="form-group form-material row">
@@ -41,7 +43,7 @@
                                             </span>
                                             <input class="form-control" id="tgl-draft" name="tgl"
                                                 data-date-format="dd/mm/yyyy" data-now="$dateNow"
-                                                value="<% if $dateNow %>$dateNow<% end_if %>" data-plugin="datepicker"
+                                                value="$Now.format('dd/MM/yyyy')" data-plugin="datepicker"
                                                 type="text">
                                         </div>
                                     </div>
@@ -49,15 +51,22 @@
                                 <div class="form-group form-material row">
                                     <label class="col-md-3 col-form-label">Supplier :</label>
                                     <div class="col-md-9">
-                                        <select class="form-control jabatan-cabang" name="supplier"
-                                            data-plugin="select2" id="nama-supplier">
+                                        <input class="form-control" id="nomor" name="nomor" type="text"
+                                            value="<Auto Generate>" readonly autocomplete="off">
+                                    </div>
+                                </div>
+                                <%-- <div class="form-group form-material row">
+                                    <label class="col-md-3 col-form-label">Supplier :</label>
+                                    <div class="col-md-9">
+                                        <select id="nama-supplier" class="form-control" name="supplier"
+                                            data-plugin="select2">
                                             <option>Pilih Supplier</option>
                                             <% loop $Supplier %>
                                             <option value="$ID">{$Nama}</option>
                                             <% end_loop %>
                                         </select>
                                     </div>
-                                </div>
+                                </div> --%>
                                 <div class="table-responsive">
                                     <%-- <div class="col-md-3">
                                         <button class="btn btn-block btn-primary waves-effect waves-classic"
@@ -70,17 +79,17 @@
                                             <tr>
                                                 <th class="th-detail">Jenis Barang</th>
                                                 <th class="th-detail">Nama Barang</th>
+                                                <th class="th-detail">Jumlah Barang PO</th>
                                                 <th class="th-detail">Jumlah</th>
                                                 <th class="th-detail">Satuan</th>
                                                 <th class="th-detail">Harga</th>
                                                 <th class="th-detail">Diskon (%)</th>
                                                 <th class="th-detail">Diskon (Rp)</th>
                                                 <th class="th-detail">Subtotal</th>
-                                                <th class="th-detail">Kode Inventaris</th>
                                             </tr>
                                         </thead>
                                         <tbody id="table-body">
-                                            <%-- <% loop $DetailRB %>
+                                            <% loop $DetailRB %>
                                             <tr class="table-row">
                                                 <td class="jenis-barang">
                                                     <input name="jenis_barang[]" class="form-control"
@@ -91,8 +100,12 @@
                                                         value="$NamaBarang" readonly autocomplete="off">
                                                 </td>
                                                 <td>
-                                                    <input name="jumlah[]" class="jumlah-po form-control jumlah-po-val" readonly
-                                                        value="$Jumlah" autocomplete="off">
+                                                    <input name="jumlah[]" class="form-control" readonly
+                                                    value="$Jumlah" autocomplete="off">
+                                                </td>
+                                                <td>
+                                                    <input name="jumlah[]" class="jumlah-po form-control jumlah-po-val"
+                                                        value="" autocomplete="off">
                                                 </td>
                                                 <td>
                                                     <input name="satuan[]" class="form-control" readonly
@@ -104,19 +117,15 @@
                                                 </td>
                                                 <td>
                                                     <input name="diskon[]" class="form-control diskon-po-val" type="text"
-                                                        autocomplete="off">
+                                                        readonly autocomplete="off">
                                                 </td>
                                                 <td>
                                                     <input name="diskon2[]" class="form-control diskon2-po-val" type="text"
-                                                        autocomplete="off">
+                                                        readonly autocomplete="off">
                                                 </td>
                                                 <td>
                                                     <input name="subtotal[]" class="form-control subtotal-po-val" type="text"
                                                         value="0" autocomplete="off" readonly>
-                                                </td>
-                                                <td>
-                                                    <input name="inventaris[]" class="form-control" type="text" readonly
-                                                        autocomplete="off">
                                                 </td>
                                             </tr>
                                             <% end_loop %>
@@ -126,74 +135,18 @@
                                                     autocomplete="off" readonly></td>
                                                 <td></td>
                                                 <td></td>
-                                            </tr> --%>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
                                 <div class="form-group form-material row">
-                                    <label class="col-md-3 col-form-label">Note :</label>
+                                    <label class="col-md-3 col-form-label">Keterangan :</label>
                                     <div class="col-md-9">
                                         <div class="input-group">
                                             <textarea class="form-control"
                                                 name="note"><% if $note %>$note<% end_if %></textarea>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="example">
-                                    <div class="col-md-3">
-                                        <button class="btn btn-block btn-primary waves-effect waves-classic" id="add-detail-termin" type="button">
-                                            Add Termin
-                                        </button>
-                                    </div>
-                                    <table class="table-striped table table-responsive">
-                                        <thead>
-                                            <tr>
-                                                <th>Tanggal</th>
-                                                <th>Jenis</th>
-                                                <th>Keterangan</th>
-                                                <th>Jumlah (Rp)</th>
-                                                <th></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="table-termin">
-                                            <tr class="table-row-termin">
-                                                <td>
-                                                    <input class="form-control tgl" id="tgl-draft" name="tgl[]"
-                                                        data-date-format="dd/mm/yyyy" data-now="$dateNow"
-                                                        data-plugin="datepicker" type="text">
-                                                </td>
-                                                <td>
-                                                    <select name="jenis[]"
-                                                        class="form-control">
-                                                        <option>Pilih Jenis</option>
-                                                        <option value="DP">DP</option>
-                                                        <option value="LPB">LPB</option>
-                                                        <option value="Pelunasan">Pelunasan</option>
-                                                    </select>
-                                                </td>
-                                                <td>
-                                                    <textarea class="form-control" name="deskripsi[]"></textarea>
-                                                </td>
-                                                <td>
-                                                    <input name="total-termin-po" class="form-control jumlah-termin" type="number"
-                                                        value="0" autocomplete="off">
-                                                </td>
-                                                <td>
-                                                    <button
-                                                        class="btn btn-danger delete-row-termin btn-xs waves-effect waves-classic modal-select2-show waves-effect waves-classic"
-                                                        type="button">
-                                                        Delete
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                            <tr id="row-total-termin">
-                                                <td colspan="3">Jumlah</td>
-                                                <td><input id="total-akhir-termin-po" name="total" class="form-control" type="text" value="0"
-                                                    autocomplete="off" readonly></td>
-                                                <td></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
                                 </div>
                                 <div class="form-group form-material row">
                                     <div class="col-md-9">

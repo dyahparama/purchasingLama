@@ -3,7 +3,7 @@
 	  <div>
 		<div>
 		  <ul class="site-menu" data-plugin="menu">
-			<!-- <li class="site-menu-category">Welcome Nandi</li> -->
+			<li class="site-menu-category">Welcome Nandi</li>
 			<!-- <li class="site-menu-item">
 			  	<a class="animsition-link" href="#">
 					<i class="site-menu-icon md-view-dashboard" aria-hidden="true"></i> -->
@@ -11,76 +11,76 @@
 					<!-- <span class="site-menu-title">Dashboard</span>
 				</a>
 			</li> -->
-			<li class="site-menu-item has-sub">
+			<!-- <li class="site-menu-item has-sub<% if $siteParent == 'Welcome' %> active open<% end_if %>">
 			  <a href="javascript:void(0)">
 					<i class="" aria-hidden="true"></i>
 				  	<span class="site-menu-title">Welcome Nandi</span>
 					<span class="site-menu-arrow"></span><br>
 				  </a>
 			  <ul class="site-menu-sub">
-				<li class="site-menu-item active">
+				<li class="site-menu-item <% if $siteChild == 'Profil' %> active<% end_if %>">
 				  <a class="animsition-link" href="/prfl">
 					<span class="site-menu-title">Profil</span>
 				  </a>
 				</li>
 			  </ul>
-			</li>
-			<li class="site-menu-item">
+			</li> -->
+			<li class="site-menu-item<% if $siteParent == 'My Task' %> active open<% end_if %>">
 				<a class="animsition-link" href="/ta">
                   	<i class="" aria-hidden="true"></i>
-					<span class="site-menu-title">My task (30)</span>
+					<span class="site-menu-title">My task <% if $total %>($total)<% end_if %></span>
 				</a>
 			</li>
-			<li class="site-menu-item has-sub">
+			<li class="site-menu-item has-sub<% if $siteParent == 'Draft RB' %> active open<% end_if %>">
 			  <a href="javascript:void(0)">
 					<i class="" aria-hidden="true"></i>
 				  	<span class="site-menu-title">Draft RB</span>
 					<span class="site-menu-arrow"></span><br>
 				  </a>
 			  <ul class="site-menu-sub">
-				<li class="site-menu-item active">
-				  <a class="animsition-link" href="/draf-rb">
+				<li class="site-menu-item<% if $siteChild == 'Me' %> active<% end_if %>">
+				  <a class="animsition-link" href="/test">
 					<span class="site-menu-title">Me</span>
 				  </a>
 				</li>
-				<li class="site-menu-item">
-				  <a class="animsition-link" href="#">
+				<li class="site-menu-item<% if $siteChild == 'Team' %> active<% end_if %>">
+				  <a class="animsition-link" href="/test">
 					<span class="site-menu-title">Team</span>
 				  </a>
 				</li>
 			  </ul>
 			</li>
-			<li class="site-menu-item">
+			<li class="site-menu-item<% if $siteParent == 'RB' %> active open<% end_if %>">
 				<a class="animsition-link" href="#">
 					<i class="" aria-hidden="true"></i>
 					<span class="site-menu-title">RB</span>
 				</a>
 			</li>
-			<li class="site-menu-item">
+			<li class="site-menu-item<% if $siteParent == 'PO' %> active open<% end_if %>">
 				<a class="animsition-link" href="#">
 					<i class="" aria-hidden="true"></i>
 					<span class="site-menu-title">PO</span>
 				</a>
 			</li>
-			<li class="site-menu-item">
+			<li class="site-menu-item<% if $siteParent == 'LPB' %> active open<% end_if %>">
 				<a class="animsition-link" href="#">
 					<i class="" aria-hidden="true"></i>
 					<span class="site-menu-title">LPB</span>
 				</a>
 			</li>
-			<li class="site-menu-item has-sub">
+			<li class="site-menu-item has-sub<% if $siteParent == 'Reject' %> active open<% end_if %>">
 			  <a href="javascript:void(0)">
 					<i class="" aria-hidden="true"></i>
 				  	<span class="site-menu-title">Transaksi yang di Reject</span>
 					<span class="site-menu-arrow"></span><br>
 				  </a>
-			  <ul class="site-menu-sub">
+			  <ul class="site-menu-sub<% if $siteChild == 'Me Reject' %> active<% end_if %>">
 				<li class="site-menu-item">
 				  <a class="animsition-link" href="/rj/rjme">
 					<span class="site-menu-title">Me</span>
 				  </a>
 				</li>
-				<li class="site-menu-item">
+				<li class="site-menu-item<% if $siteChild == 'Team Reject' %> active<% end_if %>">
 				  <a class="animsition-link" href="/rj/rjteam">
 					<span class="site-menu-title">Team</span>
 				  </a>

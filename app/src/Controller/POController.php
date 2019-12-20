@@ -16,17 +16,30 @@ class POController extends PageController
 
     public function index(HTTPRequest $request) {
         Requirements::themedCSS('custom');
-        $data = array(
-            "RB" => DraftRB::get(),
-            "Supplier" => Supplier::get(),
-            "JenisBarang" => JenisBarang::get(),
-            "Satuan" => Satuan::get(),
-            "mgeJS" =>"po"
-        );
-        return $this->customise($data)
+        // $data = array(
+        //     "RB" => DraftRB::get(),
+        //     "Supplier" => Supplier::get(),
+        //     "JenisBarang" => JenisBarang::get(),
+        //     "Satuan" => Satuan::get(),
+        //     "mgeJS" =>"po"
+        // );
+        // return $this->customise($data)
+        //         ->renderWith(array(
+        //             'POPage', 'Page',
+        //         ));
+        if (isset($_REQUEST['id']) &&  $_REQUEST['id'] != "") {
+            $id = $_REQUEST['id'];
+            $data = array(
+                "RB" => DraftRB::get()->byID($id),
+                "DetailRB" => DraftRBDetail::get()->where("DraftRBID = {$id}"),
+                "Supplier" => Supplier::get(),
+                "mgeJS" =>"po"
+            );
+            return $this->customise($data)
                 ->renderWith(array(
                     'POPage', 'Page',
                 ));
+        }
     }
 
     public function doPostPO() {

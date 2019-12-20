@@ -53,10 +53,13 @@
   <script src="/_resources/themes/custom/global/js/Plugin/asscrollable.js"></script>
   <script src="/_resources/themes/custom/global/js/Plugin/slidepanel.js"></script>
   <script src="/_resources/themes/custom/global/js/Plugin/switchery.js"></script>
-	  <script src="/_resources/themes/custom/global/js/Plugin/matchheight.js"></script>
-	  <script src="/_resources/themes/custom/global/js/Plugin/jvectormap.js"></script>
-    <script src="/_resources/themes/custom/global/js/Plugin/peity.js"></script>
-    <script src="/_resources/themes/custom/global/js/Plugin/dropify.js"></script>
+  <script src="/_resources/themes/custom/global/js/Plugin/responsive-tabs.js"></script>
+  <script src="/_resources/themes/custom/global/js/Plugin/closeable-tabs.js"></script>
+  <script src="/_resources/themes/custom/global/js/Plugin/tabs.js"></script>
+  <script src="/_resources/themes/custom/global/js/Plugin/matchheight.js"></script>
+  <script src="/_resources/themes/custom/global/js/Plugin/jvectormap.js"></script>
+  <script src="/_resources/themes/custom/global/js/Plugin/peity.js"></script>
+  <script src="/_resources/themes/custom/global/js/Plugin/dropify.js"></script>
 
     <script src="/_resources/themes/custom/assets/examples/js/dashboard/v1.js"></script>
     <!-- <script src="/_resources/themes/custom/javascript/po.js"></script> -->
@@ -78,7 +81,30 @@
     <script src="/_resources/themes/custom/global/vendor/datatables.net-buttons/buttons.colVis.js"></script>
     <script src="/_resources/themes/custom/global/vendor/datatables.net-buttons-bs4/buttons.bootstrap4.js"></script>
 
+    <!-- ellipsis -->
+    <script src="/_resources/themes/custom/javascript/ellipsis.js"></script>
+
+    <!-- <script src="/_resources/themes/custom/global/vendor/formvalidation/formValidation.min.js"></script>
+    <script src="/_resources/themes/custom/global/vendor/formvalidation/framework/bootstrap4.min.js"></script> -->
+    
     <%-- typeahead  --%>
     <script src="/_resources/themes/custom/global/vendor/typeahead-js/bloodhound.min.js"></script>
     <script src="/_resources/themes/custom/global/vendor/typeahead-js/typeahead.jquery.min.js"></script>
+
+    <%-- advanced panel --%>
+    <script src="/_resources/themes/custom/global/vendor/switchery/switchery.js"></script>
+    <script src="/_resources/themes/custom/global/vendor/intro-js/intro.js"></script>
+    <script src="/_resources/themes/custom/global/vendor/screenfull/screenfull.js"></script>
+    <script src="/_resources/themes/custom/global/vendor/slidepanel/jquery-slidePanel.js"></script>
+    <script src="/_resources/themes/custom/global/js/Plugin/slidepanel.js"></script>
+    <script src="/_resources/themes/custom/global/js/Plugin/switchery.js"></script>
+    <script src="/_resources/themes/custom/global/js/Plugin/panel.js"></script>
+    <script src="/_resources/themes/custom/assets/examples/js/uikit/panel-actions.js"></script>
+    <script src="/_resources/themes/custom/global/js/Plugin/peity.js"></script>
+    <script src="/_resources/themes/custom/global/js/Plugin/asselectable.js"></script>
+    <script src="/_resources/themes/custom/global/js/Plugin/selectable.js"></script>
+    <script src="/_resources/themes/custom/global/js/Plugin/table.js"></script>
+    
+
     <script src="/_resources/themes/custom/javascript/{$mgeJS}.js"></script>
+    

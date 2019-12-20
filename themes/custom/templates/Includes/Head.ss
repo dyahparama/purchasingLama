@@ -48,11 +48,21 @@
         <link rel="stylesheet" href="/_resources/themes/custom/global/vendor/datatables.net-select-bs4/dataTables.select.bootstrap4.css">
         <link rel="stylesheet" href="/_resources/themes/custom/global/vendor/datatables.net-responsive-bs4/dataTables.responsive.bootstrap4.css">
         <link rel="stylesheet" href="/_resources/themes/custom/global/vendor/datatables.net-buttons-bs4/dataTables.buttons.bootstrap4.css">
-        <link rel="stylesheet" href="/_resources/themes/custom/assets/examples/css/tables/datatable.css">
+		<link rel="stylesheet" href="/_resources/themes/custom/assets/examples/css/tables/datatable.css">
+		<!-- <link rel="stylesheet" href="/_resources/themes/custom/global/vendor/formvalidation/formValidation.css">
+        <link rel="stylesheet" href="/_resources/themes/custom/assets/examples/css/forms/validation.css"> -->
 
         <%-- typeahead --%>
         <link rel="stylesheet" href="/_resources/themes/custom/global/vendor/typeahead-js/typeahead.css">
 		
+		<%-- advanced panel --%>
+	    <link rel="stylesheet" href="/_resources/themes/custom/global/vendor/animsition/animsition.css">
+	    <link rel="stylesheet" href="/_resources/themes/custom/global/vendor/asscrollable/asScrollable.css">
+	    <link rel="stylesheet" href="/_resources/themes/custom/global/vendor/switchery/switchery.css">
+	    <link rel="stylesheet" href="/_resources/themes/custom/global/vendor/intro-js/introjs.css">
+	    <link rel="stylesheet" href="/_resources/themes/custom/global/vendor/slidepanel/slidePanel.css">
+	    <link rel="stylesheet" href="/_resources/themes/custom/global/vendor/flag-icon-css/flag-icon.css">
+
 		<!--[if lt IE 9]>
 		<script src="/_resources/themes/custom/global/vendor/html5shiv/html5shiv.min.js"></script>
 		<![endif]-->

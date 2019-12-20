@@ -3,6 +3,7 @@ var uri_segment = window.location.pathname.split('/')[1];
 var column_name = $(document).find('#datatable1 > thead > tr');
 var cur_status = $(document).find('#cur_status').text();
 let id_pemohon = 0;
+var params = [];
 
 function getData(jenis, status){
 	var data = function () {
@@ -25,6 +26,15 @@ function getData(jenis, status){
 }
 
 $(document).ready(function(){
+    // Submit Form
+    $('#form_filter').submit(function(evt, ui){
+    	evt.preventDefault();
+    	$(document).find('#filterPanel').parent().addClass('is-collapse');
+    	params = $(this).serialize();
+
+    	table.ajax.reload();
+    })
+
 	var substringMatcher = function(strs) {
 	  return function findMatches(q, cb) {
 	    var matches, substringRegex;
@@ -93,7 +103,6 @@ $(document).ready(function(){
 
 	if (cur_status == 'Me') {
 		$('#pemohon').val(id_pemohon).trigger('change');
-		$("#pemohon").prop("disabled", true);
 	}
 
 	/**fill jenis barang dropdown**/
@@ -111,16 +120,14 @@ $(document).ready(function(){
 
 	// end of fill data into form filter
 
-
-
 	table = $('#datatable1').DataTable({
 		'language': {
             'lengthMenu': 'Tampilkan _MENU_ data per halaman',
             'zeroRecords': 'Maaf data tidak ditemukan',
             'info': 'Menampilkan halaman _PAGE_ dari _PAGES_ halaman',
             'infoEmpty': 'Tidak ada data',
-            // <%-- 'processing':  'Sedang memproses permintaan anda...', --%>
-            'processing':  '<img src="{$ThemeDir}/img/spinner.gif"></img>',
+            'processing':  'Sedang memproses permintaan anda...',
+            // 'processing':  '<img src="{$ThemeDir}/img/spinner.gif"></img>',
             'infoFiltered': '(filter dari _MAX_ total data)',
             'searchPlaceholder': 'Cari data ?',
             'paginate': {
@@ -130,20 +137,23 @@ $(document).ready(function(){
 		        'previous': 'Sebelumnya'
 		    }
         },
+      	'dom': '<"top"l>rt<"bottom"ip><"clear">',
 		'processing': true,
 		'serverSide': true,
-		'responsive': true,
+		// 'responsive': true,
 		'columnDefs': [{
-			'className': 'dt-center', 'targets': '_all',
-			'targets': [4,5],
-			'orderable': false
+			targets: 7,
+			render: $.fn.dataTable.render.ellipsis( 25, true )
 		}],
-		'order': [[0,'desc']],
+		// 'order': [[0,'desc']],
 		// <%-- 'pagingType': 'full_numbers', --%>
 		// <%-- 'lengthMenu'    : [5, 10, 15, 20], --%>
 		'paging': true,
 		'ajax': {
-			'url' : '{$Link}{$url}'
+			'url' : uri_segment+'/searchdrb',
+			'data' : function(d){
+				d.filter_record = params;
+			}
 		},
 		createdRow: function( row, data, dataIndex ) {
 		    // Set the data-title attribute

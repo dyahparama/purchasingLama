@@ -12,7 +12,7 @@
 					<!-- Example Horizontal Form -->
 					<div class="example-wrap">
 						<div class="example">
-							<form id="form-drb">
+							<form id="form-drb" action="javascript:void(0);">
 								<div class="form-group form-material row">
 									<label class="col-md-3 col-form-label">*Nomor Draft RB :</label>
 									<div class="col-md-3">
@@ -28,9 +28,8 @@
 										</select>
 									</div>
 									<div class="col-md-3">
-										<button 
-											class="btn btn-block btn-primary waves-effect waves-classic" id="load-draft"
-											type="button">
+										<button class="btn btn-block btn-primary waves-effect waves-classic"
+											id="load-draft" type="button">
 											Load
 										</button>
 									</div>
@@ -61,7 +60,7 @@
 									<div class="col-md-9">
 										<select class="form-control jabatan-cabang" name="jabatan-cabang"
 											data-plugin="select2" required="">
-											<option>Pilih Jabatan/Cabang</option>
+											<option value="">Pilih Jabatan/Cabang</option>
 											<% loop $jabatan %>
 											<option <% if $ID == $Top.pegawaiJabatan %>selected <% end_if %>value="$ID">
 												{$Jabatan.Nama}/{$Cabang.Nama}</option>
@@ -95,33 +94,32 @@
 											<span class="input-group-addon">
 												<i class="icon md-calendar" aria-hidden="true"></i>
 											</span>
-											<input class="form-control" value="<% if $deadline %>$deadline<% end_if %>"
-												name="tgl-butuh" data-date-format="dd/mm/yyyy" data-plugin="datepicker"
-												type="text" required="">
+											<input autocomplete="off" id="tgl-butuh" class="form-control"
+												value="<% if $deadline %>$deadline<% end_if %>" name="tgl-butuh"
+												data-date-format="dd/mm/yyyy" data-plugin="datepicker" type="text"
+												required="">
 										</div>
 									</div>
 								</div>
 								<div class="form-group form-material row">
 									<label class="col-md-3 col-form-label">*Alasan Permintaan:</label>
 									<div class="col-md-9">
-										<textarea name="alasan"
-											class="form-control" required><% if $alasan %>$alasan<% end_if %></textarea>
+										<textarea name="alasan" class="form-control"
+											required><% if $alasan %>$alasan<% end_if %></textarea>
 									</div>
 								</div>
 								<div class="form-group form-material row">
 									<label class="col-md-3 col-form-label">*Nomor Proyek :</label>
 									<div class="col-md-9">
-										<input class="form-control"
-											value="$nomorProyek" name="nomor-proyek"
-											type="text" autocomplete="off" required="">
+										<input class="form-control" value="$nomorProyek" name="nomor-proyek" type="text"
+											autocomplete="off" required="">
 									</div>
 								</div>
 
 								<div class="form-group form-material row">
 									<div class="col-md-3">
-										<button data-target="#exampleNiftyFadeScale" data-toggle="modal"
-											class="btn btn-block btn-primary waves-effect waves-classic" id="add-detail"
-											type="button">
+										<button class="btn btn-block btn-primary waves-effect waves-classic"
+											id="add-detail" type="button">
 											Add Detail Barang
 										</button>
 									</div>
@@ -143,7 +141,7 @@
 										</thead>
 										<tbody>
 											<% loop $detail %>
-											<tr>
+											<tr class="data-detail">
 												<td>$Jenis.Nama</td>
 												<td>$Deskripsi</td>
 												<td>$Jumlah</td>
@@ -330,55 +328,53 @@
 				<h4 class="modal-title">Tambah Detail</h4>
 			</div>
 			<div class="modal-body">
+
 				<div class="example">
-					<div class="form-group form-material row">
-						<label class="col-md-3 col-form-label">Jenis Barang :</label>
-						<div class="col-md-9">
-							<select id="jenis-brg" class="form-control select2-modal" data-plugin="select2">
-								<option>Pilih Jenis Barang</option>
-								<% loop $jenisBrng %>
-								<option value="$ID">{$Nama}</option>
-								<% end_loop %>
-							</select>
-						</div>
-					</div>
-					<div class="form-group form-material row">
-						<label class="col-md-3 col-form-label">Deskripsi Kebutuhan :</label>
-						<div class="col-md-9">
-							<div class="input-group">
-								<textarea id="deskripsi-kebutuhan" class="form-control"></textarea>
+					<form id="form-modal-add-detail" action="javascript:void(0);">
+						<div class="form-group form-material row">
+							<label class="col-md-3 col-form-label">Jenis Barang :</label>
+							<div class="col-md-9">
+								<select id="jenis-brg" name="add-detail-form-1" class="form-control select2-modal" data-plugin="select2">
+									<option value="">Pilih Jenis Barang</option>
+									<% loop $jenisBrng %>
+									<option value="$ID">{$Nama}</option>
+									<% end_loop %>
+								</select>
 							</div>
 						</div>
-					</div>
-					<div class="form-group form-material row">
-						<label class="col-md-3 col-form-label">Jumlah :</label>
-						<div class="col-md-9">
-							<input id="jumlah" class="form-control" type="number" value="0" autocomplete="off">
+						<div class="form-group form-material row">
+							<label class="col-md-3 col-form-label">Deskripsi Kebutuhan :</label>
+							<div class="col-md-9">
+								<div class="input-group">
+									<textarea id="deskripsi-kebutuhan" name="add-detail-form-2" class="form-control"></textarea>
+								</div>
+							</div>
 						</div>
-					</div>
-					<div class="form-group form-material row">
-						<label class="col-md-3 col-form-label">Satuan :</label>
-						<div class="col-md-9">
-							<select id="satuan" class="form-control select2-modal" data-plugin="select2">
-								<option>Pilih Satuan</option>
-								<% loop $satuan %>
-								<option value="$ID">{$Kode}</option>
-								<% end_loop %>
-							</select>
+						<div class="form-group form-material row">
+							<label class="col-md-3 col-form-label">Jumlah :</label>
+							<div class="col-md-9">
+								<input name="add-detail-form-3" id="jumlah" class="form-control" type="number" value="0" autocomplete="off">
+							</div>
 						</div>
-					</div>
-					<div class="form-group form-material row">
-						<label class="col-md-3 col-form-label">Supplier Lokal :</label>
-						<div class="col-md-9">
-							<input id="supplier-lokal" class="form-control" type="text" autocomplete="off">
+						<div class="form-group form-material row">
+							<label class="col-md-3 col-form-label">Satuan :</label>
+							<div class="col-md-9">
+								<select name="add-detail-form-3" id="satuan" class="form-control select2-modal" data-plugin="select2">
+									<option value="">Pilih Satuan</option>
+									<% loop $satuan %>
+									<option value="$ID">{$Kode}</option>
+									<% end_loop %>
+								</select>
+							</div>
 						</div>
-					</div>
-					<div class="form-group form-material row">
-						<label class="col-md-3 col-form-label">Penawaran :</label>
-						<div class="col-md-9">
-							<form action="draf-rb/saveDetailFile" class="dropzone" id="penawaran"></form>
+						<div class="form-group form-material row">
+							<label class="col-md-3 col-form-label">Supplier Lokal :</label>
+							<div class="col-md-9">
+								<input name="add-detail-form-4" id="supplier-lokal" class="form-control" type="text" autocomplete="off">
+							</div>
 						</div>
-					</div>
+					</form>
+
 					<div class="form-group form-material row">
 						<label class="col-md-3 col-form-label">Spesifikasi Barang :</label>
 						<div class="col-md-9">
@@ -391,7 +387,14 @@
 							<input class="form-control" id="kode-inventaris" type="text" autocomplete="off">
 						</div>
 					</div>
+					<div class="form-group form-material row">
+						<label class="col-md-3 col-form-label">Penawaran :</label>
+						<div class="col-md-9">
+							<form action="draf-rb/saveDetailFile" class="dropzone" id="penawaran"></form>
+						</div>
+					</div>
 				</div>
+
 			</div>
 			<div class="modal-footer">
 				<button type="button" id="save-detail" class="btn btn-primary">Save</button>
