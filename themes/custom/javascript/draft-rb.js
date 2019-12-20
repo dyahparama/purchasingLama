@@ -6,7 +6,7 @@ $("#penawaran").dropzone({
     //   return new Date().getTime();
     // }
 });
-
+let baseURL=$("#baseURL").data("url");
 $(document).ready(function() {
     let dateNow = $("#tgl-draft").data("now");
     $("#tgl-draft").datepicker({ format: "dd/mm/yy" });
@@ -184,7 +184,7 @@ $(document).ready(function() {
             id: id
         };
         $.ajax({
-            url: "/draf-rb/updateDetail",
+            url: baseURL+"draf-rb/updateDetail",
             type: "post", //form method
             data: data,
             dataType: "json",
@@ -201,7 +201,7 @@ $(document).ready(function() {
     $("#load-draft").click(function(e) {
         if (!isNaN($("#draft-lama").val())) {
             $.ajax({
-                url: "/draf-rb/loadDraft",
+                url: baseURL+"draf-rb/loadDraft",
                 type: "post", //form method
                 data: {
                     id: $("#draft-lama").val()
@@ -239,7 +239,7 @@ $(document).ready(function() {
             };
             //console.log(data);
             $.ajax({
-                url: "/draf-rb/approve",
+                url: baseURL+"draf-rb/approve",
                 type: "post", //form method
                 data: data,
                 dataType: "json",
@@ -252,5 +252,26 @@ $(document).ready(function() {
                 },
                 error: function(xhr, Status, err) {}
             });
+        });
+        $("#clear-data").click(function (e) { 
+            let nomor = $("#nomor").val();
+            data = {
+                nomor:nomor
+            };
+            $.ajax({
+                url: baseURL+"draf-rb/clearData",
+                type: "post", //form method
+                data: data,
+                dataType: "json",
+                beforeSend: function() {},
+                success: function(result) {
+                   // location.reload();
+                },
+                complete: function(result) {
+                    //location.reload();
+                },
+                error: function(xhr, Status, err) {}
+            });
+
         });
 });
