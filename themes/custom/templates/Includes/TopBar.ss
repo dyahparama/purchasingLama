@@ -77,7 +77,7 @@
 			  </span>
 			</a>
 			<div class="dropdown-menu" role="menu">
-			  <a class="dropdown-item" href="/prfl" role="menuitem"><i class="icon md-account" aria-hidden="true"></i> Profile</a>
+			  <a class="dropdown-item" href="{$BaseHref}prfl" role="menuitem"><i class="icon md-account" aria-hidden="true"></i> Profile</a>
 			  <!-- <a class="dropdown-item" href="javascript:void(0)" role="menuitem"><i class="icon md-card" aria-hidden="true"></i> Billing</a>
 			  <a class="dropdown-item" href="javascript:void(0)" role="menuitem"><i class="icon md-settings" aria-hidden="true"></i> Settings</a> -->
 			  <div class="dropdown-divider" role="presentation"></div>
