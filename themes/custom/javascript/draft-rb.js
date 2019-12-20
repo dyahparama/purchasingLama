@@ -110,9 +110,11 @@ $(document).ready(function() {
 
                     Dropzone.forElement("#penawaran").on(
                         "queuecomplete",
-                        function(file) {}
+                        function(file) {
+
+                            location.reload();
+                        }
                     );
-                    location.reload();
                 },
                 error: function(xhr, Status, err) {}
             });
