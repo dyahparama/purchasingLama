@@ -63,8 +63,8 @@ class User extends DataObject {
 		$fields = new FieldList();
 		$fields->add(new TabSet("Root"));
 
-		$user = Pegawai::get();
-		$user = $user->leftJoin("user", "\"pegawai\".\"ID\" <> \"user\".\"ID\"")->where("user.ID <> pegawai.ID");
+		$user = self::userList();
+		$user = $user->where("user.PegawaiID <> pegawai.ID");
 
 		if (!$this->ID) {
 			$dropdown = new DropdownField('PegawaiID', 'Pegawai', $user->map('ID', 'Nama'));
@@ -80,8 +80,12 @@ class User extends DataObject {
 		return $fields;
 	}
 
+	public function getNama() {
+		return $this->Pegawai()->Nama;
+	}
+
 	public static function userList() {
-		$user = Pegawai::get()->innerJoin("user", "\"pegawai\".\"ID\" = \"user\".\"PegawaiID\"");
+		$user = User::get()->innerJoin("pegawai", "\"pegawai\".\"ID\" = \"user\".\"PegawaiID\"");
 		return $user;
 	}
 

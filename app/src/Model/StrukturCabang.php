@@ -75,7 +75,7 @@ class StrukturCabang extends DataObject
         'Kode',
         'Nama',
         'Jenis',
-        'Kacab.Pegawai.ID',
+        'Kacab.Pegawai.Nama',
         'Approver.Pegawai.Nama',
         'Regional.Nama',
         'Pusat.Nama',
@@ -242,10 +242,16 @@ class StrukturCabang extends DataObject
 
             $dropdwonKecab = new DropdownField('KacabID', 'Kepala Cabang', $user->map('ID', 'Nama'));
             $dropdwonKecab->setEmptyString("Pilih Kepala Cabang");
+            if ($this->ID) {
+                $dropdwonKecab->setValue($this->Kacab()->PegawaiID);
+            }
             $fields->addFieldToTab("Root.Main", $dropdwonKecab);
 
             $dropdwonApprover = new DropdownField('ApproverID', 'Purchasing Approver', $user->map('ID', 'Nama'));
             $dropdwonApprover->setEmptyString("Pilih Approver");
+            if ($this->ID) {
+                $dropdwonKecab->setValue($this->Approver()->PegawaiID);
+            }
             $fields->addFieldToTab("Root.Main", $dropdwonApprover);
 
             if ($this->ID) {
