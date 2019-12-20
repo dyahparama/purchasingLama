@@ -181,12 +181,12 @@ class DraftRBController extends PageController
         return $count;
     }
 
-    public function GetKepalaCabang()
-    {
-        $id = $_POST["id"];
-        $kepalaCabang = PegawaiPerJabatan::get()->byID($id);
-        echo json_encode($kepalaCabang->Cabang()->Kacab()->Pegawai()->Nama);
-    }
+    // public function GetKepalaCabang()
+    // {
+    //     $id = $_POST["id"];
+    //     $kepalaCabang = PegawaiPerJabatan::get()->byID($id);
+    //     echo json_encode($kepalaCabang->Cabang()->Kacab()->Pegawai()->Nama);
+    // }
     public function saveMasterDRB()
     {
         $drb = DraftRB::get()->where("Kode = '" . $_POST["nomor"] . "'")->limit(1);
