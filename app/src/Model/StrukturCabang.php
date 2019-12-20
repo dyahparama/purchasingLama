@@ -280,7 +280,7 @@ class StrukturCabang extends DataObject
         if (strpos($_SERVER['REQUEST_URI'], 'edit-approver')) {
             return new RequiredFields(array());
         } else {
-            return new RequiredFields(array("Kode", "Nama", "Jenis", "ApproverID"));
+            return new RequiredFields(array("Kode", "Nama", "Jenis"));
         }
     }
 }
