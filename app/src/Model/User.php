@@ -102,5 +102,6 @@ class User extends DataObject
     {
         $user = User::get()->innerJoin("pegawai", "\"pegawai\".\"ID\" = \"user\".\"PegawaiID\"");
         return $user;
+        
     }
 }
