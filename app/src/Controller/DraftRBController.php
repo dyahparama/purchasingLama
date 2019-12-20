@@ -20,6 +20,7 @@ class DraftRBController extends PageController
         "loadDraft",
         "ApprovePage",
         "approve",
+        "clearData"
     ];
 
     private static $casting = [
@@ -107,7 +108,8 @@ class DraftRBController extends PageController
                 "kepalaCabang" => $kepalaCabang,
                 "detail" => $detail,
                 "oldDraft" => $oldData,
-                "mgeJS" =>"draft-rb"
+                "mgeJS" =>"draft-rb",
+                "linkRefresh" => "clear-data"
             ];
             return $this->customise($data)
                 ->renderWith(array(
@@ -386,6 +388,19 @@ class DraftRBController extends PageController
                 break;
             default:
                 break;
+        }
+    }
+    public function clearData()
+    {
+        $drb = DraftRB::get()->where("Kode = '" . $_POST["nomor"] . "'")->limit(1);
+        if ($drb->count()) {
+          $drb = $drb->first();
+          $id = $drb->ID;
+          $detail = DraftRBDetail::get()->where("DraftRBID = " . $id );
+          foreach ($detail as $key) {
+            $key->delete();
+          }
+          $drb->delete();
         }
     }
 }

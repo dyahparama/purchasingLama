@@ -5,12 +5,12 @@ After: framework/_config/routes#coreroutes
 SilverStripe\Control\Director:
   rules:
     'draf-rb//$Action/$ID/$Name': 'DraftRBController'
-    'list-rb//$Action/$ID/$Name': 'TestController'
+    'list-drb//$Action/$ID/$Name': 'TestController'
     'user': 'UserController'
     'helper': 'HelperController'
     'rb//$Action/$ID/$Name': 'RBController'
     'po//$Action/$ID/$Name': 'POController'
-    'lpb': 'LPBController'
+    'lpb//$Action/$ID/$Name': 'LPBController'
     'ta': 'MyTaskController'
     'rj': 'RejectedController'
     'prfl': 'ProfileController'
