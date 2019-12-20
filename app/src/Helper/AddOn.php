@@ -14,13 +14,16 @@ class AddOn
     public static function createKode($model, $prefix)
     {
         $data = $model::get()->last();
-        $id = $data->ID;
+        $id = 1;
+        if ($data) {
+            $id = $data->ID + 1;
+        }
         $count = strlen($id);
         $kode = "";
         for ($i = $count; $i < 5; $i++) {
             $kode .= "0";
         }
-        $kode = $prefix."-".$kode.$id;
+        $kode = $prefix . "-" . $kode . $id;
         return $kode;
         // while ($count < 5) {
         //     $kode = "0";

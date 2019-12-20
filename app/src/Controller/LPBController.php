@@ -11,7 +11,7 @@ use SilverStripe\ORM\DB;
 class LPBController extends PageController
 {
     private static $allowed_actions = [
-        'getDetailBarang', 'ApprovePage', 'searchlpb', 'getData'
+        'getDetailBarang', 'ApprovePage', 'searchlpb', 'getData', 'doPostLPB'
     ];
 
     public function index(HTTPRequest $request)
@@ -29,6 +29,43 @@ class LPBController extends PageController
         ->renderWith(array(
             'ListLPBPage', 'Page',
         ));
+    }
+
+    public function doPostLPB()
+    {
+        if (isset($_REQUEST['tgl-lpb']) && $_REQUEST['tgl-lpb'] != "") {
+            $tgl = $_REQUEST['tgl-lpb'];
+
+            $po = new LPB();
+            $po->Tgl = AddOn::convertDateToDatabase($tgl);
+            $po->POID = $_REQUEST['POID'];
+            $idPO = $po->write();
+
+            $jenisBarang = $_REQUEST['jenis_barangid'];
+            $namaBarang = $_REQUEST['nama_barang'];
+            $jumlah = $_REQUEST['jumlah'];
+            $jumlahDiterima = $_REQUEST['jumlah_diterima'];
+            $satuan = $_REQUEST['satuanid'];
+            $harga = $_REQUEST['harga'];
+            $subtotal = $_REQUEST['subtotal'];
+            $parentid = $_REQUEST['parentid'];
+
+            foreach ($jenisBarang as $key => $val) {
+                $poDetail = new LPBDetail();
+
+                $poDetail->JenisID = $jenisBarang[$key];
+                $poDetail->NamaBarang = $namaBarang[$key];
+                $poDetail->Jumlah = $jumlah[$key];
+                $poDetail->JumlahTerima = $jumlahDiterima[$key];
+                $poDetail->SatuanID = $satuan[$key];
+                $poDetail->Harga = $harga[$key];
+                $poDetail->Total = $subtotal[$key];
+                $poDetail->LPBID = $idPO;
+                $poDetail->DetailPOID = $parentid[$key];
+
+                $poDetail->write();
+            }
+        }
     }
 
     public function ApprovePage(HTTPRequest $request)

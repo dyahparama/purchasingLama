@@ -12,7 +12,8 @@
                     <!-- Example Horizontal Form -->
                     <div class="example-wrap">
                         <div class="example">
-                            <form action="/po/doPostPo" method="post">
+                            <form action="/lpb/doPostLPB" method="post">
+                            <input type="hidden" value="{$PO.ID}" name="POID">
                                 <div class="form-group form-material row">
                                     <label class="col-md-3 col-form-label">Kode PO :</label>
                                     <div class="col-md-9">
@@ -46,7 +47,7 @@
                                                 value="$Now.format('dd/MM/yyyy')" data-plugin="datepicker"
                                                 type="text">
                                         </div> --%>
-                                        <input class="form-control" id="nomor" name="nomor" type="text"
+                                        <input class="form-control" id="nomor" name="tgl-lpb" type="text"
                                             value="$Now.format('dd/MM/yyyy')" readonly autocomplete="off">
                                     </div>
                                 </div>
@@ -94,6 +95,8 @@
                                             <% loop $Detail %>
                                             <tr class="table-row">
                                                 <td class="jenis-barang">
+                                                    <input type="hidden" name="parentid[]" value="$ID">
+                                                    <input type="hidden" name="jenis_barangid[]" value="$JenisID">
                                                     <input name="jenis_barang[]" class="form-control"
                                                         value="$Jenis.Nama" readonly autocomplete="off">
                                                 </td>
@@ -110,6 +113,7 @@
                                                         value="$Jumlah" autocomplete="off">
                                                 </td>
                                                 <td>
+                                                    <input type="hidden" name="satuanid[]" value="$SatuanID">
                                                     <input name="satuan[]" class="form-control" readonly
                                                     value="$Satuan.Nama" autocomplete="off">
                                                 </td>

@@ -74,12 +74,12 @@ class POController extends PageController
             $tgl = $_REQUEST['tgl-po'];
 
             $po = new PO();
-            $po->Tgl = AddOn::convertDateToDatabase($_REQUEST['tgl-po']);
+            $po->Tgl = AddOn::convertDateToDatabase($tgl);
             $po->Total = $_REQUEST['total-akhir-po'];
             $po->DraftRBID = $_REQUEST['DraftRBID'];
             $po->RBID = $_REQUEST['RBID'];
             $po->NamaSupplier = $_REQUEST['nama-supplier'];
-            $po->Tgl = AddOn::convertDateToDatabase($_REQUEST['tgl-po']);
+            $po->Tgl = AddOn::convertDateToDatabase($tgl);
             $idPO = $po->write();
 
             $jenisBarang = $_REQUEST['jenis_barangid'];
