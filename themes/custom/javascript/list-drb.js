@@ -154,6 +154,7 @@ $(document).ready(function(){
 			'url' : baseURL+uri_segment+"/searchdrb/",
 			'data' : function(d){
 				d.filter_record = params;
+				d.cur_status = cur_status;
 			}
 		},
 		createdRow: function( row, data, dataIndex ) {
