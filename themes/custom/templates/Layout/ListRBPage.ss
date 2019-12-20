@@ -20,9 +20,9 @@
             <div class="col-md-6 col-xl-4">
               <!-- Example Basic -->
               <div>
-                <p>Kode Draft RB</p>
+                <p>Kode RB</p>
                 <div class="example">
-                	<input type="text" class="form-control" name="kodeDraftRb" id="kodeDraftRb" placeholder="Kode Draft RB">
+                	<input type="text" class="form-control" name="kodeRb" id="kodeDraftRb" placeholder="Kode RB">
                 </div>
               </div>
               <!-- End Example Basic -->
