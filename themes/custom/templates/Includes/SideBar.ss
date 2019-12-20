@@ -3,7 +3,7 @@
 	  <div>
 		<div>
 		  <ul class="site-menu" data-plugin="menu">
-			<li class="site-menu-category">Welcome Nandi</li>
+			<li class="site-menu-category">Welcome {$getUsername()}</li>
 			<!-- <li class="site-menu-item">
 			  	<a class="animsition-link" href="#">
 					<i class="site-menu-icon md-view-dashboard" aria-hidden="true"></i> -->
@@ -39,12 +39,12 @@
 				  </a>
 			  <ul class="site-menu-sub">
 				<li class="site-menu-item<% if $siteChild == 'Me' %> active<% end_if %>">
-				  <a class="animsition-link" href="{$BaseHref}test">
+				  <a class="animsition-link" href="{$BaseHref}list-rb/Me">
 					<span class="site-menu-title">Me</span>
 				  </a>
 				</li>
 				<li class="site-menu-item<% if $siteChild == 'Team' %> active<% end_if %>">
-				  <a class="animsition-link" href="{$BaseHref}test">
+				  <a class="animsition-link" href="{$BaseHref}list-rb/Teams">
 					<span class="site-menu-title">Team</span>
 				  </a>
 				</li>

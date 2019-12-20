@@ -5,7 +5,7 @@ After: framework/_config/routes#coreroutes
 SilverStripe\Control\Director:
   rules:
     'draf-rb//$Action/$ID/$Name': 'DraftRBController'
-    'test//$Action/$ID/$Name': 'TestController'
+    'list-rb//$Action/$ID/$Name': 'TestController'
     'user': 'UserController'
     'helper': 'HelperController'
     'rb//$Action/$ID/$Name': 'RBController'
