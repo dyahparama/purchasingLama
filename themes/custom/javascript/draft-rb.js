@@ -133,8 +133,10 @@ $(document).ready(function() {
                 beforeSend: function() {},
                 success: function(result) {
                     //location.reload();
+                    window.location.href = baseURL+"list-drb/index/Me";
                 },
                 complete: function(result) {
+                    window.location.href = baseURL+"list-drb/index/Me";
                     //location.reload();
                 },
                 error: function(xhr, Status, err) {}
