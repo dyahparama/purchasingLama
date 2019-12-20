@@ -94,7 +94,9 @@ $(document).ready(function() {
                 type: "post", //form method
                 data: data,
                 dataType: "json",
-                beforeSend: function() {},
+                beforeSend: function() {
+                    $('#save-detail').attr('disabled',true);
+                },
                 success: function(result) {
                     newId = result;
                 },
@@ -108,6 +110,9 @@ $(document).ready(function() {
                     });
                     Dropzone.forElement("#penawaran").processQueue();
 
+                    if (!Dropzone.forElement("#penawaran").getQueuedFiles().length) {
+                        location.reload();
+                    }
                     Dropzone.forElement("#penawaran").on(
                         "queuecomplete",
                         function(file) {
