@@ -3,6 +3,7 @@
 	use SilverStripe\View\Requirements;
 	use SilverStripe\ORM\ArrayList;
 	use SilverStripe\Control\Director;
+	use SilverStripe\Control\Controller;
 
 	class TestController extends PageController
 	{
@@ -19,15 +20,12 @@
 
 	    public function index(HTTPRequest $request)
 	    {
-            // echo "<pre>";
-            // var_dump(ModelData::TableHeader(array('Nama', 'Tes')));die;
-			$curStat = "Me";
+			$curStat = $request->param('ID');
 			$data = [
 	    		'cur_status' => $curStat,
 	    		'user' => 'User',
 	    		'Columns' => new ArrayList($this->getCustomColumns('drb')), 
 	    		'mgeJS' => 'list-drb',
-				'url'  => 'searchcosting',
 				'siteParent'=>"Draft RB",
 				'siteChild'=>$curStat,
 				'linkNew'=>"draf-rb"
@@ -66,7 +64,7 @@
 						if($cur_status == 'Teams'){
 	    					$teams = PegawaiPerJabatan::get()->where("CabangID = " . $jabatan->first()->CabangID . " AND DepartemenID = " . $jabatan->first()->DepartemenID);
 	    					foreach ($teams as $team) {
-	    						$temp[$team->Pegawai()->ID] = $team->Pegawai()->Nama;
+	    						$temp[$team->Pegawai()->ID] = $team->Pegawai()->Nama ;
 	    					}
     					}
 
@@ -176,11 +174,23 @@
 			return $columns;
 		}
 
+		public function Link($action = null) 
+		{
+		    // Construct link with graceful handling of GET parameters
+		    $link = Controller::join_links('list-drb', $action);
+		    
+		    // Allow Versioned and other extension to update $link by reference.
+		    $this->extend('updateLink', $link, $action);
+		    
+		    return $link;
+		}
+
 		function searchdrb() {
 		    // ============ filter bawaan datatable
 			$pk = 'ID';
 
 			$filter_record = (isset($_REQUEST['filter_record'])) ? $_REQUEST['filter_record'] : '';
+	    	$cur_status = isset($_REQUEST['cur_status']) ? $_REQUEST['cur_status'] : 'Me';
 			$start = (isset($_REQUEST['start'])) ? $_REQUEST['start'] : 0;
 			$length = (isset($_REQUEST['length'])) ? $_REQUEST['length'] : 10;
 			$search = (isset($_REQUEST['search']['value'])) ? $_REQUEST['search']['value'] : '';
@@ -189,12 +199,32 @@
 			$fieldsort = (isset($_REQUEST['columns'][$columnsort]['data']) && $_REQUEST['columns'][$columnsort]['data']) ? $_REQUEST['columns'][$columnsort]['data'] : 0;
 		    // ============ end filter
 
+		    // params
+		    $user_logged_id = $_SESSION['user_id'];
+			$pegawai = User::get()->byID($user_logged_id);
+			$jabatan = PegawaiPerJabatan::get()->
+				where("PegawaiID = ".$pegawai->PegawaiID);
+
 		    // SETTING INI
 			$columns = $this->getCustomColumns('drb');
 			$params_array = [];
 			parse_str($filter_record, $params_array);
 
 			$result = DraftRB::get();
+			switch ($cur_status) {
+				case 'Me':
+					$result = $result->where("PemohonID = ".$user_logged_id);
+					break;
+				case 'Teams':
+					$teams = PegawaiPerJabatan::get()->where("CabangID = " . $jabatan->first()->CabangID . " AND DepartemenID = " . $jabatan->first()->DepartemenID);
+					$teams_id = AddOn::groupConcat($teams, 'PegawaiID');
+					
+					$result = $result->where("PemohonID IN(" . $teams_id . ")");
+					break;
+				default:
+					# code...
+					break;
+			}
 				// ->limit($length, $start)
 				// ->sort($columns[$fieldsort]['ColumnDb'] . ' ' . $typesort);
 
