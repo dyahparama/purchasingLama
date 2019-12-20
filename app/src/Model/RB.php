@@ -2,6 +2,7 @@
 
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Assets\Image;
+use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\ValidationException;
 
 class RB extends DataObject
@@ -43,5 +44,20 @@ class RB extends DataObject
             }
         }
         parent::onBeforeWrite();
+    }
+    public static function GetSuplier($ID)
+    {
+        $detailnya = DetailRBPerSupplier::get()->where('RBID = '.$ID);
+        $tes = AddOn::groupBySum($detailnya, "NamaSupplier", array("Total"), array("NamaSupplier", "Kode", "Total"));
+        $temp = array();
+        $asu = new ArrayList();;
+        foreach ($tes as $key) {
+            $temp['NamaSupplier'] = $key['NamaSupplier'];
+            $temp['Kode'] = $key['Kode'];
+            $temp['Total'] = $key['Total'];
+            $temp['view_link'] = '../po/ApprovePage/'.$ID."/".$key['NamaSupplier'];
+            $asu->push($temp);
+        }
+        return $asu;
     }
 }

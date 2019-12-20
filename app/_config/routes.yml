@@ -8,7 +8,7 @@ SilverStripe\Control\Director:
     'test//$Action/$ID/$Name': 'TestController'
     'user': 'UserController'
     'helper': 'HelperController'
-    'rb': 'RBController'
+    'rb//$Action/$ID/$Name': 'RBController'
     'po': 'POController'
     'lpb': 'LPBController'
     'ta': 'MyTaskController'

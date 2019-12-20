@@ -9,7 +9,7 @@ class DetailRBPerSupplier extends DataObject
 {
     private static $db = [
         'NamaSupplier' => 'Varchar(255)',
-        'KodeSupplier' => 'Double',
+        'KodeSupplier' => 'Varchar(50)',
         'Jumlah' => 'Double',
         'Harga' => 'Double',
         'Total' => 'Double',

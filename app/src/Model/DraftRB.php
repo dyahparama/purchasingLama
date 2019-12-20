@@ -32,6 +32,9 @@ class DraftRB extends DataObject
     private static $has_many = [
         'Detail' => DraftRBDetail::class,
     ];
+    private static $belongs_to = [
+        'RB' => RB::class,
+    ];
     // private static $has_many = [
     //     'Regionals' => Regional::class,
     // ];

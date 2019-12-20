@@ -81,7 +81,7 @@
 			  <!-- <a class="dropdown-item" href="javascript:void(0)" role="menuitem"><i class="icon md-card" aria-hidden="true"></i> Billing</a>
 			  <a class="dropdown-item" href="javascript:void(0)" role="menuitem"><i class="icon md-settings" aria-hidden="true"></i> Settings</a> -->
 			  <div class="dropdown-divider" role="presentation"></div>
-			  <a class="dropdown-item" href="user/dologout" role="menuitem"><i class="icon md-power" aria-hidden="true"></i> Logout</a>
+			  <a class="dropdown-item" href="{$BaseHref}user/dologout" role="menuitem"><i class="icon md-power" aria-hidden="true"></i> Logout</a>
 			</div>
 		  </li>
 		  <!-- <li class="nav-item dropdown">
@@ -290,3 +290,4 @@
 	  <!-- End Site Navbar Seach -->
 	</div>
   </nav>
+  <div id="baseURL" data-url="$getBaseURL()"></div>

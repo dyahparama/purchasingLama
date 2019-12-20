@@ -26,7 +26,7 @@
 			  </ul>
 			</li> -->
 			<li class="site-menu-item<% if $siteParent == 'My Task' %> active open<% end_if %>">
-				<a class="animsition-link" href="/ta">
+				<a class="animsition-link" href="{$BaseHref}ta">
                   	<i class="" aria-hidden="true"></i>
 					<span class="site-menu-title">My task <% if $total %>($total)<% end_if %></span>
 				</a>
@@ -50,14 +50,27 @@
 				</li>
 			  </ul>
 			</li>
-			<li class="site-menu-item<% if $siteParent == 'RB' %> active open<% end_if %>">
-				<a class="animsition-link" href="#">
-					<i class="" aria-hidden="true"></i>
-					<span class="site-menu-title">RB</span>
-				</a>
-			</li>
+			<li class="site-menu-item has-sub<% if $siteParent == 'RB' %> active open<% end_if %>">
+				<a href="javascript:void(0)">
+					  <i class="" aria-hidden="true"></i>
+						<span class="site-menu-title">RB</span>
+					  <span class="site-menu-arrow"></span><br>
+					</a>
+				<ul class="site-menu-sub">
+				  <li class="site-menu-item<% if $siteChild == 'RB Me' %> active<% end_if %>">
+					<a class="animsition-link" href="/rb">
+					  <span class="site-menu-title">Me</span>
+					</a>
+				  </li>
+				  <li class="site-menu-item<% if $siteChild == 'RB Team' %> active<% end_if %>">
+					<a class="animsition-link" href="/rb">
+					  <span class="site-menu-title">Team</span>
+					</a>
+				  </li>
+				</ul>
+			  </li>
 			<li class="site-menu-item<% if $siteParent == 'PO' %> active open<% end_if %>">
-				<a class="animsition-link" href="#">
+				<a class="animsition-link" href="po/PoList">
 					<i class="" aria-hidden="true"></i>
 					<span class="site-menu-title">PO</span>
 				</a>

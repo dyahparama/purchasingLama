@@ -1,4 +1,5 @@
 var table;
+let baseURL=$("#baseURL").data("url");
 var uri_segment = window.location.pathname.split('/')[1];
 var column_name = $(document).find('#datatable1 > thead > tr');
 var cur_status = $(document).find('#cur_status').text();
@@ -13,7 +14,7 @@ function getData(jenis, status){
 	        'type': "POST",
 	        'global': false,
 	        'dataType': 'json',
-	        'url': uri_segment+"/getData",
+	        'url': baseURL+"rb/getData",
 	        'data': {'jenis': jenis, 'cur_status': status},
 	        'success': function (data) {
 	            tmp = data.msg;
@@ -150,7 +151,7 @@ $(document).ready(function(){
 		// <%-- 'lengthMenu'    : [5, 10, 15, 20], --%>
 		'paging': true,
 		'ajax': {
-			'url' : uri_segment+'/searchdrb',
+			'url' : baseURL+"rb/searchRb/",
 			'data' : function(d){
 				d.filter_record = params;
 			}

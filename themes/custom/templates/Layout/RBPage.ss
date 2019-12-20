@@ -36,7 +36,7 @@
                                             <span class="input-group-addon">
                                                 <i class="icon md-calendar" aria-hidden="true"></i>
                                             </span>
-                                            <input class="form-control" id="tgl-draft" name="tgl"
+                                            <input class="form-control" id="tgl-draft" name="tgl-rb"
                                                 data-date-format="dd/mm/yyyy" data-now="$dateNow"
                                                 value="<% if $dateNow %>$dateNow<% end_if %>" data-plugin="datepicker"
                                                 type="text">

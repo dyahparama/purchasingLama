@@ -32,6 +32,10 @@ namespace {
             Requirements::themedCSS('custom');
             parent::init();
         }
+        public static function getBaseURL()
+        {
+            return Director::absoluteBaseURL();
+        }
         public function index(HTTPRequest $request)
         {
             if (!UserController::cekSession()) {
@@ -323,19 +327,19 @@ namespace {
             $drb = $rb->DraftRB();
             $nominalTPS = $siteconfig->NominalTPS;
             $nominalPimpinan = $siteconfig->NominalPimpinan;
-            $userTps=[];
-            $history=[];
+            $userTps = [];
+            $history = [];
             $kepalaPusat = $drb->PegawaiPerJabatan()->Cabang()->Pusat()->Kacab()->ID;
-            if($drb->Status()->ID == 7 && $rb->Total >= $nominalTPS){
+            if ($drb->Status()->ID == 7 && $rb->Total >= $nominalTPS) {
                 $timTps = Pegawai::get()->where("IsTPS = 1");
                 $historyRB = HistoryApproval::get()->where("Status > 6 AND Status < 10");
                 foreach ($timTps as $key) {
-                    $userTps [] =$key->User()->ID;
+                    $userTps[] = $key->User()->ID;
                 }
                 foreach ($historyRB as $key) {
-                    $history[]= $key->ApprovedBy()->ID;
+                    $history[] = $key->ApprovedBy()->ID;
                 }
-                $irisan = array_intersect($history,$userTps);
+                $irisan = array_intersect($history, $userTps);
                 if (count($irisan)) {
                     return true;
                 }
@@ -349,7 +353,7 @@ namespace {
 
         public static function ApproveRB($note, $rb, $approver)
         {
-            $drb=$rb->DraftRB();
+            $drb = $rb->DraftRB();
             $stop = false;
             while ($stop == false) {
                 $target = self::getNextTargetRB($drb);

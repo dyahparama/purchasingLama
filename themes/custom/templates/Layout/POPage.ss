@@ -23,39 +23,22 @@
                                 <div class="form-group form-material row">
                                     <label class="col-md-3 col-form-label">Kode RB :</label>
                                     <div class="col-md-9">
-                                        <select id="kode-rb-po" class="form-control" name="kode-rb"
-                                            data-plugin="select2">
-                                            <option>Pilih RB</option>
-                                            <% loop $RB %>
-                                            <option value="$ID">{$Kode}</option>
-                                            <% end_loop %>
-                                        </select>
+                                        <input class="form-control" id="nomor" name="nomor" type="text"
+                                            value="{$RB.Kode}" readonly autocomplete="off">
                                     </div>
                                 </div>
                                 <div class="form-group form-material row">
                                     <label class="col-md-3 col-form-label">Tanggal :</label>
                                     <div class="col-md-9">
-                                        <div class="input-group">
-                                            <span class="input-group-addon">
-                                                <i class="icon md-calendar" aria-hidden="true"></i>
-                                            </span>
-                                            <input class="form-control" id="tgl-draft" name="tgl"
-                                                data-date-format="dd/mm/yyyy" data-now="$dateNow"
-                                                value="<% if $dateNow %>$dateNow<% end_if %>" data-plugin="datepicker"
-                                                type="text">
-                                        </div>
+                                        <input class="form-control" id="nomor" name="nomor" type="text"
+                                            value="$Now.format(dd/MM/yyyy)" readonly autocomplete="off">
                                     </div>
                                 </div>
                                 <div class="form-group form-material row">
                                     <label class="col-md-3 col-form-label">Supplier :</label>
                                     <div class="col-md-9">
-                                        <select class="form-control jabatan-cabang" name="supplier"
-                                            data-plugin="select2" id="nama-supplier">
-                                            <option>Pilih Supplier</option>
-                                            <% loop $Supplier %>
-                                            <option value="$ID">{$Nama}</option>
-                                            <% end_loop %>
-                                        </select>
+                                        <input class="form-control" id="nomor" name="nomor" type="text"
+                                            value="{$NamaSupplier}" readonly autocomplete="off">
                                     </div>
                                 </div>
                                 <div class="table-responsive">
@@ -73,22 +56,19 @@
                                                 <th class="th-detail">Jumlah</th>
                                                 <th class="th-detail">Satuan</th>
                                                 <th class="th-detail">Harga</th>
-                                                <th class="th-detail">Diskon (%)</th>
-                                                <th class="th-detail">Diskon (Rp)</th>
                                                 <th class="th-detail">Subtotal</th>
-                                                <th class="th-detail">Kode Inventaris</th>
                                             </tr>
                                         </thead>
                                         <tbody id="table-body">
-                                            <%-- <% loop $DetailRB %>
+                                            <% loop $Detail %>
                                             <tr class="table-row">
                                                 <td class="jenis-barang">
                                                     <input name="jenis_barang[]" class="form-control"
-                                                        value="$Jenis.Nama" readonly autocomplete="off">
+                                                        value="$DraftRBDetail.Jenis.Nama" readonly autocomplete="off">
                                                 </td>
                                                 <td>
                                                     <input name="nama_barang[]" class="form-control"
-                                                        value="$NamaBarang" readonly autocomplete="off">
+                                                        value="$DraftRBDetailID.NamaBarang" readonly autocomplete="off">
                                                 </td>
                                                 <td>
                                                     <input name="jumlah[]" class="jumlah-po form-control jumlah-po-val" readonly
@@ -96,37 +76,23 @@
                                                 </td>
                                                 <td>
                                                     <input name="satuan[]" class="form-control" readonly
-                                                    value="$Satuan.Nama" autocomplete="off">
+                                                    value="$DraftRBDetail.Satuan.Nama" autocomplete="off">
                                                 </td>
                                                 <td>
                                                     <input name="harga[]" class="form-control harga-po-val" type="text"
-                                                        readonly autocomplete="off">
-                                                </td>
-                                                <td>
-                                                    <input name="diskon[]" class="form-control diskon-po-val" type="text"
-                                                        autocomplete="off">
-                                                </td>
-                                                <td>
-                                                    <input name="diskon2[]" class="form-control diskon2-po-val" type="text"
-                                                        autocomplete="off">
+                                                        value="$Harga" readonly autocomplete="off">
                                                 </td>
                                                 <td>
                                                     <input name="subtotal[]" class="form-control subtotal-po-val" type="text"
-                                                        value="0" autocomplete="off" readonly>
-                                                </td>
-                                                <td>
-                                                    <input name="inventaris[]" class="form-control" type="text" readonly
-                                                        autocomplete="off">
+                                                        value="$Total" autocomplete="off" readonly>
                                                 </td>
                                             </tr>
                                             <% end_loop %>
                                             <tr id="row-total">
-                                                <td colspan="8">Jumlah</td>
+                                                <td colspan="5">Jumlah</td>
                                                 <td><input id="total-akhir-po" name="total" class="form-control" type="text" value="0"
                                                     autocomplete="off" readonly></td>
-                                                <td></td>
-                                                <td></td>
-                                            </tr> --%>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>

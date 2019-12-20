@@ -15,3 +15,16 @@ $(document).on('click','.viewpo',function(){
 		$(this).attr('shownya','0');
 	}
 });
+
+$(document).on('click','.viewlpb',function(){
+	let link = $(this).attr('idnya');
+	let show = $(this).attr('shownya');
+	if(show==0){
+		$('.showdetaillpb'+link).show();
+		$(this).attr('shownya','1');
+	}
+	if (show==1) {
+		$('.showdetaillpb'+link).hide();	
+		$(this).attr('shownya','0');
+	}
+});

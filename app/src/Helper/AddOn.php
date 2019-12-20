@@ -4,6 +4,7 @@ use SilverStripe\Core\Config\Config;
 use Silverstripe\SiteConfig\SiteConfig;
 use SilverStripe\View\SSViewer;
 use SilverStripe\View\ViewableData;
+use SilverStripe\Control\Director;
 
 class AddOn
 {
@@ -32,6 +33,12 @@ class AddOn
     {
         $temp = array_column($arr, $col);
         return $temp;
+    }
+
+    public static function convertDateToDatabase($string) {
+        $arr = explode("/", $string);
+
+        return $arr[2]."-".$arr[1]."-".$arr[0];
     }
 
     public static function groupBySum($data, $object, $sum, $display = null)
@@ -351,5 +358,9 @@ class AddOn
             $count = "0" . $count;
         }
         return $count;
+    }
+    public static function getBaseURL()
+    {
+        return Director::absoluteBaseURL();
     }
 }

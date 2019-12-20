@@ -30,7 +30,9 @@
             $draftrbnya = DraftRB::get()->where('ForwardToID = '.$pegawainya->ID);
             $rb = RB::get();
             $jumlahrb=0;
+            $jumlahpo=0;
             // print_r($rb);
+            $nama = [];
             foreach ($rb as $key) {
             	if($key->DraftRB()->ForwardToID == $pegawainya->ID && $key->DraftRB()->Status()->ID != 11){
             		$temp1['Tgl'] = date('d/m/Y',strtotime($key->Tgl));
@@ -50,6 +52,7 @@
             		$jumlahrb++;
             	}
             	if($key->DraftRB()->Status()->ID == 11){
+                    $temp2['ID'] = $key->ID;
                     $temp2['Tgl'] = date('d/m/Y',strtotime($key->Tgl));
                     $temp2['Kode'] = $key->Kode;
                     $temp2['Deadline'] = date('d/m/Y',strtotime($key->DraftRB()->Deadline));
@@ -60,41 +63,54 @@
                     foreach ($detail as $key1) {
                         $temp2['JenisBarang'] = $key1->Jenis()->Nama;
                     }
+                    $detailnya = DetailRBPerSupplier::get()->where('RBID = '.$key->ID);
+                    $temp2['isi'] = $key->GetSuplier($key->ID);
                     $temp2['Status'] = $key->DraftRB()->Status()->Status;
-                    $temp2['view_link'] = '../rb/ApprovePage/'.$key->ID;
                     $show2->push($temp2);
+                    // echo "<pre>";
+                    // var_dump($temp2);
+                    // die;
+                    $jumlahpo++;
                 }
             }
             // echo "<pre>".print_r($show2);
             // // var_dump($show2);
             // die();
-            $jumlahdraft = count($draftrbnya);
+            $jumlahdraft = 0;
             foreach ($draftrbnya as $key) {
-            	$temp['ID'] = $key->ID;
-            	$temp['Tgl'] = date('d/m/Y',strtotime($key->Tgl));
-            	$temp['Kode'] = $key->Kode;
-            	$temp['Deadline'] = date('d/m/Y',strtotime($key->Deadline));
-            	$temp['Atasan'] = $key->PegawaiPerJabatan()->Jabatan()->Nama ." / ". $key->PegawaiPerJabatan()->Cabang()->Nama ." / ". $key->PegawaiPerJabatan()->Cabang()->Kacab()->Pegawai()->Nama;
-            	$temp['Pemohon'] = $key->Pemohon()->Pegawai()->Nama;
-            	$temp['Jenis'] = $key->Jenis;
-            	$detail = DraftRBDetail::get()->where('DraftRBID = '.$key->ID)->limit(1);
-            	foreach ($detail as $key1) {
-            		$temp['JenisBarang'] = $key1->Jenis()->Nama;
-            		$temp['Deskripsi'] = $key1->Deskripsi;
-            	}
-            	$temp['view_link'] = '../draf-rb/ApprovePage/'.$key->ID;
-				$temp['delete_link'] = $this->Link().'deletereqcost/'.$key->ID;
-            	$show->push($temp);
+                if($key->Status()->ID<=6){
+                	$temp['ID'] = $key->ID;
+                	$temp['Tgl'] = date('d/m/Y',strtotime($key->Tgl));
+                	$temp['Kode'] = $key->Kode;
+                	$temp['Deadline'] = date('d/m/Y',strtotime($key->Deadline));
+                	$temp['Atasan'] = $key->PegawaiPerJabatan()->Jabatan()->Nama ." / ". $key->PegawaiPerJabatan()->Cabang()->Nama ." / ". $key->PegawaiPerJabatan()->Cabang()->Kacab()->Pegawai()->Nama;
+                	$temp['Pemohon'] = $key->Pemohon()->Pegawai()->Nama;
+                	$temp['Jenis'] = $key->Jenis;
+                	$detail = DraftRBDetail::get()->where('DraftRBID = '.$key->ID)->limit(1);
+                	foreach ($detail as $key1) {
+                		$temp['JenisBarang'] = $key1->Jenis()->Nama;
+                		$temp['Deskripsi'] = $key1->Deskripsi;
+                	}
+                    $temp['Status'] = $key->Status()->Status;
+                	$temp['view_link'] = '../draf-rb/ApprovePage/'.$key->ID;
+    				$temp['delete_link'] = $this->Link().'deletereqcost/'.$key->ID;
+                	$show->push($temp);
+                    $jumlahdraft++;
+                }
             }
             $total = $this->TotalTask();
             // echo $pegawainya->ID;
             $data = array(
                 "draftrbnya" => $show,
+                'siteParent' => 'My Task',
+                'PageTitle' => "My Task",
+                'Title' => 'My Task',
                 'total' => $total,
                 'rbnya' => $show1,
                 'ponya' => $show2,
                 "jumlahdraft" => $jumlahdraft,
                 'jumlahrb' => $jumlahrb,
+                'jumlahpo' => $jumlahpo,
                 "mgeJS" =>"task-my"
             );
             return $this->customise($data)
@@ -110,16 +126,22 @@
             $draftrbnya = DraftRB::get()->where('ForwardToID = '.$pegawainya->ID);
             $rb = RB::get();
             $jumlahrb=0;
+            $jumlahpo=0;
+            $jumlahdraft = 0;
             foreach ($rb as $key) {
-                if($key->DraftRB()->ForwardToID == $pegawainya->ID){
+                if($key->DraftRB()->ForwardToID == $pegawainya->ID && $key->DraftRB()->Status()->ID != 11){
                     $jumlahrb++;
                 }
-                else{
-                    // echo "tidak";
+                if($key->DraftRB()->Status()->ID == 11){
+                    $jumlahpo++;
                 }
             }
-            $jumlahdraft = count($draftrbnya);
-            $totalnya = $jumlahdraft + $jumlahrb;
+            foreach ($draftrbnya as $key) {
+                if($key->Status()->ID<=6){
+                    $jumlahdraft++;
+                }
+            }
+            $totalnya = $jumlahdraft + $jumlahrb + $jumlahpo;
             return $totalnya;
         }
 	}

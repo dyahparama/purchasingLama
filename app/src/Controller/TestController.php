@@ -2,6 +2,7 @@
 	use SilverStripe\Control\HTTPRequest;
 	use SilverStripe\View\Requirements;
 	use SilverStripe\ORM\ArrayList;
+	use SilverStripe\Control\Director;
 
 	class TestController extends PageController
 	{
@@ -10,12 +11,10 @@
 	    public function init()
 	    {
 	    	parent::init();
-
 	    	if (!isset($_SESSION['user_id'])) {
 	    		$_SESSION['error_login'] = "1";
 	    		return $this->redirect('user/login');
 	    	}
-
 	    }
 
 	    public function index(HTTPRequest $request)
@@ -27,7 +26,7 @@
 	    		'cur_status' => $curStat,
 	    		'user' => 'User',
 	    		'Columns' => new ArrayList($this->getCustomColumns('drb')), 
-	    		'mgeJS' => 'list-rb',
+	    		'mgeJS' => 'list-drb',
 				'url'  => 'searchcosting',
 				'siteParent'=>"Draft RB",
 				'siteChild'=>$curStat,
@@ -36,7 +35,7 @@
 
 	    	return $this->customise($data)
                 ->renderWith(array(
-                    'ListRBPage', 'Page',
+                    'ListDRBPage', 'Page',
                 ));
 	    }
 
@@ -160,6 +159,12 @@
 							'ColumnDb' => 'status',
 							'Type' => 'Varchar',
 							'Required' => true
+						),
+						array(
+							'ColumnTb' => 'Posisi Terakhir',
+							'ColumnDb' => 'ForwardToID',
+							'Type' => 'Int',
+							'Required' => true
 						)
 					);
 					break;
@@ -223,6 +228,10 @@
 					}elseif ($col['ColumnDb'] == 'status') {
 						$status = $row->Status()->Status;
 						$temp[] = $status;	
+					}
+					elseif ($col['ColumnDb'] == 'ForwardToID') {
+						$ForwardTo = $row->ForwardTo()->Pegawai()->Nama;
+						$temp[] = $ForwardTo;	
 					}elseif($col['Type'] == 'Date')
 						$temp[] = date('d-m-Y', strtotime($row->{$col['ColumnDb']}));
 					else
@@ -232,13 +241,13 @@
 				}
 
 
-				$view_link = $this->Link().'view/'.$id;
+				$view_link = Director::absoluteBaseURL().'draf-rb/ApprovePage/'.$id;
 				$delete_link = $this->Link().'deletereqcost/'.$id;
 
 				$temp[] = '
 				<div class="btn-group">
 				  <a href="'.$view_link.'" type="button" class="btn btn-default view"><i class="text-info fa fa-eye"></i> View</a>
-				  <a href="'.$delete_link.'" type="button" class="btn btn-danger delete"><i class="text-info fa fa-eye"></i> Delete</a> 					 
+				  <!--<a href="'.$delete_link.'" type="button" class="btn btn-danger delete"><i class="text-info fa fa-eye"></i> Delete</a>-->					 
 				</div>
 				';
 
