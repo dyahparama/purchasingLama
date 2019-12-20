@@ -14,7 +14,7 @@ function getData(jenis, status){
 	        'type': "POST",
 	        'global': false,
 	        'dataType': 'json',
-	        'url': baseURL+"test/getData",
+	        'url': baseURL+uri_segment+"/getData",
 	        'data': {'jenis': jenis, 'cur_status': status},
 	        'success': function (data) {
 	            tmp = data.msg;
@@ -151,7 +151,7 @@ $(document).ready(function(){
 		// <%-- 'lengthMenu'    : [5, 10, 15, 20], --%>
 		'paging': true,
 		'ajax': {
-			'url' : baseURL+"test/searchdrb/",
+			'url' : baseURL+uri_segment+"/searchdrb/",
 			'data' : function(d){
 				d.filter_record = params;
 			}

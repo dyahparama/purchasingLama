@@ -373,5 +373,12 @@ namespace {
             }
         }
 
+        public function getUsername()
+        {
+            $user = User::get()->byID($_SESSION['user_id']);
+            $name = $user->Pegawai()->Nama;
+            return $name;
+        }
+
     }
 }

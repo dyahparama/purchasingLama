@@ -81,7 +81,8 @@ class User extends DataObject {
 	}
 
 	public static function userList() {
-		$user = Pegawai::get()->innerJoin("user", "\"pegawai\".\"ID\" = \"user\".\"ID\"");
+		$user = Pegawai::get()->innerJoin("user", "\"pegawai\".\"ID\" = \"user\".\"PegawaiID\"");
 		return $user;
 	}
+
 }

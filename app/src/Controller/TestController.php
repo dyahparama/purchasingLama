@@ -30,7 +30,7 @@
 				'url'  => 'searchcosting',
 				'siteParent'=>"Draft RB",
 				'siteChild'=>$curStat,
-				'linkNew'=>"/draf-rb"
+				'linkNew'=>"draf-rb"
 	    	];
 
 	    	return $this->customise($data)

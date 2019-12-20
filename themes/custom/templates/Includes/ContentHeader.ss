@@ -6,9 +6,9 @@
 	</ol>
 	<% if $linkNew %>
 	<div class="page-header-actions">
-	  <a href="{$BaseHref}{$linkNew}" type="button" class="btn btn-sm btn-icon btn-primary btn-round" data-toggle="tooltip"
+	  <a href="{$BaseHref}{$linkNew}" type="button" class="btn  btn-icon btn-primary btn-round" data-toggle="tooltip"
 		data-original-title="New">
-		<i class="icon md-edit" aria-hidden="true"></i>
+		<i class="icon md-plus" aria-hidden="true"></i>
 	</a>
 	  <!-- <button type="button" class="btn btn-sm btn-icon btn-primary btn-round" data-toggle="tooltip"
 		data-original-title="Refresh">
