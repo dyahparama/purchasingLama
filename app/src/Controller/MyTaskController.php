@@ -82,7 +82,7 @@
                         $temp2['JenisBarang'] = $key1->Jenis()->Nama;
                     }
                     $detailnya = DetailRBPerSupplier::get()->where('RBID = '.$key->ID);
-                    $temp2['isi'] = $key->GetSuplier($key->ID);
+                    $temp1['view_link'] = 'po/ApprovePage/'.$key->ID;
                     $temp2['Status'] = $key->DraftRB()->Status()->Status;
                     $show2->push($temp2);
                     // echo "<pre>";
@@ -120,7 +120,7 @@
                     $temp3['KodeDraftRB'] = $key5->DraftRB()->Kode; 
                     $temp3['Tgl'] = $key5->Tgl;
                     $temp3['Suplier'] = $key5->Supplier()->Nama;
-                    // $temp3['Isi']
+                    $temp3['isi'] = $key5->GetPO($key->ID);
                     $show3->push($temp3);
                     $jumlahlpb++;
                 }

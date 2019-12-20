@@ -22,6 +22,13 @@ class LPB extends DataObject
     private static $has_many = [
         'Detail' => LPBDetail::class,
     ];
+
+    public function onBeforeWrite(){
+        parent::onBeforeWrite();
+        if (!$this->ID) {
+            $this->Kode = AddOn::createKode("LPB", "LPB");
+        }
+    }
     // private static $has_many = [
     //     'Regionals' => Regional::class,
     // ];

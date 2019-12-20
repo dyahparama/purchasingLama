@@ -179,13 +179,13 @@
                                             <input type="radio" id="RadioReject" name="respond" value="reject">
                                             <label for="RadioReject">Reject</label>
                                         </div>
-                                        <div class="radio-custom radio-primary">
+                                        <%-- <div class="radio-custom radio-primary">
                                             <input type="radio" id="RadioForward" name="respond" checked=""
                                                 value="forward">
                                             <label for="RadioForward">Forward</label>
-                                        </div>
+                                        </div> --%>
                                     </div>
-                                    <div class="col-md-5" id="forward-to">
+                                    <%-- <div class="col-md-5" id="forward-to">
                                         <label class="col-md-3 col-form-label">Forward To :</label>
                                         <div class="col-md-9">
                                             <select id="select-forward-to" class="form-control" name="jabatan-cabang"
@@ -197,7 +197,7 @@
                                                 <% end_loop %>
                                             </select>
                                         </div>
-                                    </div>
+                                    </div> --%>
                                 </div>
                                 <div class="form-group form-material row">
                                     <div class="col-md-9">
