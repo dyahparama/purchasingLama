@@ -245,6 +245,8 @@ class DraftRBController extends PageController
         $kepalaCabang = PegawaiPerJabatan::get()->byID($cek->PegawaiPerJabatanID);
         $kepalaCabang = $kepalaCabang->Cabang()->Kacab()->Pegawai()->ID;
 
+        var_dump($kepalaCabang);
+        die;
         $cek->ForwardToID = $kepalaCabang;
         $cek->ApproveToID = $kepalaCabang;
         $cek->TglSubmit = date("Y/m/d");
