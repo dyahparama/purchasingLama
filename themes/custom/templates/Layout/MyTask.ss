@@ -7,23 +7,25 @@
               <div class="nav-tabs-horizontal nav-tabs-inverse" data-plugin="tabs">
                 <ul class="nav nav-tabs" role="tablist">
                   	<li class="nav-item" role="presentation">
-                    	<a class="nav-link active" data-toggle="tab" href="#listdraftrb" aria-controls="listdraftrb" role="tab"><span>Draft RB</span> <span class="badge badge-pill badge-dark">$jumlahdraft</span>
+                    	<a class="nav-link active" data-toggle="tab" href="#listdraftrb" aria-controls="listdraftrb" role="tab"><span>Draft RB </span><span class="badge badge-pill badge-dark">$jumlahdraft</span>
                 		</a>
                   	</li>
 	                <li class="nav-item" role="presentation">
 	                    <a class="nav-link" data-toggle="tab" href="#listrb" aria-controls="listrb" role="tab">
-		                  <span>RB</span><span class="badge badge-pill badge-dark">$jumlahrb</span>
+		                  <span>RB </span><span class="badge badge-pill badge-dark">$jumlahrb</span>
 		                </a>
 	                </li>
+	                <% if $shownya == 1 %>
 	                <li class="nav-item" role="presentation">
-                    	<a class="nav-link" data-toggle="tab" href="#listpo" aria-controls="listpo" role="tab"><span>PO</span> <span class="badge badge-pill badge-dark">$jumlahpo</span>
+                    	<a class="nav-link" data-toggle="tab" href="#listpo" aria-controls="listpo" role="tab"><span>PO </span><span class="badge badge-pill badge-dark">$jumlahpo</span>
                 		</a>
                   	</li>
 	                <li class="nav-item" role="presentation">
 	                    <a class="nav-link" data-toggle="tab" href="#listlpb" aria-controls="listlpb" role="tab">
-		                  <span>LPB</span><span class="badge badge-pill badge-dark">5</span>
+		                  <span>LPB </span><span class="badge badge-pill badge-dark">$jumlahlpb</span>
 		                </a>
 	                </li>
+	                <% end_if %>
                 </ul>
                 <div class="tab-content p-20" style="width: 100%;">
                   <div class="tab-pane active" id="listdraftrb" role="tabpanel">
@@ -33,7 +35,7 @@
 			                  <th style="vertical-align: middle;">Tanggal</th>
 			                  <th style="vertical-align: middle;">Kode Draft RB</th>
 			                  <th style="vertical-align: middle;">Tanggal Deadline</th>
-			                  <th style="vertical-align: middle;">Jabatan / Cabang / Kepala Cabang</th>
+			                  <th style="vertical-align: middle;">Jabatan/ Cabang/ Kepala Cabang</th>
 			                  <th style="vertical-align: middle;">Pemohon</th>
 			                  <th style="vertical-align: middle;">Jenis Permintaan</th>
 			                  <th style="vertical-align: middle;">Jenis Barang</th>
@@ -55,10 +57,12 @@
 				                <td>$Deskripsi</td>
 				                <td>$Status</td>
 				                <td>
+				                  	<% if $view_link!='' %>
 				                  	<div class="btn-group">
-									  <a href="$view_link" type="button" class="btn btn-default view"><i class="text-info fa fa-eye"></i> View</a>
+									  <a href="{$BaseHref}$view_link" type="button" class="btn btn-default view"><i class="text-info fa fa-eye"></i> View</a>
 									  <!-- <a href="'$delete_link'" type="button" class="btn btn-danger delete"><i class="text-info fa fa-eye"></i> Delete</a> --> 					 
 									</div>
+									<% end_if %>
 								</td>
 			                </tr>
 			                <% end_loop %>
@@ -94,16 +98,19 @@
 				                <td>$Deskripsi</td>
 				                <td>$Status</td>
 				                <td>
+				                  	<% if $view_link!='' %>
 				                  	<div class="btn-group">
-									  <a href="$view_link" type="button" class="btn btn-default view"><i class="text-info fa fa-eye"></i> View</a>
+									  <a href="{$BaseHref}$view_link" type="button" class="btn btn-default view"><i class="text-info fa fa-eye"></i> View</a>
 									  <!-- <a href="'$delete_link'" type="button" class="btn btn-danger delete"><i class="text-info fa fa-eye"></i> Delete</a> --> 					 
 									</div>
+									<% end_if %>
 								</td>
 			                </tr>
 			                <% end_loop %>
 		              	</tbody>
 		            </table>
                   </div>
+                  <% if $shownya == 1 %>
                   <div class="tab-pane" id="listpo" role="tabpanel">
                 	<table class="table table-hover dataTable table-striped w-full" data-plugin="dataTable" id="dataTablepo">
 		              	<thead>
@@ -158,10 +165,12 @@
 			                	<td>$Kode</td>
 			                	<td>$Total</td>
 			                	<td>
-			                		<div class="btn-group">
-									  <a href="$view_link" type="button" class="btn btn-default view"><i class="text-info fa fa-eye"></i> View</a>
+			                		<% if $view_link!='' %>
+				                  	<div class="btn-group">
+									  <a href="{$BaseHref}$view_link" type="button" class="btn btn-default view"><i class="text-info fa fa-eye"></i> View</a>
 									  <!-- <a href="'$delete_link'" type="button" class="btn btn-danger delete"><i class="text-info fa fa-eye"></i> Delete</a> --> 					 
 									</div>
+									<% end_if %>
 			                	</td>
 			                	<td></td>
 			                	<td></td>
@@ -194,11 +203,11 @@
 			                  	<td>$Tgl.Format(d/M/Y)</td>
 			                  	<td>$Suplier</td>
 			                  	<td>
-			                		<div class="btn-group">
+				                  	<div class="btn-group">
 									  <a type="button" class="btn btn-default viewlpb" shownya='0' idnya="$ID"><i class="text-info fa fa-eye"></i> Lihat Detail</a>
 									  <!-- <a href="'$delete_link'" type="button" class="btn btn-danger delete"><i class="text-info fa fa-eye"></i> Delete</a> --> 					 
 									</div>
-			                	</td>
+				                </td>
 			                </tr>
 		              	</tbody>
 		              	<tbody>
@@ -215,6 +224,7 @@
 			                	<td>tes</td>
 			                	<td>tes</td>
 			                	<td colspan="2">
+			                		<% if $view_link!='' %>
 			                		<div class="btn-group">
 									  <a href="$view_link" type="button" class="btn btn-default view"><i class="text-info fa fa-eye"></i> Buat LPB</a>
 									  <!-- <a href="'$delete_link'" type="button" class="btn btn-danger delete"><i class="text-info fa fa-eye"></i> Delete</a> --> 					 
@@ -227,12 +237,14 @@
 									  <a href="$view_link" type="button" class="btn btn-default view"><i class="text-info fa fa-eye"></i>Tutup PO</a>
 									  <!-- <a href="'$delete_link'" type="button" class="btn btn-danger delete"><i class="text-info fa fa-eye"></i> Delete</a> --> 					 
 									</div>
+									<% end_if %>
 			                	</td>
 			                </tr>
 		              	</tbody>
 		              	<% end_loop %>
 		            </table>
                   </div>
+                  <% end_if %>
                 </div>
               </div>
             </div>

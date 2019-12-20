@@ -5,6 +5,7 @@
 	use SilverStripe\ORM\ArrayList;
 	use SilverStripe\View\Requirements;
 	use SilverStripe\ORM\DB;
+    use Silverstripe\SiteConfig\SiteConfig;
 
 
 	class MyTaskController extends PageController
@@ -27,15 +28,29 @@
 	    	$temp1 = array();
             $temp2 = array();
             $temp3 = array();
+            $shownya = 0;
 	    	$pegawainya = User::get()->byID($idnya)->Pegawai();
+            $config = SiteConfig::current_site_config(); 
+            $jabatannya = $config->StafPencarianHargaID;
+            $departemennya = $config->DepartemenPencairanHargaID;
+            $jabatanpegawai = [];
+            $departemenpegawai = [];
+            foreach ($pegawainya->Jabatans() as $key) {
+                $jabatanpegawai[] = $key->JabatanID;
+                $departemenpegawai[] = $key->DepartemenID;
+            }
+            if(in_array(strtoupper($jabatannya),$jabatanpegawai) && in_array(strtoupper($departemennya),$departemenpegawai)) {
+                $shownya = 1;
+            }
             Requirements::themedCSS('custom');
             $draftrbnya = DraftRB::get()->where('ForwardToID = '.$pegawainya->ID);
             $lpbnya = PO::get();
             $rb = RB::get();
             $jumlahrb=0;
             $jumlahpo=0;
+            $jumlahdraft = 0;
+            $jumlahlpb = 0;
             // print_r($rb);
-            $nama = [];
             foreach ($rb as $key) {
             	if($key->DraftRB()->ForwardToID == $pegawainya->ID && $key->DraftRB()->Status()->ID != 11){
             		$temp1['Tgl'] = date('d/m/Y',strtotime($key->Tgl));
@@ -50,11 +65,11 @@
 	            		$temp1['Deskripsi'] = $key1->Deskripsi;
 	            	}
 	            	$temp1['Status'] = $key->DraftRB()->Status()->Status;
-	            	$temp1['view_link'] = '../rb/ApprovePage/'.$key->ID;
+	            	$temp1['view_link'] = 'rb/ApprovePage/'.$key->ID;
 	            	$show1->push($temp1);
             		$jumlahrb++;
             	}
-            	if($key->DraftRB()->Status()->ID == 11){
+            	if($key->DraftRB()->Status()->ID == 11 && $shownya==1){
                     $temp2['ID'] = $key->ID;
                     $temp2['Tgl'] = date('d/m/Y',strtotime($key->Tgl));
                     $temp2['Kode'] = $key->Kode;
@@ -76,7 +91,6 @@
                     $jumlahpo++;
                 }
             }
-            $jumlahdraft = 0;
             foreach ($draftrbnya as $key) {
                 if($key->Status()->ID<=6){
                 	$temp['ID'] = $key->ID;
@@ -92,28 +106,34 @@
                 		$temp['Deskripsi'] = $key1->Deskripsi;
                 	}
                     $temp['Status'] = $key->Status()->Status;
-                	$temp['view_link'] = '../draf-rb/ApprovePage/'.$key->ID;
+                	$temp['view_link'] = 'draf-rb/ApprovePage/'.$key->ID;
     				$temp['delete_link'] = $this->Link().'deletereqcost/'.$key->ID;
                 	$show->push($temp);
                     $jumlahdraft++;
                 }
             }
             foreach ($lpbnya as $key5) {
-                $temp3['ID'] = $key->ID;
-                $temp3['KodePO'] = $key5->Kode;
-                $temp3['KodeRB'] = $key5->RB()->Kode;
-                $temp3['KodeDraftRB'] = $key5->DraftRB()->Kode; 
-                $temp3['Tgl'] = $key5->Tgl;
-                $temp3['Suplier'] = $key5->Suplier()->Nama;
-                $show3->push($temp3);
+                if($key5->DraftRB()->StatusID !=14){
+                    $temp3['ID'] = $key->ID;
+                    $temp3['KodePO'] = $key5->Kode;
+                    $temp3['KodeRB'] = $key5->RB()->Kode;
+                    $temp3['KodeDraftRB'] = $key5->DraftRB()->Kode; 
+                    $temp3['Tgl'] = $key5->Tgl;
+                    $temp3['Suplier'] = $key5->Supplier()->Nama;
+                    // $temp3['Isi']
+                    $show3->push($temp3);
+                    $jumlahlpb++;
+                }
             }
             // echo "<pre>";
-            // var_dump($lpbnya);
+            // var_dump($config);
             // die();
             $total = $this->TotalTask();
             // echo $pegawainya->ID;
+            echo $shownya;
             $data = array(
                 "draftrbnya" => $show,
+                'shownya' => $shownya,
                 'siteParent' => 'My Task',
                 'PageTitle' => "My Task",
                 'Title' => 'My Task',
@@ -124,6 +144,7 @@
                 "jumlahdraft" => $jumlahdraft,
                 'jumlahrb' => $jumlahrb,
                 'jumlahpo' => $jumlahpo,
+                'jumlahlpb' => $jumlahlpb,
                 "mgeJS" =>"task-my"
             );
             return $this->customise($data)
