@@ -243,7 +243,7 @@ class DraftRBController extends PageController
 
         $cek = DraftRB::get()->where("Kode = '" . $_POST['kode'] . "'")->limit(1)->first();
         $kepalaCabang = PegawaiPerJabatan::get()->byID($cek->PegawaiPerJabatan()->ID);
-        $kepalaCabang = $kepalaCabang->Cabang()->Kacab()->User()->ID;
+        $kepalaCabang = $kepalaCabang->Cabang()->Kacab()->ID;
 
         // var_dump($kepalaCabang);
         // die;

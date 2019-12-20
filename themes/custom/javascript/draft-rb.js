@@ -132,7 +132,7 @@ $(document).ready(function() {
                 dataType: "json",
                 beforeSend: function() {},
                 success: function(result) {
-                    //location.reload();
+                     //location.reload();
                     window.location.href = baseURL+"list-drb/index/Me";
                 },
                 complete: function(result) {
