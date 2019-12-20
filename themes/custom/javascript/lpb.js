@@ -22,3 +22,17 @@ $(document).on('change', '#nama-supplier', function(){
         })
     }
 })
+
+$(document).on('keyup', '.jumlah-diterima-lpb', function () {
+    let parent = $(this).parent().parent()
+    let harga = parent.find(".harga-lpb").val() ? parent.find(".harga-lpb").val() : 0
+    let jumlah = parent.find(".jumlah-diterima-lpb").val() ? parent.find(".jumlah-diterima-lpb").val() : 0
+    let total = harga * jumlah
+    parent.find('.subtotal-lpb').val(total)
+
+    let totalakhir = 0
+    $('.subtotal-lpb').each(function () {
+        totalakhir += parseInt($(this).val())
+    })
+    $('#total-akhir-lpb').val(totalakhir)
+})

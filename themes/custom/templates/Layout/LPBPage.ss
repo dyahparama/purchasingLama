@@ -3,7 +3,7 @@
     <div class="panel">
         <header class="panel-heading">
             <h3 class="panel-title">
-                Input PO
+                Input LPB
             </h3>
         </header>
         <div class="panel-body container-fluid">
@@ -24,20 +24,20 @@
                                     <label class="col-md-3 col-form-label">Kode RB :</label>
                                     <div class="col-md-9">
                                         <input class="form-control" id="nomor" name="nomor" type="text"
-                                            value="<Auto Generate>" readonly autocomplete="off">
+                                            value="{$PO.RB.Kode}" readonly autocomplete="off">
                                     </div>
                                 </div>
                                 <div class="form-group form-material row">
                                     <label class="col-md-3 col-form-label">Kode Draft RB :</label>
                                     <div class="col-md-9">
                                         <input class="form-control" id="nomor" name="nomor" type="text"
-                                            value="<Auto Generate>" readonly autocomplete="off">
+                                            value="{$PO.DraftRB.Kode}" readonly autocomplete="off">
                                     </div>
                                 </div>
                                 <div class="form-group form-material row">
                                     <label class="col-md-3 col-form-label">Tanggal :</label>
                                     <div class="col-md-9">
-                                        <div class="input-group">
+                                        <%-- <div class="input-group">
                                             <span class="input-group-addon">
                                                 <i class="icon md-calendar" aria-hidden="true"></i>
                                             </span>
@@ -45,14 +45,16 @@
                                                 data-date-format="dd/mm/yyyy" data-now="$dateNow"
                                                 value="$Now.format('dd/MM/yyyy')" data-plugin="datepicker"
                                                 type="text">
-                                        </div>
+                                        </div> --%>
+                                        <input class="form-control" id="nomor" name="nomor" type="text"
+                                            value="$Now.format('dd/MM/yyyy')" readonly autocomplete="off">
                                     </div>
                                 </div>
                                 <div class="form-group form-material row">
                                     <label class="col-md-3 col-form-label">Supplier :</label>
                                     <div class="col-md-9">
                                         <input class="form-control" id="nomor" name="nomor" type="text"
-                                            value="<Auto Generate>" readonly autocomplete="off">
+                                            value="{$PO.NamaSupplier}" readonly autocomplete="off">
                                     </div>
                                 </div>
                                 <%-- <div class="form-group form-material row">
@@ -80,16 +82,16 @@
                                                 <th class="th-detail">Jenis Barang</th>
                                                 <th class="th-detail">Nama Barang</th>
                                                 <th class="th-detail">Jumlah Barang PO</th>
-                                                <th class="th-detail">Jumlah</th>
+                                                <th class="th-detail">Jumlah Barang Diterima</th>
                                                 <th class="th-detail">Satuan</th>
                                                 <th class="th-detail">Harga</th>
-                                                <th class="th-detail">Diskon (%)</th>
-                                                <th class="th-detail">Diskon (Rp)</th>
+                                                <%-- <th class="th-detail">Diskon (%)</th>
+                                                <th class="th-detail">Diskon (Rp)</th> --%>
                                                 <th class="th-detail">Subtotal</th>
                                             </tr>
                                         </thead>
                                         <tbody id="table-body">
-                                            <% loop $DetailRB %>
+                                            <% loop $Detail %>
                                             <tr class="table-row">
                                                 <td class="jenis-barang">
                                                     <input name="jenis_barang[]" class="form-control"
@@ -100,38 +102,38 @@
                                                         value="$NamaBarang" readonly autocomplete="off">
                                                 </td>
                                                 <td>
-                                                    <input name="jumlah[]" class="form-control" readonly
+                                                    <input name="jumlah[]" class="form-control jumlah-lpb" readonly
                                                     value="$Jumlah" autocomplete="off">
                                                 </td>
                                                 <td>
-                                                    <input name="jumlah[]" class="jumlah-po form-control jumlah-po-val"
-                                                        value="" autocomplete="off">
+                                                    <input name="jumlah_diterima[]" type="number" class="jumlah-diterima-lpb form-control"
+                                                        value="$Jumlah" autocomplete="off">
                                                 </td>
                                                 <td>
                                                     <input name="satuan[]" class="form-control" readonly
                                                     value="$Satuan.Nama" autocomplete="off">
                                                 </td>
                                                 <td>
-                                                    <input name="harga[]" class="form-control harga-po-val" type="text"
-                                                        readonly autocomplete="off">
+                                                    <input name="harga[]" class="form-control harga-lpb" type="text"
+                                                        value="$Jumlah" readonly autocomplete="off" value="$Harga">
                                                 </td>
-                                                <td>
+                                                <%-- <td>
                                                     <input name="diskon[]" class="form-control diskon-po-val" type="text"
                                                         readonly autocomplete="off">
                                                 </td>
                                                 <td>
                                                     <input name="diskon2[]" class="form-control diskon2-po-val" type="text"
                                                         readonly autocomplete="off">
-                                                </td>
+                                                </td> --%>
                                                 <td>
-                                                    <input name="subtotal[]" class="form-control subtotal-po-val" type="text"
-                                                        value="0" autocomplete="off" readonly>
+                                                    <input name="subtotal[]" class="form-control subtotal-lpb" type="text"
+                                                        value="$Total" autocomplete="off" readonly>
                                                 </td>
                                             </tr>
                                             <% end_loop %>
                                             <tr id="row-total">
-                                                <td colspan="8">Jumlah</td>
-                                                <td><input id="total-akhir-po" name="total" class="form-control" type="text" value="0"
+                                                <td colspan="6">Jumlah</td>
+                                                <td><input id="total-akhir-lpb" name="total" class="form-control" type="text" value="{$TotalAkhir}"
                                                     autocomplete="off" readonly></td>
                                                 <td></td>
                                                 <td></td>

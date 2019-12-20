@@ -40,13 +40,11 @@ class PO extends DataObject
     public static function GetPO($ID)
     {
         $detailnya = PODetail::get()->where('POID = '.$ID);
-        $tes = AddOn::groupBySum($detailnya, "NamaSupplier", array("Total"), array("NamaSupplier", "Kode", "Total"));
         $temp = array();
         $asu = new ArrayList();;
-        foreach ($tes as $key) {
-            $temp['NamaSupplier'] = $key['NamaSupplier'];
-            $temp['Kode'] = $key['Kode'];
-            $temp['Total'] = $key['Total'];
+        foreach ($detailnya as $key) {
+            $temp['NamaBarang'] = $key['NamaBarang'];
+            $temp['Jumlah'] = $key['Jumlah'];
             $temp['view_link'] = 'po/ApprovePage/'.$ID."/".$key['NamaSupplier'];
             $asu->push($temp);
         }

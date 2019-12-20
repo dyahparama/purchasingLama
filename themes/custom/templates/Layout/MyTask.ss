@@ -194,8 +194,8 @@
 			                  <th>Aksi</th>
 			                </tr>
 		              	</thead>
-		              	<% loop $lpbnya %>
 		              	<tbody>
+		              		<% loop $lpbnya %>
 			                <tr>
 			                  	<td>$KodePO</td>
 			                  	<td>$KodeRB</td>
@@ -203,45 +203,16 @@
 			                  	<td>$Tgl.Format(d/M/Y)</td>
 			                  	<td>$Suplier</td>
 			                  	<td>
+				                  	<% if $view_link!='' %>
 				                  	<div class="btn-group">
-									  <a type="button" class="btn btn-default viewlpb" shownya='0' idnya="$ID"><i class="text-info fa fa-eye"></i> Lihat Detail</a>
-									  <!-- <a href="'$delete_link'" type="button" class="btn btn-danger delete"><i class="text-info fa fa-eye"></i> Delete</a> --> 					 
-									</div>
-				                </td>
-			                </tr>
-		              	</tbody>
-		              	<tbody>
-		              		<tr class="showdetaillpb$ID no-sort" style="display: none;">
-			                	<th></th>
-			                	<th>Nama Barang</th>
-			                	<th>Jumlah Dipesan</th>
-			                	<th>Jumlah Diterima</th>
-			                	<th colspan="2" style="text-align: center;">Action</th>
-			                </tr>
-			                <tr class="showdetaillpb$ID no-sort" style="display: none;">
-			                	<td></td>
-			                	<td>tes</td>
-			                	<td>tes</td>
-			                	<td>tes</td>
-			                	<td colspan="2">
-			                		<% if $view_link!='' %>
-			                		<div class="btn-group">
-									  <a href="$view_link" type="button" class="btn btn-default view"><i class="text-info fa fa-eye"></i> Buat LPB</a>
-									  <!-- <a href="'$delete_link'" type="button" class="btn btn-danger delete"><i class="text-info fa fa-eye"></i> Delete</a> --> 					 
-									</div>
-									<div class="btn-group">
-									  <a href="$view_link" type="button" class="btn btn-default view"><i class="text-info fa fa-eye"></i> View LPB</a>
-									  <!-- <a href="'$delete_link'" type="button" class="btn btn-danger delete"><i class="text-info fa fa-eye"></i> Delete</a> --> 					 
-									</div>
-									<div class="btn-group">
-									  <a href="$view_link" type="button" class="btn btn-default view"><i class="text-info fa fa-eye"></i>Tutup PO</a>
+									  <a href="{$BaseHref}$view_link" type="button" class="btn btn-default view"><i class="text-info fa fa-eye"></i> View</a>
 									  <!-- <a href="'$delete_link'" type="button" class="btn btn-danger delete"><i class="text-info fa fa-eye"></i> Delete</a> --> 					 
 									</div>
 									<% end_if %>
-			                	</td>
+								</td>
 			                </tr>
+			       		    <% end_loop %>
 		              	</tbody>
-		              	<% end_loop %>
 		            </table>
                   </div>
                   <% end_if %>
