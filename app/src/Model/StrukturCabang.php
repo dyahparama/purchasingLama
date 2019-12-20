@@ -75,7 +75,7 @@ class StrukturCabang extends DataObject
         'Kode',
         'Nama',
         'Jenis',
-        'Kacab.Pegawai.Nama',
+        'Kacab.Pegawai.ID',
         'Approver.Pegawai.Nama',
         'Regional.Nama',
         'Pusat.Nama',
