@@ -258,8 +258,7 @@
 					}elseif ($col['ColumnDb'] == 'status') {
 						$status = $row->Status()->Status;
 						$temp[] = $status;	
-					}
-					elseif ($col['ColumnDb'] == 'ForwardToID') {
+					}elseif ($col['ColumnDb'] == 'ForwardToID') {
 						$ForwardTo = $row->ForwardTo()->Pegawai()->Nama;
 						$temp[] = $ForwardTo;	
 					}elseif($col['Type'] == 'Date')

@@ -110,7 +110,7 @@
 									</div>
 								</div>
 								<div class="form-group form-material row">
-									<label class="col-md-3 col-form-label">*Nomor Proyek :</label>
+									<label class="col-md-3 col-form-label">Nomor Proyek :</label>
 									<div class="col-md-9">
 										<input class="form-control" value="$nomorProyek" name="nomor-proyek" type="text"
 											autocomplete="off" required="">

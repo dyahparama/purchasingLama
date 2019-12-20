@@ -55,7 +55,7 @@ class RB extends DataObject
             $temp['NamaSupplier'] = $key['NamaSupplier'];
             $temp['Kode'] = $key['Kode'];
             $temp['Total'] = $key['Total'];
-            $temp['view_link'] = '../po/ApprovePage/'.$ID."/".$key['NamaSupplier'];
+            $temp['view_link'] = 'po/ApprovePage/'.$ID."/".$key['NamaSupplier'];
             $asu->push($temp);
         }
         return $asu;
