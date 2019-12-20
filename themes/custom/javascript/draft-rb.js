@@ -35,7 +35,7 @@ $(document).ready(function() {
         let pass = true;
         let data = $("#form-drb").serializeArray();
         data.forEach(element => {
-            if (element.value == "" && ( element.name != "note" || element.name != "nomor-proyek")) {
+            if ((element.value == "" && element.name != "note") && (element.value == "" &&  element.name != "nomor-proyek")) {
                 pass = false;
             }
         });
