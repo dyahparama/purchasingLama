@@ -269,10 +269,10 @@ $(document).ready(function() {
                 dataType: "json",
                 beforeSend: function() {},
                 success: function(result) {
-                   // location.reload();
+                    location.reload();
                 },
                 complete: function(result) {
-                    //location.reload();
+                    location.reload();
                 },
                 error: function(xhr, Status, err) {}
             });
