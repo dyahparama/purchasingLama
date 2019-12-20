@@ -16,7 +16,7 @@ $(document).ready(function() {
     $(".jabatan-cabang").change(function(e) {
         let id = $(this).val();
         $.ajax({
-            url: "/draf-rb/GetKepalaCabang",
+            url: baseURL+"draf-rb/GetKepalaCabang",
             type: "post", //form method
             data: {
                 id: id
@@ -49,7 +49,7 @@ $(document).ready(function() {
                 .next()
                 .css("width", "100%");
             $.ajax({
-                url: "/draf-rb/saveMasterDRB",
+                url: baseURL+"draf-rb/saveMasterDRB",
                 type: "post", //form method
                 data: $("#form-drb").serialize(),
                 dataType: "json",
@@ -90,7 +90,7 @@ $(document).ready(function() {
             };
             let newId;
             $.ajax({
-                url: "/draf-rb/saveDetailDRB",
+                url: baseURL+"draf-rb/saveDetailDRB",
                 type: "post", //form method
                 data: data,
                 dataType: "json",
@@ -126,7 +126,7 @@ $(document).ready(function() {
                 kode: $("#nomor").val()
             };
             $.ajax({
-                url: "/draf-rb/forwardTo",
+                url: baseURL+"draf-rb/forwardTo",
                 type: "post", //form method
                 data: data,
                 dataType: "json",
@@ -146,7 +146,7 @@ $(document).ready(function() {
     $(".delete-detail").click(function(e) {
         let id = $(this).data("id");
         $.ajax({
-            url: "/draf-rb/deleteDetail",
+            url: baseURL+"draf-rb/deleteDetail",
             type: "post", //form method
             data: { id },
             dataType: "json",
