@@ -68,14 +68,14 @@
 										</select>
 									</div>
 								</div>
-								<div class="form-group form-material row">
+								<!-- <div class="form-group form-material row">
 									<label class="col-md-3 col-form-label">*Nama Atasan :</label>
 									<div class="col-md-9">
 										<input id="kepala-cabang"
 											value="<% if $kepalaCabang %>$kepalaCabang<% end_if %>" class="form-control"
 											type="text" readonly autocomplete="off" required="">
 									</div>
-								</div>
+								</div> -->
 								<div class="form-group form-material row">
 									<label class="col-md-3 col-form-label">*Jenis Permintaan :</label>
 									<div class="col-md-9">
