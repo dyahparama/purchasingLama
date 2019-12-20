@@ -39,12 +39,12 @@
 				  </a>
 			  <ul class="site-menu-sub">
 				<li class="site-menu-item<% if $siteChild == 'Me' %> active<% end_if %>">
-				  <a class="animsition-link" href="{$BaseHref}list-rb/Me">
+				  <a class="animsition-link" href="{$BaseHref}list-drb/index/Me">
 					<span class="site-menu-title">Me</span>
 				  </a>
 				</li>
 				<li class="site-menu-item<% if $siteChild == 'Team' %> active<% end_if %>">
-				  <a class="animsition-link" href="{$BaseHref}list-rb/Teams">
+				  <a class="animsition-link" href="{$BaseHref}list-drb/index/Teams">
 					<span class="site-menu-title">Team</span>
 				  </a>
 				</li>

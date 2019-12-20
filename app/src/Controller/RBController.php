@@ -161,6 +161,12 @@ class RBController extends PageController
                         'Type' => 'Varchar',
                         'Required' => true,
                     ),
+                    array(
+                        'ColumnTb' => 'Posisi Terakhir',
+                        'ColumnDb' => 'ForwardToID',
+                        'Type' => 'Int',
+                        'Required' => true
+                    )
                 );
                 break;
             default:
@@ -200,7 +206,7 @@ class RBController extends PageController
         if (!empty($jenis)) {
             switch ($jenis) {
                 case 'kddrb':
-                    $data = AddOn::getSpecColumn(DraftRB::get()->toNestedArray(), 'Kode');
+                    $data = AddOn::getSpecColumn(RB::get()->toNestedArray(), 'Kode');
                     break;
                 case 'cbg':
                     $data = $jabatan->map('ID', 'PegawaiJabatan')->toArray();
@@ -306,8 +312,11 @@ class RBController extends PageController
                 elseif ($col['ColumnDb'] == 'Kode') {
                     $status = $row->RB()->Kode;
                     $temp[] = $status;
-                } else
-                    $temp[] = $row->{$col['ColumnDb']};
+                } elseif ($col['ColumnDb'] == 'ForwardToID') {
+                        $ForwardTo = $row->ForwardTo()->Pegawai()->Nama;
+                        $temp[] = $ForwardTo;   
+                }else
+                $temp[] = $row->{$col['ColumnDb']};
 
                 $idx++;
             }
