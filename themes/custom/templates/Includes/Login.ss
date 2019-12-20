@@ -10,7 +10,7 @@
                 <div class="brand">
                     <img
                         class="brand-img"
-                        src="/_resources/themes/custom/assets//images/logo-colored.png"
+                        src="{$BaseHref}public/_resources/themes/custom/assets/images/logo-colored.png"
                         alt="..."
                     />
                     <h2 class="brand-text font-size-18">Remark</h2>
@@ -24,7 +24,7 @@
                 <fieldset>
                     <form
                         id="MemberLoginForm_LoginForm"
-                        action="/Security/login/default/LoginForm/"
+                        action="{$BaseHref}Security/login/default/LoginForm/"
                         method="post"
                         enctype="application/x-www-form-urlencoded"
                     >
@@ -90,7 +90,7 @@
                         <input
                             type="hidden"
                             name="BackURL"
-                            value="/admin/pages/"
+                            value="{$BaseHref}admin/pages/"
                             class="hidden"
                             id="MemberLoginForm_LoginForm_BackURL"
                         />

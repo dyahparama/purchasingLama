@@ -4,3 +4,8 @@
 /themes/simple/
 /_resources/
 /public/_resources/
+/themes/custom/templates/Includes/Head.ss
+/themes/custom/templates/Includes/HeadLogin.ss
+/themes/custom/templates/Includes/Footer.ss
+/themes/custom/templates/Includes/FootLogin.ss
+/themes/custom/templates/Includes/Login.ss

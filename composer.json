@@ -36,7 +36,7 @@
         ],
         "expose": [
             "themes/custom/css"
-          ]
+        ]
     },
     "config": {
         "process-timeout": 600
