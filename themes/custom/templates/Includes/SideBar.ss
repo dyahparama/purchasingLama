@@ -39,12 +39,12 @@
 				  </a>
 			  <ul class="site-menu-sub">
 				<li class="site-menu-item<% if $siteChild == 'Me' %> active<% end_if %>">
-				  <a class="animsition-link" href="/test">
+				  <a class="animsition-link" href="{$BaseHref}test">
 					<span class="site-menu-title">Me</span>
 				  </a>
 				</li>
 				<li class="site-menu-item<% if $siteChild == 'Team' %> active<% end_if %>">
-				  <a class="animsition-link" href="/test">
+				  <a class="animsition-link" href="{$BaseHref}test">
 					<span class="site-menu-title">Team</span>
 				  </a>
 				</li>
@@ -58,19 +58,19 @@
 					</a>
 				<ul class="site-menu-sub">
 				  <li class="site-menu-item<% if $siteChild == 'RB Me' %> active<% end_if %>">
-					<a class="animsition-link" href="/rb">
+					<a class="animsition-link" href="{$BaseHref}rb">
 					  <span class="site-menu-title">Me</span>
 					</a>
 				  </li>
 				  <li class="site-menu-item<% if $siteChild == 'RB Team' %> active<% end_if %>">
-					<a class="animsition-link" href="/rb">
+					<a class="animsition-link" href="{$BaseHref}rb">
 					  <span class="site-menu-title">Team</span>
 					</a>
 				  </li>
 				</ul>
 			  </li>
 			<li class="site-menu-item<% if $siteParent == 'PO' %> active open<% end_if %>">
-				<a class="animsition-link" href="po/PoList">
+				<a class="animsition-link" href="{$BaseHref}po/PoList">
 					<i class="" aria-hidden="true"></i>
 					<span class="site-menu-title">PO</span>
 				</a>
@@ -89,12 +89,12 @@
 				  </a>
 			  <ul class="site-menu-sub<% if $siteChild == 'Me Reject' %> active<% end_if %>">
 				<li class="site-menu-item">
-				  <a class="animsition-link" href="/rj/rjme">
+				  <a class="animsition-link" href="{$BaseHref}rj/rjme">
 					<span class="site-menu-title">Me</span>
 				  </a>
 				</li>
 				<li class="site-menu-item<% if $siteChild == 'Team Reject' %> active<% end_if %>">
-				  <a class="animsition-link" href="/rj/rjteam">
+				  <a class="animsition-link" href="{$BaseHref}rj/rjteam">
 					<span class="site-menu-title">Team</span>
 				  </a>
 				</li>

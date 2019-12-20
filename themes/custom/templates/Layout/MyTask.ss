@@ -185,30 +185,31 @@
 			                  <th>Aksi</th>
 			                </tr>
 		              	</thead>
+		              	<% loop $lpbnya %>
 		              	<tbody>
 			                <tr>
-			                  	<td>Tes</td>
-			                  	<td>Tes</td>
-			                  	<td>Tes</td>
-			                  	<td>Tes</td>
-			                  	<td>Tes</td>
+			                  	<td>$KodePO</td>
+			                  	<td>$KodeRB</td>
+			                  	<td>$KodeDraftRB</td>
+			                  	<td>$Tgl.Format(d/M/Y)</td>
+			                  	<td>$Suplier</td>
 			                  	<td>
 			                		<div class="btn-group">
-									  <a type="button" class="btn btn-default viewlpb" shownya='0' idnya="1"><i class="text-info fa fa-eye"></i> Lihat Detail</a>
+									  <a type="button" class="btn btn-default viewlpb" shownya='0' idnya="$ID"><i class="text-info fa fa-eye"></i> Lihat Detail</a>
 									  <!-- <a href="'$delete_link'" type="button" class="btn btn-danger delete"><i class="text-info fa fa-eye"></i> Delete</a> --> 					 
 									</div>
 			                	</td>
 			                </tr>
 		              	</tbody>
 		              	<tbody>
-		              		<tr class="showdetaillpb1 no-sort" style="display: none;">
+		              		<tr class="showdetaillpb$ID no-sort" style="display: none;">
 			                	<th></th>
 			                	<th>Nama Barang</th>
 			                	<th>Jumlah Dipesan</th>
 			                	<th>Jumlah Diterima</th>
 			                	<th colspan="2" style="text-align: center;">Action</th>
 			                </tr>
-			                <tr class="showdetaillpb1 no-sort" style="display: none;">
+			                <tr class="showdetaillpb$ID no-sort" style="display: none;">
 			                	<td></td>
 			                	<td>tes</td>
 			                	<td>tes</td>
@@ -229,6 +230,7 @@
 			                	</td>
 			                </tr>
 		              	</tbody>
+		              	<% end_loop %>
 		            </table>
                   </div>
                 </div>

@@ -22,12 +22,15 @@
 	    	$show = new ArrayList();
 	    	$show1 = new ArrayList();
             $show2 = new ArrayList();
+            $show3 = new ArrayList();
 	    	$temp = array();
 	    	$temp1 = array();
             $temp2 = array();
+            $temp3 = array();
 	    	$pegawainya = User::get()->byID($idnya)->Pegawai();
             Requirements::themedCSS('custom');
             $draftrbnya = DraftRB::get()->where('ForwardToID = '.$pegawainya->ID);
+            $lpbnya = PO::get();
             $rb = RB::get();
             $jumlahrb=0;
             $jumlahpo=0;
@@ -73,9 +76,6 @@
                     $jumlahpo++;
                 }
             }
-            // echo "<pre>".print_r($show2);
-            // // var_dump($show2);
-            // die();
             $jumlahdraft = 0;
             foreach ($draftrbnya as $key) {
                 if($key->Status()->ID<=6){
@@ -98,6 +98,18 @@
                     $jumlahdraft++;
                 }
             }
+            foreach ($lpbnya as $key5) {
+                $temp3['ID'] = $key->ID;
+                $temp3['KodePO'] = $key5->Kode;
+                $temp3['KodeRB'] = $key5->RB()->Kode;
+                $temp3['KodeDraftRB'] = $key5->DraftRB()->Kode; 
+                $temp3['Tgl'] = $key5->Tgl;
+                $temp3['Suplier'] = $key5->Suplier()->Nama;
+                $show3->push($temp3);
+            }
+            // echo "<pre>";
+            // var_dump($lpbnya);
+            // die();
             $total = $this->TotalTask();
             // echo $pegawainya->ID;
             $data = array(
@@ -108,6 +120,7 @@
                 'total' => $total,
                 'rbnya' => $show1,
                 'ponya' => $show2,
+                'lpbnya' => $show3,
                 "jumlahdraft" => $jumlahdraft,
                 'jumlahrb' => $jumlahrb,
                 'jumlahpo' => $jumlahpo,

@@ -9,7 +9,7 @@ SilverStripe\Control\Director:
     'user': 'UserController'
     'helper': 'HelperController'
     'rb//$Action/$ID/$Name': 'RBController'
-    'po': 'POController'
+    'po//$Action/$ID/$Name': 'POController'
     'lpb': 'LPBController'
     'ta': 'MyTaskController'
     'rj': 'RejectedController'
