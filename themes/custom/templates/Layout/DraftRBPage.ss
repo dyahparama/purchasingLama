@@ -368,13 +368,14 @@
 								</select>
 							</div>
 						</div>
+					</form>
 						<div class="form-group form-material row">
 							<label class="col-md-3 col-form-label">Supplier Lokal :</label>
 							<div class="col-md-9">
 								<input name="add-detail-form-4" id="supplier-lokal" class="form-control" type="text" autocomplete="off">
 							</div>
 						</div>
-					</form>
+					
 
 					<div class="form-group form-material row">
 						<label class="col-md-3 col-form-label">Spesifikasi Barang :</label>
