@@ -12,7 +12,10 @@
                     <!-- Example Horizontal Form -->
                     <div class="example-wrap">
                         <div class="example">
-                            <form action="/po/doPostPo" method="post">
+                            <form action="/po/doPostPo" method="post" novalidate="novalidate">
+                            <%-- <form action="/po/doPostPoaaa" id="form-po" method="post" novalidate="novalidate" class="fv-form fv-form-bootstrap4"> --%>
+                                <input type="hidden" name="RBID" value="{$RB.ID}">
+                                <input type="hidden" name="DraftRBID" value="{$RB.DraftRBID}">
                                 <div class="form-group form-material row">
                                     <label class="col-md-3 col-form-label">Kode PO :</label>
                                     <div class="col-md-9">
@@ -30,14 +33,14 @@
                                 <div class="form-group form-material row">
                                     <label class="col-md-3 col-form-label">Tanggal :</label>
                                     <div class="col-md-9">
-                                        <input class="form-control" id="nomor" name="nomor" type="text"
+                                        <input class="form-control" id="nomor" name="tgl-po" type="text"
                                             value="$Now.format(dd/MM/yyyy)" readonly autocomplete="off">
                                     </div>
                                 </div>
                                 <div class="form-group form-material row">
                                     <label class="col-md-3 col-form-label">Supplier :</label>
                                     <div class="col-md-9">
-                                        <input class="form-control" id="nomor" name="nomor" type="text"
+                                        <input class="form-control" id="nomor" name="nama-supplier" type="text"
                                             value="{$NamaSupplier}" readonly autocomplete="off">
                                     </div>
                                 </div>
@@ -63,8 +66,11 @@
                                             <% loop $Detail %>
                                             <tr class="table-row">
                                                 <td class="jenis-barang">
+                                                    <input type="hidden" name="parentid[]" value="$ID">
                                                     <input name="jenis_barang[]" class="form-control"
                                                         value="$DraftRBDetail.Jenis.Nama" readonly autocomplete="off">
+                                                    <input name="jenis_barangid[]" class="form-control" type="hidden"
+                                                        value="$DraftRBDetail.JenisID" readonly autocomplete="off">
                                                 </td>
                                                 <td>
                                                     <input name="nama_barang[]" class="form-control"
@@ -77,6 +83,8 @@
                                                 <td>
                                                     <input name="satuan[]" class="form-control" readonly
                                                     value="$DraftRBDetail.Satuan.Nama" autocomplete="off">
+                                                    <input name="satuanid[]" class="jumlah-po form-control jumlah-po-val" readonly
+                                                        value="$Jumlah" autocomplete="off" type="hidden">
                                                 </td>
                                                 <td>
                                                     <input name="harga[]" class="form-control harga-po-val" type="text"
@@ -90,7 +98,7 @@
                                             <% end_loop %>
                                             <tr id="row-total">
                                                 <td colspan="5">Jumlah</td>
-                                                <td><input id="total-akhir-po" name="total" class="form-control" type="text" value="0"
+                                                <td><input id="total-akhir-po" name="total-akhir-po" class="form-control" type="text" value="{$Total}"
                                                     autocomplete="off" readonly></td>
                                             </tr>
                                         </tbody>
@@ -124,13 +132,13 @@
                                         <tbody id="table-termin">
                                             <tr class="table-row-termin">
                                                 <td>
-                                                    <input class="form-control tgl" id="tgl-draft" name="tgl[]"
+                                                    <input class="form-control tgl" id="tgl-termin" name="tgl-termin[]"
                                                         data-date-format="dd/mm/yyyy" data-now="$dateNow"
                                                         data-plugin="datepicker" type="text">
                                                 </td>
                                                 <td>
-                                                    <select name="jenis[]"
-                                                        class="form-control">
+                                                    <select name="jenis-termin[]"
+                                                        class="form-control required-field">
                                                         <option>Pilih Jenis</option>
                                                         <option value="DP">DP</option>
                                                         <option value="LPB">LPB</option>
@@ -138,10 +146,10 @@
                                                     </select>
                                                 </td>
                                                 <td>
-                                                    <textarea class="form-control" name="deskripsi[]"></textarea>
+                                                    <textarea class="form-control" name="keterangan-termin[]"></textarea>
                                                 </td>
                                                 <td>
-                                                    <input name="total-termin-po" class="form-control jumlah-termin" type="number"
+                                                    <input name="total-termin[]" class="form-control jumlah-termin required-field" type="number"
                                                         value="0" autocomplete="off">
                                                 </td>
                                                 <td>
@@ -154,7 +162,7 @@
                                             </tr>
                                             <tr id="row-total-termin">
                                                 <td colspan="3">Jumlah</td>
-                                                <td><input id="total-akhir-termin-po" name="total" class="form-control" type="text" value="0"
+                                                <td><input id="total-akhir-termin-po" name="total-akhir-termin" class="form-control" type="text" value="0"
                                                     autocomplete="off" readonly></td>
                                                 <td></td>
                                             </tr>
@@ -163,7 +171,7 @@
                                 </div>
                                 <div class="form-group form-material row">
                                     <div class="col-md-9">
-                                        <button type="submit" class="btn-primary btn">Submit</button>
+                                        <button type="button" id="submit-po" class="btn-primary btn">Submit</button>
                                     </div>
                                 </div>
                             </form>

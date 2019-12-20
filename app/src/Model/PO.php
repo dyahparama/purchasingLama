@@ -7,6 +7,8 @@ class PO extends DataObject
     private static $db = [
         'Kode' => 'Varchar(25)',
         'Tgl' => 'Date',
+        'Total' => 'Double',
+        'NamaSupplier' => 'Varchar(50)',
     ];
     private static $indexes = [
         'Kode' =>[
@@ -27,6 +29,29 @@ class PO extends DataObject
         'Detail' => PODetail::class,
         'Termin' => POTerminDetail::class,
     ];
+
+    public function onBeforeWrite(){
+        parent::onBeforeWrite();
+        if (!$this->ID) {
+            $this->Kode = AddOn::createKode("PO", "PO");
+        }
+    }
+
+    public static function GetPO($ID)
+    {
+        $detailnya = PODetail::get()->where('POID = '.$ID);
+        $tes = AddOn::groupBySum($detailnya, "NamaSupplier", array("Total"), array("NamaSupplier", "Kode", "Total"));
+        $temp = array();
+        $asu = new ArrayList();;
+        foreach ($tes as $key) {
+            $temp['NamaSupplier'] = $key['NamaSupplier'];
+            $temp['Kode'] = $key['Kode'];
+            $temp['Total'] = $key['Total'];
+            $temp['view_link'] = 'po/ApprovePage/'.$ID."/".$key['NamaSupplier'];
+            $asu->push($temp);
+        }
+        return $asu;
+    }
     // private static $has_many = [
     //     'Regionals' => Regional::class,
     // ];

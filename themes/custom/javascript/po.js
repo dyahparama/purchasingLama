@@ -1,203 +1,183 @@
-var dataRB = []
-var countSelect = 1
-// $('#add-detail-po').on('click', function () {
-//     $('#table-body').append('<tr>' + $('#table-body tr.table-row:last').html() + '</tr>')
-//     $('#table-body tr.table-row:last td').each(function () {
-//         $(this).val("")
-//     })
-//     $('#row-total').appendTo('#table-body')
+var table;
+let baseURL=$("#baseURL").data("url");
+var uri_segment = window.location.pathname.split('/')[1];
+var column_name = $(document).find('#datatable1 > thead > tr');
+var cur_status = $(document).find('#cur_status').text();
+let id_pemohon = 0;
+var params = [];
 
-//     let html = '<select name="jenis[]" class="form-control select2-modal" data-plugin="select2"><option>Pilih Jenis Barang</option>'
-//     $.each(dataRB, function (key, value) {
-//         html += '<option value="' + key + '">' + value['Jenis_Nama'] + '</option>'
-//     })
-//     html += '</select>'
-
-//     $('.jenis-barang:last').html(html)
-
-//     $('.jenis-barang select').each(function () {
-//         // $(this).html(html)
-//         // $(this).select2('destroy')
-//         $(this).select2()
-//     })
-// })
-
-$(document).on('click', '.delete-row', function () {
-    // alert($('#table-body tr').length)
-    if ($('#table-body tr').length > 2) {
-        // alert("Detailsss")
-        let c = confirm("Apakah yakin akan menghapus data?")
-        if (c)
-            $(this).parent().parent().remove()
-    }
-    else {
-        alert("Detail harus ada")
-    }
-})
-
-$('#add-detail-termin').on('click', function () {
-    $('#table-termin').append('<tr>' + $('#table-termin tr.table-row-termin:last').html() + '</tr>')
-    $('#table-termin tr.table-row-termin:last td').each(function () {
-        $(this).val("")
-    })
-    $('#row-total-termin').appendTo('#table-termin')
-    $(".tgl").datepicker({ format: "dd/mm/yyyy" })
-})
-
-$(document).on('click', '.delete-row-termin', function () {
-    // alert($('#table-body tr').length)
-    if ($('#table-termin tr').length > 2) {
-        let c = confirm("Apakah yakin akan menghapus data?")
-        if (c) {
-            $(this).parent().parent().remove()
-            countTermin($(this))
-        }
-    }
-    else {
-        alert("Termin harus ada")
-    }
-})
-
-$(document).on('change', '#kode-rb-po', function () {
-    if ($(this).val()) {
+function getData(jenis, status){
+    var data = function () {
+        var tmp = null;
         $.ajax({
-            url: "po/getDetailRB",
-            type: "post", //form method
-            data: {
-                id: $(this).val()
-            },
-            dataType: "json",
-            beforeSend: function () { },
-            success: function (result) {
-                dataRB = result
-                let html = "<option>Pilih Jenis Barang</option>"
-                $.each(dataRB, function (key, value) {
-                    html += '<option value="' + key + '">' + value['Jenis_Nama'] + '</option>'
-                })
-                $('.jenis-barang select').each(function () {
-                    $(this).html(html)
-                    // $(this).select2('destroy')
-                    $(this).select2()
-                })
-            },
-            complete: function (result) { },
-            error: function (xhr, Status, err) { }
-        })
-    }
-})
-
-$(document).on('change', '.jumlah-po', function () {
-    let parent = $(this).parent().parent()
-    parent.find('select').each(function () {
-        let jenis = $(this).val()
-        if (jenis) {
-            let jumlah = 0
-            $('.jumlah-po').each(function () {
-                if (jenis == $(this).parent().parent().find('select').val())
-                    jumlah += parseInt($(this).val())
-            })
-            // alert(jumlah)
-            if (dataRB[$(this).val()]['Jumlah'] < jumlah) {
-                alert("Total " + dataRB[$(this).val()]['Jenis_Nama'] + " tidak boleh lebih dari " + dataRB[$(this).val()]['Jumlah'])
-                parent.find('.jumlah-po').val(dataRB[$(this).val()]['Jumlah'] - (jumlah - parent.find('.jumlah-po').val()))
+            'async': false,
+            'type': "POST",
+            'global': false,
+            'dataType': 'json',
+            'url': baseURL+uri_segment+"/getData",
+            'data': {'jenis': jenis, 'cur_status': status},
+            'success': function (data) {
+                tmp = data.msg;
             }
-        }
-    })
-})
+        });
+        return tmp;
+    }();
 
-$(document).on('keyup', '.harga-po-val, .jumlah-po-val, .diskon-po-val, .diskon2-po-val', function () {
-    let parent = $(this).parent().parent()
-    let harga = parent.find(".harga-po-val").val() ? parent.find(".harga-po-val").val() : 0
-    let jumlah = parent.find(".jumlah-po-val").val() ? parent.find(".jumlah-po-val").val() : 0
-    let total = harga * jumlah
-    let diskonPersen = parent.find(".diskon-po-val").val() ? parent.find(".diskon-po-val").val() : 0
-    let diskonRP = parent.find(".diskon2-po-val").val() ? parent.find(".diskon2-po-val").val() : 0
-    if ($(this).hasClass('diskon-po-val')) {
-        diskonPersen = parent.find(".diskon-po-val").val() ? parent.find(".diskon-po-val").val() : 0
-        diskonRP = total * diskonPersen / 100
-        parent.find('.diskon2-po-val').val(diskonRP)
-    } else if ($(this).hasClass('diskon2-po-val')) {
-        diskonRP = parent.find(".diskon2-po-val").val() ? parent.find(".diskon2-po-val").val() : 0
-        diskonPersen = ((total * diskonRP) / 100) / 100
-        parent.find('.diskon-po-val').val(diskonPersen)
-    } else {
-        diskonRP = total * diskonPersen / 100
-        parent.find('.diskon2-po-val').val(diskonRP)
-    }
-    parent.find('.subtotal-po-val').val(total - diskonRP)
-
-    let totalakhir = 0
-    $('.subtotal-po-val').each(function () {
-        totalakhir += parseInt($(this).val())
-    })
-    $('#total-akhir-po').val(totalakhir)
-})
-
-function countTermin(el) {
-    let totalakhir = 0
-    $('.jumlah-termin').each(function () {
-        totalakhir += parseInt($(this).val())
-    })
-    $('#total-akhir-termin-po').val(totalakhir)
+    return data;
 }
 
-$(document).on('keyup', '.jumlah-termin', function () {
-    countTermin($(this))
-})
+$(document).ready(function(){
+    // Submit Form
+    $('#form_filter').submit(function(evt, ui){
+        evt.preventDefault();
+        $(document).find('#filterPanel').parent().addClass('is-collapse');
+        params = $(this).serialize();
 
-$(document).on('change', '#nama-supplier', function () {
-    if ($(this).val()) {
-        let html = ""
-        let result = ['1', '2']
-        $.each(result, function (key, value) {
-            let id = 1
-            html += '<tr>'
-            html += '<td><input name="jenis_barang[' + id + '][]" class="form-control" readonly value=""></td>'
-            html += '<td><input name="nama_barang[' + id + '][]" class="form-control" readonly value=""></td>'
-            html += '<td><input name="jumlah[' + id + '][]" class="form-control" readonly value=""></td>'
-            html += '<td><input name="jumlah[' + id + '][]" class="form-control" readonly value=""></td>'
-            html += '<td><input name="jumlah[' + id + '][]" class="form-control" readonly value=""></td>'
-            html += '<td><input name="jumlah[' + id + '][]" class="form-control" readonly value=""></td>'
-            html += '<td><input name="jumlah[' + id + '][]" class="form-control" readonly value=""></td>'
-            html += '<td><input name="jumlah[' + id + '][]" class="form-control" readonly value=""></td>'
-            html += '<td><input name="jumlah[' + id + '][]" class="form-control" readonly value=""></td>'
-            html += '</tr>'
-        })
-        $('#table-body').html(html)
-        // $.ajax({
-        //     url: "po/getDetailBarang",
-        //     type: "post", //form method
-        //     data: {
-        //         nama_supplier: "tes",
-        //         id_po: "2"
-        //     },
-        //     dataType: "json",
-        //     beforeSend: function () { },
-        //     success: function (result) {
-        //         let html = ""
-        //         $.each(result, function (key, value) {
-        //             let id = 1
-        //             html += '<tr>'
-        //             html += '<td><input name="jenis_barang['+id+'][]" class="form-control" readonly value=""></td>'
-        //             html += '<td><input name="nama_barang['+id+'][]" class="form-control" readonly value=""></td>'
-        //             html += '<td><input name="jumlah['+id+'][]" class="form-control" readonly value=""></td>'
-        //             html += '<td><input name="jumlah['+id+'][]" class="form-control" readonly value=""></td>'
-        //             html += '<td><input name="jumlah['+id+'][]" class="form-control" readonly value=""></td>'
-        //             html += '<td><input name="jumlah['+id+'][]" class="form-control" readonly value=""></td>'
-        //             html += '<td><input name="jumlah['+id+'][]" class="form-control" readonly value=""></td>'
-        //             html += '<td><input name="jumlah['+id+'][]" class="form-control" readonly value=""></td>'
-        //             html += '<td><input name="jumlah['+id+'][]" class="form-control" readonly value=""></td>'
-        //             html += '</tr>'
-        //         })
-        //         $('#table-body').html(html)
-        //     },
-        //     complete: function (result) { },
-        //     error: function (xhr, Status, err) { }
-        // })
+        table.ajax.reload();
+    })
+
+    var substringMatcher = function(strs) {
+      return function findMatches(q, cb) {
+        var matches, substringRegex;
+
+        // an array that will be populated with substring matches
+        matches = [];
+
+        // regex used to determine if a string contains the substring `q`
+        substrRegex = new RegExp(q, 'i');
+
+        // iterate through the pool of strings and for any string that
+        // contains the substring `q`, add it to the `matches` array
+        $.each(strs, function(i, str) {
+          if (substrRegex.test(str)) {
+            matches.push(str);
+          }
+        });
+
+        cb(matches);
+      };
+    };
+
+    // ---- list data ---
+    /**get kdrb**/
+    var kdrb = getData('kddrb');
+
+    /**get cabang**/
+    var cabang = getData('cbg');
+
+    /**get pemohon**/
+    var pemohon = getData('pemohon', cur_status);
+
+    /**get jenis barang**/
+    var jbarang = getData('jbarang');
+
+    /**get status**/
+    var mstatus = getData('mstatus');
+
+    // ---- end of list data ---
+
+    // fill data into form filter
+    /**kode draft rb autcomplete**/
+    $('#kodeDraftRb').typeahead({
+          hint: true,
+          highlight: true,
+          minLength: 1
+        },
+        {
+          name: 'kdrb',
+          source: substringMatcher(kdrb)
+    });
+
+    /**fill cabang/jabatan dropdown (select2)**/
+    $.each(cabang, function(idx, data){
+        var newOption = new Option(data, idx, false, false);
+        $('#jabcab').append(newOption).trigger('change');
+    });
+
+
+    /**fill pemohon dropdown**/
+    $.each(pemohon, function(idx, data){
+        var newOption = new Option(data, idx, false, false);
+        $('#pemohon').append(newOption).trigger('change');
+        id_pemohon = idx;
+    });
+
+    if (cur_status == 'Me') {
+        $('#pemohon').val(id_pemohon).trigger('change');
     }
+
+    /**fill jenis barang dropdown**/
+    $.each(jbarang, function(idx, data){
+        var newOption = new Option(data, idx, false, false);
+        $('#jbarang').append(newOption).trigger('change');
+    });
+
+    /**fill status dropdown**/
+    $.each(mstatus, function(idx, data){
+        var newOption = new Option(data, idx, false, false);
+        $('#status').append(newOption).trigger('change');
+    });
+
+
+    // end of fill data into form filter
+
+    table = $('#datatable1').DataTable({
+        'language': {
+            'lengthMenu': 'Tampilkan _MENU_ data per halaman',
+            'zeroRecords': 'Maaf data tidak ditemukan',
+            'info': 'Menampilkan halaman _PAGE_ dari _PAGES_ halaman',
+            'infoEmpty': 'Tidak ada data',
+            'processing':  'Sedang memproses permintaan anda...',
+            // 'processing':  '<img src="{$ThemeDir}/img/spinner.gif"></img>',
+            'infoFiltered': '(filter dari _MAX_ total data)',
+            'searchPlaceholder': 'Cari data ?',
+            'paginate': {
+                'first': 'Pertama',
+                'last': 'Terakhir',
+                'next': 'Selanjutnya',
+                'previous': 'Sebelumnya'
+            }
+        },
+        'dom': '<"top"l>rt<"bottom"ip><"clear">',
+        'processing': true,
+        'serverSide': true,
+        // 'responsive': true,
+        'columnDefs': [{
+            targets: 7,
+            render: $.fn.dataTable.render.ellipsis( 25, true )
+        }],
+        // 'order': [[0,'desc']],
+        // <%-- 'pagingType': 'full_numbers', --%>
+        // <%-- 'lengthMenu'    : [5, 10, 15, 20], --%>
+        'paging': true,
+        'ajax': {
+            'url' : baseURL+uri_segment+"/searchdrb/",
+            'data' : function(d){
+                d.filter_record = params;
+                d.cur_status = cur_status;
+            }
+        },
+        createdRow: function( row, data, dataIndex ) {
+            // Set the data-title attribute
+            column_name.find('th').each(function (key, val) {
+                $(row).find('td:eq('+parseInt(key)+')')
+                    .attr('data-title', $(this).text());
+            });
+        },
+        'deferRender': true
+    });
+});
+
+$(document).on('click', '#submit-po', function() {
+    // let postForm = true
+    // $('.required-field').each(function(){
+    //     // if (!$(this).val()) {
+    //         postForm = false
+    //     // }
+    // })
+
+    // if (postForm == false)
+    //     alert("Data belum lengkap")
+    // // else
+        $('#form-po').submit()
 })
-
-
-
-
-

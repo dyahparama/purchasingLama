@@ -11,6 +11,24 @@ class AddOn
     /**
      * Convert obj to Array
      */
+    public static function createKode($model, $prefix)
+    {
+        $data = $model::get()->last();
+        $id = $data->ID;
+        $count = strlen($id);
+        $kode = "";
+        for ($i = $count; $i < 5; $i++) {
+            $kode .= "0";
+        }
+        $kode = $prefix."-".$kode.$id;
+        return $kode;
+        // while ($count < 5) {
+        //     $kode = "0";
+        // }
+        // $kode = $prefix.$kode.$id;
+        // return $kode;
+    }
+
     public static function objToArray($obj, &$arr)
     {
         if (!is_object($obj) && !is_array($obj)) {
@@ -35,10 +53,11 @@ class AddOn
         return $temp;
     }
 
-    public static function convertDateToDatabase($string) {
+    public static function convertDateToDatabase($string)
+    {
         $arr = explode("/", $string);
 
-        return $arr[2]."-".$arr[1]."-".$arr[0];
+        return $arr[2] . "-" . $arr[1] . "-" . $arr[0];
     }
 
     public static function groupBySum($data, $object, $sum, $display = null)

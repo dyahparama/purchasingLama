@@ -7,7 +7,7 @@
 
 	class TestController extends PageController
 	{
-	    private static $allowed_actions = ['getData', 'searchdrb'];
+	    private static $allowed_actions = ['getData', 'searchdrb', 'Tes'];
 
 	    public function init()
 	    {
@@ -16,7 +16,12 @@
 	    		$_SESSION['error_login'] = "1";
 	    		return $this->redirect('user/login');
 	    	}
-	    }
+        }
+
+        public function Tes() {
+            var_dump(AddOn::createKode("PO", "PO"));
+            // echo "Dididn tolol";
+        }
 
 	    public function index(HTTPRequest $request)
 	    {
@@ -24,7 +29,7 @@
 			$data = [
 	    		'cur_status' => $curStat,
 	    		'user' => 'User',
-	    		'Columns' => new ArrayList($this->getCustomColumns('drb')), 
+	    		'Columns' => new ArrayList($this->getCustomColumns('drb')),
 	    		'mgeJS' => 'list-drb',
 				'siteParent'=>"Draft RB",
 				'siteChild'=>$curStat,
@@ -174,14 +179,14 @@
 			return $columns;
 		}
 
-		public function Link($action = null) 
+		public function Link($action = null)
 		{
 		    // Construct link with graceful handling of GET parameters
 		    $link = Controller::join_links('list-drb', $action);
-		    
+
 		    // Allow Versioned and other extension to update $link by reference.
 		    $this->extend('updateLink', $link, $action);
-		    
+
 		    return $link;
 		}
 
@@ -218,7 +223,7 @@
 				case 'Teams':
 					$teams = PegawaiPerJabatan::get()->where("CabangID = " . $jabatan->first()->CabangID . " AND DepartemenID = " . $jabatan->first()->DepartemenID);
 					$teams_id = AddOn::groupConcat($teams, 'PegawaiID');
-					
+
 					$result = $result->where("PemohonID IN(" . $teams_id . ")");
 					break;
 				default:
@@ -247,20 +252,20 @@
 						$cab = $row->PegawaiPerJabatan()->Cabang()->Nama;
 						$kacab = $row->PegawaiPerJabatan()->Cabang()->Kacab()->Pegawai()->Nama;
 
-						$temp[] = ($jab . "/" .$cab . "/" .$kacab);	
+						$temp[] = ($jab . "/" .$cab . "/" .$kacab);
 					}elseif ($col['ColumnDb'] == 'pemohon') {
 						$pemohon = $row->Pemohon()->Pegawai()->Nama;
-						$temp[] = $pemohon;	
+						$temp[] = $pemohon;
 					}elseif ($col['ColumnDb'] == 'jbarang') {
 						$temp[] = AddOn::groupConcat($drafrb_det, 'Jenis.Nama');
 					}elseif ($col['ColumnDb'] == 'deskripsi') {
 						$temp[] = AddOn::groupConcat($drafrb_det, 'Deskripsi');
 					}elseif ($col['ColumnDb'] == 'status') {
 						$status = $row->Status()->Status;
-						$temp[] = $status;	
+						$temp[] = $status;
 					}elseif ($col['ColumnDb'] == 'ForwardToID') {
 						$ForwardTo = $row->ForwardTo()->Pegawai()->Nama;
-						$temp[] = $ForwardTo;	
+						$temp[] = $ForwardTo;
 					}elseif($col['Type'] == 'Date')
 						$temp[] = date('d-m-Y', strtotime($row->{$col['ColumnDb']}));
 					else
@@ -276,7 +281,7 @@
 				$temp[] = '
 				<div class="btn-group">
 				  <a href="'.$view_link.'" type="button" class="btn btn-default view"><i class="text-info fa fa-eye"></i> View</a>
-				  <!--<a href="'.$delete_link.'" type="button" class="btn btn-danger delete"><i class="text-info fa fa-eye"></i> Delete</a>-->					 
+				  <!--<a href="'.$delete_link.'" type="button" class="btn btn-danger delete"><i class="text-info fa fa-eye"></i> Delete</a>-->
 				</div>
 				';
 

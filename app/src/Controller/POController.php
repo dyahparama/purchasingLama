@@ -6,6 +6,7 @@ use SilverStripe\Control\HTTPRequest;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\View\Requirements;
 use SilverStripe\ORM\DB;
+use SilverStripe\Control\Controller;
 
 
 class POController extends PageController
@@ -19,15 +20,23 @@ class POController extends PageController
         if (isset($request->params()["ID"])) {
             $id = $request->params()["ID"];
             $nama = $request->params()['Name'];
+            $nama = urldecode($nama);
+            // var_dump($nama);
             $rb = RB::get()->byID($id);
             if ($rb) {
-                $detail = DetailRBPerSupplier::get()->byID($id);
+                $detail = DetailRBPerSupplier::get()->where("RBID = {$id} AND NamaSupplier = '{$nama}'");
+
+                $total = 0;
+                foreach ($detail as $val) {
+                    $total += $val->Total;
+                }
                 // $supplierID =
                 $data = array(
                     "RB" => RB::get()->byID($id),
-                    "Detail" => DetailRBPerSupplier::get()->where("RBID = {$id}"),
+                    "Detail" => $detail,
                     "mgeJS" => "po",
-                    "NamaSupplier" => $nama
+                    "NamaSupplier" => $nama,
+                    "Total" => $total
                 );
                 return $this->customise($data)
                     ->renderWith(array(
@@ -61,8 +70,57 @@ class POController extends PageController
 
     public function doPostPO()
     {
-        foreach ($_REQUEST['diskon'] as $val) {
-            var_dump($val);
+        if (isset($_REQUEST['tgl-po']) && $_REQUEST['tgl-po'] != "") {
+            $tgl = $_REQUEST['tgl-po'];
+
+            $po = new PO();
+            $po->Tgl = AddOn::convertDateToDatabase($_REQUEST['tgl-po']);
+            $po->Total = $_REQUEST['total-akhir-po'];
+            $po->DraftRBID = $_REQUEST['DraftRBID'];
+            $po->RBID = $_REQUEST['RBID'];
+            $po->NamaSupplier = $_REQUEST['nama-supplier'];
+            $po->Tgl = AddOn::convertDateToDatabase($_REQUEST['tgl-po']);
+            $idPO = $po->write();
+
+            $jenisBarang = $_REQUEST['jenis_barangid'];
+            $namaBarang = $_REQUEST['nama_barang'];
+            $jumlah = $_REQUEST['jumlah'];
+            $satuan = $_REQUEST['satuanid'];
+            $harga = $_REQUEST['harga'];
+            $subtotal = $_REQUEST['subtotal'];
+            $parentid = $_REQUEST['parentid'];
+
+            foreach ($jenisBarang as $key => $val) {
+                $poDetail = new PODetail();
+
+                $poDetail->JenisID = $jenisBarang[$key];
+                $poDetail->NamaBarang = $namaBarang[$key];
+                $poDetail->Jumlah = $jumlah[$key];
+                $poDetail->SatuanID = $satuan[$key];
+                $poDetail->Harga = $harga[$key];
+                $poDetail->Total = $subtotal[$key];
+                $poDetail->POID = $idPO;
+                $poDetail->DetailPerSupplierID = $parentid[$key];
+
+                $poDetail->write();
+            }
+
+            $tgl = $_REQUEST['tgl-termin'];
+            $jenis = $_REQUEST['jenis-termin'];
+            $keterangan = $_REQUEST['keterangan-termin'];
+            $total = $_REQUEST['total-termin'];
+
+            foreach ($tgl as $key => $val) {
+                $poTermin = new POTerminDetail();
+
+                $poTermin->Tanggal = $tgl[$key];
+                $poTermin->Jenis = $jenis[$key];
+                $poTermin->Keterangan = $keterangan[$key];
+                $poTermin->Jumlah = $total[$key];
+                $poTermin->POID = $idPO;
+
+                $poTermin->write();
+            }
         }
     }
 
@@ -82,7 +140,7 @@ class POController extends PageController
             'cur_status' => $curStat,
             'user' => 'User',
             'Columns' => new ArrayList($this->getCustomColumns('drb')),
-            'mgeJS' => 'list-rb',
+            'mgeJS' => 'po',
             'url'  => 'searchcosting',
             'siteParent' => "PO",
             'siteChild' => $curStat,
@@ -110,25 +168,19 @@ class POController extends PageController
                     ),
                     array(
                         'ColumnTb' => 'Kode RB',
-                        'ColumnDb' => 'Kode',
+                        'ColumnDb' => 'KodeRB',
                         'Type' => 'Varchar',
                         'Required' => true
                     ),
                     array(
                         'ColumnTb' => 'Kode Draft RB',
-                        'ColumnDb' => 'Kode',
+                        'ColumnDb' => 'KodeDRB',
                         'Type' => 'Varchar',
                         'Required' => true
                     ),
                     array(
                         'ColumnTb' => 'Tgl PO',
                         'ColumnDb' => 'Tgl',
-                        'Type' => 'Date',
-                        'Required' => true
-                    ),
-                    array(
-                        'ColumnTb' => 'Tgl Deadline',
-                        'ColumnDb' => 'Deadline',
                         'Type' => 'Date',
                         'Required' => true
                     ),
@@ -153,12 +205,6 @@ class POController extends PageController
                     array(
                         'ColumnTb' => 'Jenis Barang',
                         'ColumnDb' => 'jbarang',
-                        'Type' => 'Varchar',
-                        'Required' => true
-                    ),
-                    array(
-                        'ColumnTb' => 'Deskripsi Kebutuhan',
-                        'ColumnDb' => 'deskripsi',
                         'Type' => 'Varchar',
                         'Required' => true
                     ),
@@ -190,8 +236,11 @@ class POController extends PageController
 
         if (!empty($jenis)) {
             switch ($jenis) {
-                case 'kddrb':
+                case 'KodeDRB':
                     $data = AddOn::getSpecColumn(DraftRB::get()->toNestedArray(), 'Kode');
+                    break;
+                case 'KodeRB':
+                    $data = AddOn::getSpecColumn(RB::get()->toNestedArray(), 'Kode');
                     break;
                 case 'cbg':
                     $data = $jabatan->map('ID', 'PegawaiJabatan')->toArray();
@@ -254,60 +303,72 @@ class POController extends PageController
         $params_array = [];
         parse_str($filter_record, $params_array);
 
-        $result = DraftRB::get();
+        $result = PO::get();
         // ->limit($length, $start)
         // ->sort($columns[$fieldsort]['ColumnDb'] . ' ' . $typesort);
 
         // count all data (by filter otherwise)
-        $count_all = DraftRB::get()->count();
+        $count_all = PO::get()->count();
 
         $arr = array();
         foreach ($result as $row) {
-            $temp = array();
+            if($row->DraftRB()->StatusID !=14){
+                $temp = array();
 
-            $idx = 0;
+                $idx = 0;
 
-            $id = $row->{$pk};
+                $id = $row->{$pk};
 
-            foreach ($columns as $col) {
-                $drafrb_det = DraftRBDetail::get()->where("DraftRBID = " . $row->ID);
+                foreach ($columns as $col) {
+                    $drafrb_det = DraftRBDetail::get()->where("DraftRBID = " . $row->DraftRB()->ID);
 
-                if ($col['ColumnDb'] == 'jcabang') {
-                    $jab = $row->PegawaiPerJabatan()->Jabatan()->Nama;
-                    $cab = $row->PegawaiPerJabatan()->Cabang()->Nama;
-                    $kacab = $row->PegawaiPerJabatan()->Cabang()->Kacab()->Pegawai()->Nama;
+                    if ($col['ColumnDb'] == 'jcabang') {
+                        $jab = $row->DraftRB()->PegawaiPerJabatan()->Jabatan()->Nama;
+                        $cab = $row->DraftRB()->PegawaiPerJabatan()->Cabang()->Nama;
+                        $kacab = $row->DraftRB()->PegawaiPerJabatan()->Cabang()->Kacab()->Pegawai()->Nama;
 
-                    $temp[] = ($jab . "/" . $cab . "/" . $kacab);
-                } elseif ($col['ColumnDb'] == 'pemohon') {
-                    $pemohon = $row->Pemohon()->Pegawai()->Nama;
-                    $temp[] = $pemohon;
-                } elseif ($col['ColumnDb'] == 'jbarang') {
-                    $temp[] = AddOn::groupConcat($drafrb_det, 'Jenis.Nama');
-                } elseif ($col['ColumnDb'] == 'deskripsi') {
-                    $temp[] = AddOn::groupConcat($drafrb_det, 'Deskripsi');
-                } elseif ($col['ColumnDb'] == 'status') {
-                    $status = $row->Status()->Status;
-                    $temp[] = $status;
-                } elseif ($col['Type'] == 'Date')
-                    $temp[] = date('d-m-Y', strtotime($row->{$col['ColumnDb']}));
-                else
-                    $temp[] = $row->{$col['ColumnDb']};
+                        $temp[] = ($jab . "/" . $cab . "/" . $kacab);
+                    } elseif ($col['ColumnDb'] == 'pemohon') {
+                        $pemohon = $row->DraftRB()->Pemohon()->Pegawai()->Nama;
+                        $temp[] = $pemohon;
+                    } elseif ($col['ColumnDb'] == 'jbarang') {
+                        $temp[] = AddOn::groupConcat($drafrb_det, 'Jenis.Nama');
+                    } elseif ($col['ColumnDb'] == 'status') {
+                        $status = $row->DraftRB()->Status()->Status;
+                        $temp[] = $status;
+                    } elseif ($col['ColumnDb'] == 'Jenis') {
+                        $status = $row->DraftRB()->Jenis;
+                        $temp[] = $status;
+                    } elseif ($col['ColumnDb'] == 'KodeDRB') {
+                        $status = $row->DraftRB()->Kode;
+                        $temp[] = $status;
+                    } elseif ($col['ColumnDb'] == 'Kode') {
+                        $status = $row->Kode;
+                        $temp[] = $status;
+                    } elseif ($col['ColumnDb'] == 'KodeRB') {
+                        $status = $row->RB()->Kode;
+                        $temp[] = $status;
+                    } elseif ($col['Type'] == 'Date')
+                        $temp[] = date('d-m-Y', strtotime($row->{$col['ColumnDb']}));
+                    else
+                        $temp[] = $row->{$col['ColumnDb']};
 
-                $idx++;
+                    $idx++;
+                }
+
+
+                $view_link = $this->Link() . 'view/' . $id;
+                $delete_link = $this->Link() . 'deletereqcost/' . $id;
+
+                $temp[] = '
+                    <div class="btn-group">
+                      <a href="' . $view_link . '" type="button" class="btn btn-default view"><i class="text-info fa fa-eye"></i> View</a>
+                      <a href="' . $delete_link . '" type="button" class="btn btn-danger delete"><i class="text-info fa fa-eye"></i> Delete</a>
+                    </div>
+                    ';
+
+                $arr[] = $temp;
             }
-
-
-            $view_link = $this->Link() . 'view/' . $id;
-            $delete_link = $this->Link() . 'deletereqcost/' . $id;
-
-            $temp[] = '
-                <div class="btn-group">
-                  <a href="' . $view_link . '" type="button" class="btn btn-default view"><i class="text-info fa fa-eye"></i> View</a>
-                  <a href="' . $delete_link . '" type="button" class="btn btn-danger delete"><i class="text-info fa fa-eye"></i> Delete</a>
-                </div>
-                ';
-
-            $arr[] = $temp;
         }
 
         // die;
