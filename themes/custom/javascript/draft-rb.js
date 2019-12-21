@@ -128,6 +128,7 @@ $(document).ready(function() {
         }
     });
     $("#forwardTo").click(function(e) {
+        var elem = $(this).prop('disabled', true);
         if ($(".data-detail").length) {
             let data = {
                 kode: $("#nomor").val()
@@ -139,13 +140,21 @@ $(document).ready(function() {
                 dataType: "json",
                 beforeSend: function() {},
                 success: function(result) {
-
-                     //location.reload();
-                    window.location.href = baseURL+"list-drb/index/Me";
-
+                    var datas = JSON.parse(result);
+                    // alert(baseURL+"list-drb/index/Me");
+                    //location.reload();
+                    if (datas.msg) {
+                        window.location.href = baseURL+"list-drb/index/Me";
+                    }
                 },
                 complete: function(result) {
-                    window.location.href = baseURL+"list-drb/index/Me";
+                    var datas = result.responseText;
+                    // alert(baseURL+"list-drb/index/Me");
+                    //location.reload();
+                    if (datas.msg) {
+                        window.location.href = baseURL+"list-drb/index/Me";
+                    }  
+                    // window.location.href = baseURL+"list-drb/index/Me";
                     //location.reload();
                 },
                 error: function(xhr, Status, err) {}
@@ -256,10 +265,13 @@ $(document).ready(function() {
                 dataType: "json",
                 beforeSend: function() {},
                 success: function(result) {
-                    //location.reload();
+                    alert('Berhasil simpan')
+                    location.reload();
                 },
                 complete: function(result) {
-                    //location.reload();
+                    alert('Berhasil simpan')
+                    location.reload();
+
                 },
                 error: function(xhr, Status, err) {}
             });

@@ -1,3 +1,6 @@
+let baseURL=$("#baseURL").data("url");
+var uri_segment = "rb";
+
 $('.add-detail').on('click', function () {
     let parent = $(this).parent().parent()
     parent.find('tbody').append('<tr>' + parent.find('tr.table-row:last').html() + '</tr>')
@@ -75,7 +78,7 @@ $(document).on('change', '.supplier-nama', function(){
     if ($(this).val()) {
         let parent = $(this).parent().parent().parent()
         $.ajax({
-            url: "rb/getKodeSupplier",
+            url: baseURL+uri_segment+"/rb/getKodeSupplier",
             type: "post", //form method
             data: {
                 nama: $(this).val()

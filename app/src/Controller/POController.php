@@ -121,6 +121,8 @@ class POController extends PageController
 
                 $poTermin->write();
             }
+
+            return $this->redirect(Director::absoluteBaseURL() . "po");
         }
     }
 

@@ -215,7 +215,7 @@
 			$params_array = [];
 			parse_str($filter_record, $params_array);
 
-			$result = DraftRB::get();
+			$result = DraftRB::get()->where("StatusID <> 0");
 			switch ($cur_status) {
 				case 'Me':
 					$result = $result->where("PemohonID = ".$user_logged_id);

@@ -146,7 +146,7 @@
 			                </tr>
 		              	</tbody>
 		              	<tbody>
-		              		<tr class="showdetail1 no-sort" style="display: none;">
+		              		<tr class="showdetail$ID no-sort" style="display: none;">
 			                	<th></th>
 			                	<th>Supplier</th>
 			                	<th>Kode Supplier</th>
@@ -167,7 +167,7 @@
 			                	<td>
 			                		<% if $view_link!='' %>
 				                  	<div class="btn-group">
-									  <a href="{$BaseHref}$view_link" type="button" class="btn btn-default view"><i class="text-info fa fa-eye"></i> View</a>
+									  <a href="{$BaseHref}$view_link" type="button" class="btn btn-default view"><i class="text-info fa fa-eye"></i> Generate PO</a>
 									  <!-- <a href="'$delete_link'" type="button" class="btn btn-danger delete"><i class="text-info fa fa-eye"></i> Delete</a> --> 					 
 									</div>
 									<% end_if %>
@@ -200,12 +200,12 @@
 			                  	<td>$KodePO</td>
 			                  	<td>$KodeRB</td>
 			                  	<td>$KodeDraftRB</td>
-			                  	<td>$Tgl.Format(d/M/Y)</td>
+			                  	<td>$Tgl</td>
 			                  	<td>$Suplier</td>
 			                  	<td>
 				                  	<% if $view_link!='' %>
 				                  	<div class="btn-group">
-									  <a href="{$BaseHref}$view_link" type="button" class="btn btn-default view"><i class="text-info fa fa-eye"></i> View</a>
+									  <a href="{$BaseHref}$view_link" type="button" class="btn btn-default view"><i class="text-info fa fa-eye"></i> Buat LPB</a>
 									  <!-- <a href="'$delete_link'" type="button" class="btn btn-danger delete"><i class="text-info fa fa-eye"></i> Delete</a> --> 					 
 									</div>
 									<% end_if %>

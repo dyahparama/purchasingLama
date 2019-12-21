@@ -12,7 +12,7 @@
                     <!-- Example Horizontal Form -->
                     <div class="example-wrap">
                         <div class="example">
-                            <form action="/po/doPostPo" method="post" novalidate="novalidate">
+                            <form action="{$BaseHref}po/doPostPo" method="post" novalidate="novalidate">
                             <%-- <form action="/po/doPostPoaaa" id="form-po" method="post" novalidate="novalidate" class="fv-form fv-form-bootstrap4"> --%>
                                 <input type="hidden" name="RBID" value="{$RB.ID}">
                                 <input type="hidden" name="DraftRBID" value="{$RB.DraftRBID}">

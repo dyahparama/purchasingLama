@@ -8,7 +8,7 @@
 	<meta name="description" content="bootstrap material admin template">
 	<meta name="author" content="">
 
-	<title>Login V3 | Remark Material Admin Template</title>
+	<title>Login V3 | Purchasing System Material Admin Template</title>
 
 	<link rel="apple-touch-icon" href="../public/_resources/themes/custom/assets/images/apple-touch-icon.png">
 	<link rel="shortcut icon" href="../public/_resources/themes/custom/assets/images/favicon.ico">

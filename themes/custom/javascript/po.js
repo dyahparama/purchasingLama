@@ -1,6 +1,6 @@
 var table;
 let baseURL=$("#baseURL").data("url");
-var uri_segment = window.location.pathname.split('/')[1];
+var uri_segment = 'po';
 var column_name = $(document).find('#datatable1 > thead > tr');
 var cur_status = $(document).find('#cur_status').text();
 let id_pemohon = 0;

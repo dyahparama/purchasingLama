@@ -65,6 +65,8 @@ class LPBController extends PageController
 
                 $poDetail->write();
             }
+
+            return $this->redirect(Director::absoluteBaseURL()."lpb");
         }
     }
 

@@ -66,29 +66,34 @@ namespace {
 			// var_dump([$idCabangRegional,$idJenis]);
 			// var_dump(CabangJenisBarang::get()->where("CabangID = {$idCabangRegional} AND JenisBarangID = {$idJenis}")->first());
 			// die;
-			switch ($status) {
+                //$target = CabangJenisBarang::get()->where("CabangID = {$idCabangRegional} AND JenisBarangID = {$idJenis}")->first()->Kadep()->ID;
+
+			//var_dump($idCabangRegional);
+                // var_dump($idJenis);
+                // var_dump($idCabangRegional);
+                // die;
+            switch ($status) {
 			case 1:
 				$targetStatus = 2;
-				$target = $kepalaCabang;
+				$target = CabangJenisBarang::get()->where("CabangID = {$idCabangRegional} AND JenisBarangID = {$idJenis}")->first()->Kadep()->ID;
+				// var_dump($idCabangRegional);
+				// var_dump($idJenis);
+    //             var_dump($target);
+				// die;
 				return (["user" => $target, "status" => $targetStatus]);
 				break;
 			case 2:
 				$targetStatus = 3;
-				$target = CabangJenisBarang::get()->where("CabangID = {$idCabangRegional} AND JenisBarangID = {$idJenis}")->first()->KadepID;
+				$target = $cabangRegional->Kacab()->ID;
 				return (["user" => $target, "status" => $targetStatus]);
 				break;
 			case 3:
 				$targetStatus = 4;
-				$target = $cabangRegional->Kacab()->ID;
+				$target = CabangJenisBarang::get()->where("CabangID = {$idCabangPusat} AND JenisBarangID = {$idJenis}")->first()->JenisBarang()->Kadep()->ID;
 				return (["user" => $target, "status" => $targetStatus]);
 				break;
 			case 4:
 				$targetStatus = 5;
-				$target = CabangJenisBarang::get()->where("CabangID = {$idCabangPusat} AND JenisBarangID = {$idJenis}")->first()->JenisBarang()->Kadep()->ID;
-				return (["user" => $target, "status" => $targetStatus]);
-				break;
-			case 5:
-				$targetStatus = 6;
 				$target = 0;
 				return (["user" => $target, "status" => $targetStatus]);
 				break;
@@ -99,7 +104,7 @@ namespace {
 		}
 
 		public static function cekSudahApprove($nextUser, $drb) {
-			if (in_array($nextUser, ["staf pembelian"])) {
+			if (in_array($nextUser, ["0",0])) {
 				return false;
 			}
 			$history = HistoryApproval::get()->where("ApprovedByID = {$nextUser} AND DraftRBID = $drb->ID")->count();
@@ -112,18 +117,17 @@ namespace {
 		public static function ApproveDrb($note, $drb, $approver) {
 			$stop = false;
 			while ($stop == false) {
-				$target = self::getNextTarget($drb);
-				$history = HistoryApproval::create();
-				$history->Note = $note;
-				$history->ApprovedByID = $approver;
-				$history->DraftRBID = $drb->ID;
-				$history->StatusID = $target["status"];
-				$history->write();
-				$drb->StatusID = $target["status"];
-				$drb->ApproveToID = $target["user"];
-				$drb->ForwardToID = $target["user"];
-				$drb->write();
-				if ($drb->Status()->ID == 6) {
+				if ($drb->Status()->ID == 5) {
+					$history = HistoryApproval::create();
+					$history->Note = $note;
+					$history->ApprovedByID = $approver;
+					$history->DraftRBID = $drb->ID;
+					$history->StatusID = 6;
+					$history->write();
+					$drb->StatusID = "6";
+					$drb->ApproveToID = "0";
+					$drb->ForwardToID = "0";
+					$drb->write();
 					$RB = RB::get()->sort("ID", "DESC")->limit(1);
 					if ($drafRB->count()) {
 						$kode = "RB-" . AddOn::GenerateKode($drafRB->first()->Kode);
@@ -134,6 +138,18 @@ namespace {
 					$newRB->Kode = $kode;
 					$newRB->write();
 					$stop = true;
+				} else {
+					$target = self::getNextTarget($drb);
+					$history = HistoryApproval::create();
+					$history->Note = $note;
+					$history->ApprovedByID = $approver;
+					$history->DraftRBID = $drb->ID;
+					$history->StatusID = $target["status"];
+					$history->write();
+					$drb->StatusID = $target["status"];
+					$drb->ApproveToID = $target["user"];
+					$drb->ForwardToID = $target["user"];
+					$drb->write();
 				}
 				if (!self::cekSudahApprove($target["user"], $drb)) {
 					$stop = true;
@@ -224,8 +240,8 @@ namespace {
 			$approver = $drb->ApproveTo()->ID;
 			$forwardTo = $drb->ForwardTo()->ID;
 //             var_dump($approver);
-//             var_dump($_SESSION['user_id']);
-// die;            
+			//             var_dump($_SESSION['user_id']);
+			// die;
 
 			if ($drb->Status()->ID == 1) {
 				$assisten = $drb->PegawaiPerJabatan()->Cabang()->Approver()->ID;
@@ -373,6 +389,7 @@ namespace {
 			$departemennya = $config->DepartemenPencairanHargaID;
 			$jabatanpegawai = [];
 			$departemenpegawai = [];
+			$shownya = 0;
 			foreach ($pegawainya->Jabatans() as $key) {
 				$jabatanpegawai[] = $key->JabatanID;
 				$departemenpegawai[] = $key->DepartemenID;
@@ -397,7 +414,7 @@ namespace {
 				}
 			}
 			foreach ($draftrbnya as $key) {
-				if ($key->Status()->ID <= 6) {
+				if ($key->Status()->ID <= 6 && $shownya == 1) {
 					$jumlahdraft++;
 				}
 			}
@@ -411,4 +428,5 @@ namespace {
 		}
 
 	}
+
 }

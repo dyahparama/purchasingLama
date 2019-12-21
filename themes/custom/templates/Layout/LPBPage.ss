@@ -3,7 +3,7 @@
     <div class="panel">
         <header class="panel-heading">
             <h3 class="panel-title">
-                Input LPB
+                LPB
             </h3>
         </header>
         <div class="panel-body container-fluid">
@@ -12,10 +12,10 @@
                     <!-- Example Horizontal Form -->
                     <div class="example-wrap">
                         <div class="example">
-                            <form action="/lpb/doPostLPB" method="post">
+                            <form action="{$BaseHref}/lpb/doPostLPB" method="post">
                             <input type="hidden" value="{$PO.ID}" name="POID">
                                 <div class="form-group form-material row">
-                                    <label class="col-md-3 col-form-label">Kode PO :</label>
+                                    <label class="col-md-3 col-form-label">Kode LPB :</label>
                                     <div class="col-md-9">
                                         <input class="form-control" id="nomor" name="nomor" type="text"
                                             value="<Auto Generate>" readonly autocomplete="off">

@@ -13,7 +13,8 @@ class RBController extends PageController
         'listRBPage',
         'getData',
         'searchRb',
-        'ApprovePage'
+        'ApprovePage',
+        'View'
     ];
 
     public function ApprovePage(HTTPRequest $request)
@@ -29,6 +30,33 @@ class RBController extends PageController
                     // "DetailRB" => DraftRBDetail::get()->where("DraftRBID = {}"),
                     "DetailRB" => RB::get()->byID($id)->DraftRB()->Detail(),
                     "mgeJS" => "rb",
+                    "New" => 1
+                );
+                return $this->customise($data)
+                    ->renderWith(array(
+                        'RBPage', 'Page',
+                    ));
+            } else {
+                return $this->redirect(Director::absoluteBaseURL()."rb");
+            }
+        } else {
+            return $this->redirect(Director::absoluteBaseURL()."rb");
+        }
+    }
+
+    public function view(HTTPRequest $request) {
+        if (isset($request->params()["ID"])) {
+            $id = $request->params()["ID"];
+            $rb = RB::get()->byID($id);
+            if ($rb) {
+                $data = array(
+                    "SupplierList" => json_encode(AddOn::getOneField(Supplier::get(), "Nama")),
+                    "RB" => $rb,
+                    "DraftRB" => RB::get()->byID($id)->DraftRB(),
+                    // "DetailRB" => DraftRBDetail::get()->where("DraftRBID = {}"),
+                    "DetailRB" => RB::get()->byID($id)->DraftRB()->Detail(),
+                    "mgeJS" => "rb",
+                    "New" => 0
                 );
                 return $this->customise($data)
                     ->renderWith(array(
@@ -76,9 +104,13 @@ class RBController extends PageController
                 };
             };
 
-            $rb->Tgl = AddOn::convertDateToDatabase($_REQUEST['tgl-rb']);
+            // $rb->Tgl = AddOn::convertDateToDatabase($_REQUEST["tgl-rb"]);
             $rb->Total = $grandTotal;
             $rb->write();
+
+
+
+            return $this->redirect(Director::absoluteBaseURL()."rb");
         }
     }
 
@@ -321,7 +353,7 @@ class RBController extends PageController
                 $idx++;
             }
 
-            $view_link = '/rb/ApprovePage/' . $id;
+            $view_link = Director::absoluteBaseURL().'rb/view/' . $id;
             $delete_link = $this->Link() . 'deletereqcost/' . $id;
 
             $temp[] = '

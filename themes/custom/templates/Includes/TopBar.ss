@@ -11,8 +11,9 @@
 		<i class="icon md-more" aria-hidden="true"></i>
 	  </button>
 	  <div class="navbar-brand navbar-brand-center site-gridmenu-toggle" data-toggle="gridmenu">
-		<img class="navbar-brand-logo" src="{$BaseHref}public/_resources/themes/custom/assets/images/logo.png" title="Remark">
-		<span class="navbar-brand-text hidden-xs-down"> Remark</span>
+		<img class="navbar-brand-logo" src="{$BaseHref}/_resources/themes/custom/assets/images/cart.png">
+		<span class="navbar-brand-text hidden-xs-down"> Purchasing System</span>
+
 	  </div>
 	  <button type="button" class="navbar-toggler collapsed" data-target="#site-navbar-search"
 		data-toggle="collapse">

@@ -12,11 +12,11 @@
                     <!-- Example Horizontal Form -->
                     <div class="example-wrap">
                         <div class="example">
-                            <form action="/rb/doSubmitRB" method="post">
+                            <form action="{$BaseHref}/rb/doSubmitRB" method="post">
                                 <input class="form-control" name="RBID" type="hidden"
                                             value="{$RB.ID}" readonly autocomplete="off">
                                 <div class="form-group form-material row">
-                                    <label class="col-md-3 col-form-label">*Kode RB :</label>
+                                    <label class="col-md-3 col-form-label">Kode RB :</label>
                                     <div class="col-md-9">
                                         <input class="form-control" id="nomor" name="nomor" type="text"
                                             value="{$RB.Kode}" readonly autocomplete="off">
@@ -236,6 +236,7 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
+                                                            <% if $Top.New = 1 %>
                                                             <tr class="table-row">
                                                                 <td class="supplier">
                                                                     <input type="text"
@@ -277,6 +278,53 @@
                                                                     </button>
                                                                 </td>
                                                             </tr>
+                                                            <% else %>
+                                                                <% loop $DetailRB %>
+                                                                <% loop $DraftRBDetail %>
+                                                                <tr class="table-row">
+                                                                <td class="supplier">
+                                                                    <input type="text"
+                                                                        class="form-control tt-input typeahead supplier-nama"
+                                                                        placeholder="Supplier" autocomplete="off"
+                                                                        spellcheck="false" dir="auto"
+                                                                        style="position: relative; vertical-align: top; background-color: transparent;"
+                                                                        name="nama_supplier[$ID][]" value="{$ID}">
+                                                                </td>
+                                                                <td>
+                                                                    <input name="kode_supplier[$ID][]"
+                                                                        class="form-control supplier-kode" type="text"
+                                                                        autocomplete="off" readonly>
+                                                                </td>
+                                                                <td>
+                                                                    <input name="jumlah[$ID][]"
+                                                                        class="form-control jumlah-detail" type="number"
+                                                                        value="0" autocomplete="off">
+                                                                </td>
+                                                                <td>
+                                                                    <input name="harga[$ID][]"
+                                                                        class="form-control harga-detail" type="number"
+                                                                        value="0" autocomplete="off">
+                                                                </td>
+                                                                <td>
+                                                                    <input name="subtotal[$ID][]"
+                                                                        class="form-control subtotal-detail" type="text"
+                                                                        autocomplete="off" readonly>
+                                                                </td>
+                                                                <td>
+                                                                    <textarea name="keterangan[$ID][]"
+                                                                        class="form-control"></textarea>
+                                                                </td>
+                                                                <td>
+                                                                    <button
+                                                                        class="btn btn-danger delete-row btn-xs waves-effect waves-classic modal-select2-show waves-effect waves-classic"
+                                                                        type="button">
+                                                                        Delete
+                                                                    </button>
+                                                                </td>
+                                                            </tr>
+                                                            <% end_loop %>
+                                                            <% end_loop %>
+                                                            <% end_if %>
                                                             <tr class="row-total">
                                                                 <td colspan="4">Jumlah</td>
                                                                 <td><input name="total"
@@ -290,8 +338,10 @@
                                                 </div>
                                             </div>
                                             <div class="modal-footer">
+                                                <% if $Top.New = 1 %>
                                                 <button type="button" class="btn btn-primary close-modal"
                                                     data-modal="modal-detail_$ID">Save</button>
+                                                <% end_if %>
                                             </div>
                                         </div>
                                     </div>

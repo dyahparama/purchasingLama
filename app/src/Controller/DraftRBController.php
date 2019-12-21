@@ -242,6 +242,12 @@ class DraftRBController extends PageController {
 		$cek->TglSubmit = date("Y/m/d");
 		$cek->StatusID = 1;
 		$cek->write();
+
+        if ($cek->ID) {
+            echo json_encode(['status' => TRUE]);
+        }else{
+            echo json_encode(['status' => FALSE]);
+        }
 	}
 
 	public function deleteDetail() {
@@ -363,17 +369,19 @@ class DraftRBController extends PageController {
 		$drb = DraftRB::get()->where("Kode = '" . $_POST["draft"] . "'")->limit(1)->first();
 		switch ($_POST["respond"]) {
 		case 'approve':
-			$this::ApproveDrb($_POST["note"], $drb, $_POST["from"]);
+			self::ApproveDrb($_POST["note"], $drb, $_POST["from"]);
 			break;
 		case 'reject':
-			$this::rejectDRB($_POST["note"], $drb, $_POST["from"]);
+			self::rejectDRB($_POST["note"], $drb, $_POST["from"]);
 			break;
 		case 'forward':
-			$this::forwardDrb($_POST["note"], $drb, $_POST["from"], $_POST["forward"]);
+			self::forwardDrb($_POST["note"], $drb, $_POST["from"], $_POST["forward"]);
 			break;
 		default:
 			break;
 		}
+
+        echo json_encode(['status' => TRUE]);
 	}
 	public function clearData() {
 		$drb = DraftRB::get()->where("Kode = '" . $_POST["nomor"] . "'")->limit(1);
