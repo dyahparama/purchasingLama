@@ -13,7 +13,7 @@
                         src="/_resources/themes/custom/assets//images/logo-colored.png"
                         alt="..."
                     />
-                    <h2 class="brand-text font-size-18">Remark</h2>
+                    <h2 class="brand-text font-size-18">Purchasing System</h2>
 				</div>
 				<div class="alert dark alert-danger alert-dismissible d-none" role="alert">
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">

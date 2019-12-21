@@ -380,5 +380,51 @@ namespace {
             return $name;
         }
 
+        public function getTotalTask()
+        {
+            $idnya = $_SESSION['user_id'];
+            $pegawainya = User::get()->byID($idnya)->Pegawai();
+            $config = SiteConfig::current_site_config(); 
+            $jabatannya = $config->StafPencarianHargaID;
+            $departemennya = $config->DepartemenPencairanHargaID;
+            $jabatanpegawai = [];
+            $departemenpegawai = [];
+            foreach ($pegawainya->Jabatans() as $key) {
+                $jabatanpegawai[] = $key->JabatanID;
+                $departemenpegawai[] = $key->DepartemenID;
+            }
+            if(in_array(strtoupper($jabatannya),$jabatanpegawai) && in_array(strtoupper($departemennya),$departemenpegawai)) {
+                $shownya = 1;
+            }
+            $draftrbnya = DraftRB::get()->where('ForwardToID = '.$pegawainya->ID);
+            $lpbnya = PO::get();
+            $rb = RB::get();
+            $jumlahrb=0;
+            $jumlahpo=0;
+            $jumlahdraft = 0;
+            $jumlahlpb = 0;
+            // print_r($rb);
+            foreach ($rb as $key) {
+                if($key->DraftRB()->ForwardToID == $pegawainya->ID && $key->DraftRB()->Status()->ID != 11){
+                    $jumlahrb++;
+                }
+                if($key->DraftRB()->Status()->ID == 11 && $shownya==1){
+                    $jumlahpo++;
+                }
+            }
+            foreach ($draftrbnya as $key) {
+                if($key->Status()->ID<=6 && $shownya==1){
+                    $jumlahdraft++;
+                }
+            }
+            foreach ($lpbnya as $key5) {
+                if($key5->DraftRB()->StatusID !=14 && $shownya==1){
+                    $jumlahlpb++;
+                }
+            }
+            $totalnya = $jumlahdraft + $jumlahrb + $jumlahpo + $jumlahlpb;
+            return $totalnya;
+        }
+
     }
 }

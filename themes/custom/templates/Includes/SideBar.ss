@@ -28,7 +28,7 @@
 			<li class="site-menu-item<% if $siteParent == 'My Task' %> active open<% end_if %>">
 				<a class="animsition-link" href="{$BaseHref}ta">
                   	<i class="" aria-hidden="true"></i>
-					<span class="site-menu-title">My task <% if $total %>($total)<% end_if %></span>
+					<span class="site-menu-title">My task <% if $getTotalTask() %>($getTotalTask())<% end_if %></span>
 				</a>
 			</li>
 			<li class="site-menu-item has-sub<% if $siteParent == 'Draft RB' %> active open<% end_if %>">

@@ -5,7 +5,7 @@
 		<meta name="description" content="bootstrap material admin template">
 		<meta name="author" content="">
 		
-		<title>Dashboard | Remark Material Admin Template</title>
+		<title>Dashboard | Purchasing System Material Admin Template</title>
 		
 		<link rel="apple-touch-icon" href="/_resources/themes/custom/assets/images/apple-touch-icon.png">
 		<link rel="shortcut icon" href="/_resources/themes/custom/assets/images/favicon.ico">
