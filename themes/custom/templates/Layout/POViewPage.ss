@@ -63,7 +63,7 @@
                                     <label class="col-md-3 col-form-label">Nama :</label>
                                     <div class="col-md-9">
                                         <input class="form-control" id="nomor" readonly name="nama_deliver" type="text"
-                                            value="{$Nama}" autocomplete="off">
+                                            value="{$PO.Nama}" autocomplete="off">
                                     </div>
                                 </div>
                                 <div class="form-group form-material row">
@@ -71,7 +71,7 @@
                                     <div class="col-md-9">
                                         <div class="input-group">
                                             <textarea readonly="" class="form-control"
-                                                name="alamat">$Alamat</textarea>
+                                                name="alamat" value="$Alamat">$PO.Alamat</textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -80,7 +80,7 @@
                                     <div class="col-md-9">
                                         <div class="input-group">
                                             <textarea readonly class="form-control"
-                                                name="kontak">$Kontak</textarea>
+                                                name="kontak">$PO.Kontak</textarea>
                                         </div>
                                     </div>
                                 </div>

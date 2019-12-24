@@ -13,6 +13,7 @@ class PO extends DataObject {
 		'Nama' => 'Varchar(50)',
 		'Kontak' => 'Varchar(50)',
 		'IsClosed' => 'Boolean',
+		'SuratJalan' => 'Varchar(50)'
 	];
 	private static $indexes = [
 		'Kode' => [

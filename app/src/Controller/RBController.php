@@ -438,7 +438,9 @@ function searchRb()
 
         $idx = 0;
 
-        $id = $row->RB()->ID;
+        $rb = RB::get()->where("DraftRBID=".$row->ID)->first();
+        $id = $rb->ID;
+        // echo "ID: ".$id."</br>";
 
         foreach ($columns as $col) {
 
@@ -463,7 +465,7 @@ function searchRb()
             } elseif ($col['Type'] == 'Date')
             $temp[] = date('d-m-Y', strtotime($row->{$col['ColumnDb']}));
             elseif ($col['ColumnDb'] == 'Kode') {
-                $status = $row->RB()->Kode;
+                $status = $rb->Kode;
                 $temp[] = $status;
             } elseif ($col['ColumnDb'] == 'ForwardToID') {
                 $ForwardTo = $row->ForwardTo()->Pegawai()->Nama;

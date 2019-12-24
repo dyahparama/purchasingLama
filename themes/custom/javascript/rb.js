@@ -45,7 +45,6 @@ $(".close-modal").click(function (e) {
 $(document).on('keyup', '.harga-detail, .jumlah-detail', function() {
     let parentRow = $(this).parent().parent()
     let parentTable = $(this).parent().parent().parent()
-
     // if ($(this).hasClass('jumlah-detail')) {
     //     let jumlahTemp = 0
     //     let jumlahRow = parentRow.find('.jumlah-detail').val() ? parentRow.find('.jumlah-detail').val() : 0
@@ -79,7 +78,7 @@ $(document).on('keyup', '.harga-detail, .jumlah-detail', function() {
 
 $(document).on('change', '.supplier-nama', function(){
     if ($(this).val()) {
-        let parent = $(this).parent().parent().parent()
+        let parent = $(this).parent().parent().parent().parent()
         $.ajax({
             url: baseURL+uri_segment+"/getKodeSupplier",
             type: "get", //form method
@@ -89,7 +88,7 @@ $(document).on('change', '.supplier-nama', function(){
             dataType: "text",
             beforeSend: function () { },
             success: function (result) {
-                console.log(result)
+                console.log(parent)
                 parent.find('.supplier-kode').val(result)
             },
             complete: function (result) { },

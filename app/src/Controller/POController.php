@@ -7,6 +7,7 @@ use SilverStripe\ORM\ArrayList;
 use SilverStripe\View\Requirements;
 use SilverStripe\ORM\DB;
 use SilverStripe\Control\Controller;
+use Mpdf\Mpdf;
 
 
 class POController extends PageController
@@ -15,6 +16,25 @@ class POController extends PageController
         "doPostPO", "getDetailRB", 'PoList', 'getData', 'searchdrb', 'ApprovePage', 'view','printPO'
     ];
 
+    public function printPO(HTTPRequest $request){
+        $id = $request->params()["ID"];
+        $PO = PO::get()->byID($id);
+        $detailPO = $PO->Detail();
+        $termin = $PO->Termin();
+
+        $data=[
+            "NamaPerusahaan"=>"Purchase",
+            "PO" => $PO,
+            "Detail" => $detailPO,
+            "Termin"=>$termin
+        ];
+        echo( $this->customise($data)->renderWith('PrintPDF'));
+        // die;
+        
+        // $mpdf = new Mpdf();
+        // $mpdf->WriteHTML($this->customise($data)->renderWith('PrintPDF'));
+        // $mpdf->Output();
+    }
     public function ApprovePage(HTTPRequest $request)
     {
         if (isset($request->params()["ID"])) {
@@ -124,6 +144,9 @@ class POController extends PageController
             $po->Alamat = $_REQUEST['alamat'];
             $po->Tgl = AddOn::convertDateToDatabase($tgl);
             $po->Note = $note;
+            $po->Nama = $_REQUEST['nama_deliver'];
+            $po->Alamat = $_REQUEST['alamat'];
+            $po->Kontak = $_REQUEST['kontak'];
             $idPO = $po->write();
 
             $jenisBarang = $_REQUEST['jenis_barangid'];
@@ -147,6 +170,10 @@ class POController extends PageController
                 $poDetail->DetailPerSupplierID = $parentid[$key];
 
                 $poDetail->write();
+
+                $detail3 = DetailRBPerSupplier::get()->byID($parentid[$key]);
+                $detail3->IsPo = 1;
+                $detail3->write();
             }
 
             $tgl = $_REQUEST['tgl-termin'];

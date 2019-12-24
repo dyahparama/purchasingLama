@@ -78,7 +78,8 @@
                                                 name="alamat"></textarea>
                                         </div>
                                     </div>
-                                </div><div class="form-group form-material row">
+                                </div>
+                                <div class="form-group form-material row">
                                     <label class="col-md-3 col-form-label">Kontak :</label>
                                     <div class="col-md-9">
                                         <div class="input-group">

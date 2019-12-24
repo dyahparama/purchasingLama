@@ -11,8 +11,23 @@ use SilverStripe\ORM\DB;
 class LPBController extends PageController
 {
     private static $allowed_actions = [
-        'getDetailBarang', 'ApprovePage', 'searchlpb', 'getData', 'doPostLPB'
+        'getDetailBarang', 'ApprovePage', 'searchlpb', 'getData', 'doPostLPB', 'view'
     ];
+
+    public function view(HTTPRequest $request) {
+        if (isset($request->params()["ID"])) {
+            $id = $request->params()["ID"];
+            $data = [
+                "LPB" => LPB::get()->ByID($id),
+                "mgeJS" => "lpb"
+            ];
+
+            return $this->customise($data)
+            ->renderWith(array(
+                'LPBView', 'Page',
+            ));
+        }
+    }
 
     public function index(HTTPRequest $request)
     {

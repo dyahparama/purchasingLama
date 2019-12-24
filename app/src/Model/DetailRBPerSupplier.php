@@ -13,7 +13,8 @@ class DetailRBPerSupplier extends DataObject
         'Jumlah' => 'Double',
         'Harga' => 'Double',
         'Total' => 'Double',
-        'Keterangan' => 'Text'
+        'Keterangan' => 'Text',
+        'IsPo' => 'Boolean'
     ];
 
     private static $has_one = [

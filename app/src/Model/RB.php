@@ -49,7 +49,7 @@ class RB extends DataObject {
 	}
 	public static function GetSuplier($ID) {
 		$detailnya = DetailRBPerSupplier::get()->where('RBID = ' . $ID);
-		$tes = AddOn::groupBySum($detailnya, "NamaSupplier", array("Total"), array("NamaSupplier", "Kode", "Total"));
+		$tes = AddOn::groupBySum($detailnya, "NamaSupplier", array("Total"), array("NamaSupplier", "Kode","IsPo","Total"));
 		$temp = array();
 		$asu = new ArrayList();
 		foreach ($tes as $key) {
@@ -57,7 +57,13 @@ class RB extends DataObject {
 				$temp['NamaSupplier'] = $key['NamaSupplier'];
 				$temp['Kode'] = $key['Kode'];
 				$temp['Total'] = $key['Total'];
-				$temp['view_link'] = 'po/ApprovePage/' . $ID . "/" . $key['NamaSupplier'];
+				$temp['IsPo'] = $key['IsPo'];
+				if($key['IsPo']==1){
+					$temp['view_link'] = 'po/view/' . $ID . "/";
+				}
+				else{
+					$temp['view_link'] = 'po/ApprovePage/' . $ID . "/" . $key['NamaSupplier'];
+				}
 				$asu->push($temp);
 			}
 		}

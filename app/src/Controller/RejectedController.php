@@ -45,12 +45,12 @@
 	    	$temp1 = array();
 	    	$jumlahrb=0;
 	    	$jumlahdraft=0;
-	    	$pegawainya = User::get()->byID($idnya)->Pegawai();
+	    	$pegawainya = User::get()->byID($idnya);
             Requirements::themedCSS('custom');
-            $draftrbnya = DraftRB::get()->where('PemohonID = '.$pegawainya->ID.' AND StatusID = 14');
+            $draftrbnya = DraftRB::get()->where('PemohonID = '.$pegawainya->ID.' AND StatusID = 13');
 			$rb = rb::get();
 	        foreach ($rb as $key) {
-            	if($key->DraftRB()->PemohonID == $pegawainya->ID && $key->DraftRB()->Status()->ID == 14){
+            	if($key->DraftRB()->PemohonID == $pegawainya->ID && $key->DraftRB()->Status()->ID == 13){
             		$temp1['Tgl'] = date('d/m/Y',strtotime($key->Tgl));
             		$temp1['Kode'] = $key->Kode;
             		$temp1['Deadline'] = date('d/m/Y',strtotime($key->DraftRB()->Deadline));
@@ -125,10 +125,10 @@
 			$teams = PegawaiPerJabatan::get()->where("CabangID = " . $jabatan->first()->CabangID . " AND DepartemenID = " . $jabatan->first()->DepartemenID);
 			$teams_id = AddOn::groupConcat($teams, 'PegawaiID');
             Requirements::themedCSS('custom');
-            $draftrbnya = DraftRB::get()->where('PemohonID IN(' . $teams_id . ') AND StatusID = 14');
+            $draftrbnya = DraftRB::get()->where('PemohonID IN(' . $teams_id . ') AND StatusID = 13');
 			$rb = rb::get();
 	        foreach ($rb as $key) {
-            	if($key->DraftRB()->PemohonID == $pegawainya->ID && $key->DraftRB()->Status()->ID == 14){
+            	if($key->DraftRB()->PemohonID == $pegawainya->ID && $key->DraftRB()->Status()->ID == 13){
             		$temp1['Tgl'] = date('d/m/Y',strtotime($key->Tgl));
             		$temp1['Kode'] = $key->Kode;
             		$temp1['Deadline'] = date('d/m/Y',strtotime($key->DraftRB()->Deadline));

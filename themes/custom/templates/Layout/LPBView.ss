@@ -18,79 +18,38 @@
                                     <label class="col-md-3 col-form-label">Kode LPB :</label>
                                     <div class="col-md-9">
                                         <input class="form-control" id="nomor" name="nomor" type="text"
-                                            value="<Auto Generate>" readonly autocomplete="off">
-                                    </div>
-                                </div>
-                                <div class="form-group form-material row">
-                                    <label class="col-md-3 col-form-label">Kode PO :</label>
-                                    <div class="col-md-9">
-                                        <input class="form-control" id="nomor" name="nomor" type="text"
-                                            value="$PO.Kode" readonly autocomplete="off">
+                                            value="$LPB.Kode" readonly autocomplete="off">
                                     </div>
                                 </div>
                                 <div class="form-group form-material row">
                                     <label class="col-md-3 col-form-label">Kode RB :</label>
                                     <div class="col-md-9">
                                         <input class="form-control" id="nomor" name="nomor" type="text"
-                                            value="{$PO.RB.Kode}" readonly autocomplete="off">
+                                            value="{$LPB.PO.RB.Kode}" readonly autocomplete="off">
                                     </div>
                                 </div>
                                 <div class="form-group form-material row">
                                     <label class="col-md-3 col-form-label">Kode Draft RB :</label>
                                     <div class="col-md-9">
                                         <input class="form-control" id="nomor" name="nomor" type="text"
-                                            value="{$PO.DraftRB.Kode}" readonly autocomplete="off">
+                                            value="{$LPB.PO.DraftRB.Kode}" readonly autocomplete="off">
                                     </div>
                                 </div>
                                 <div class="form-group form-material row">
                                     <label class="col-md-3 col-form-label">Tanggal :</label>
                                     <div class="col-md-9">
-                                        <%-- <div class="input-group">
-                                            <span class="input-group-addon">
-                                                <i class="icon md-calendar" aria-hidden="true"></i>
-                                            </span>
-                                            <input class="form-control" id="tgl-draft" name="tgl"
-                                                data-date-format="dd/mm/yyyy" data-now="$dateNow"
-                                                value="$Now.format('dd/MM/yyyy')" data-plugin="datepicker"
-                                                type="text">
-                                        </div> --%>
                                         <input class="form-control" id="nomor" name="tgl-lpb" type="text"
-                                            value="$Now.format('dd/MM/yyyy')" readonly autocomplete="off">
+                                            value="{$LPB.Tgl.Nice}" readonly autocomplete="off">
                                     </div>
                                 </div>
                                 <div class="form-group form-material row">
                                     <label class="col-md-3 col-form-label">Supplier :</label>
                                     <div class="col-md-9">
                                         <input class="form-control" id="nomor" name="nomor" type="text"
-                                            value="{$PO.NamaSupplier}" readonly autocomplete="off">
+                                            value="{$LPB.PO.NamaSupplier}" readonly autocomplete="off">
                                     </div>
                                 </div>
-                                <div class="form-group form-material row">
-                                    <label class="col-md-3 col-form-label">SJ Supplier :</label>
-                                    <div class="col-md-9">
-                                        <input class="form-control" id="surat_jalan" name="surat_jalan" type="text"
-                                            value="" readonly autocomplete="off">
-                                    </div>
-                                </div>
-                                <%-- <div class="form-group form-material row">
-                                    <label class="col-md-3 col-form-label">Supplier :</label>
-                                    <div class="col-md-9">
-                                        <select id="nama-supplier" class="form-control" name="supplier"
-                                            data-plugin="select2">
-                                            <option>Pilih Supplier</option>
-                                            <% loop $Supplier %>
-                                            <option value="$ID">{$Nama}</option>
-                                            <% end_loop %>
-                                        </select>
-                                    </div>
-                                </div> --%>
                                 <div class="table-responsive">
-                                    <%-- <div class="col-md-3">
-                                        <button class="btn btn-block btn-primary waves-effect waves-classic"
-                                            id="add-detail-po" type="button">
-                                            Add Detail Barang
-                                        </button>
-                                    </div> --%>
                                     <table class="table-striped table">
                                         <thead>
                                             <tr>
@@ -106,12 +65,10 @@
                                             </tr>
                                         </thead>
                                         <tbody id="table-body">
-                                            <% loop $Detail %>
+                                            <% loop $LPB.Detail %>
                                             <tr class="table-row">
                                                 <input type="hidden" value="$ID" name="detail_id[]"> 
                                                 <td class="jenis-barang">
-                                                    <input type="hidden" name="parentid[]" value="$ID">
-                                                    <input type="hidden" name="jenis_barangid[]" value="$JenisID">
                                                     <input name="jenis_barang[]" class="form-control"
                                                         value="$Jenis.Nama" readonly autocomplete="off">
                                                 </td>
@@ -121,11 +78,11 @@
                                                 </td>
                                                 <td>
                                                     <input name="jumlah[]" class="form-control jumlah-lpb" readonly
-                                                    value="$Top.countLPB($ID)" autocomplete="off">
+                                                    value="$Jumlah" autocomplete="off">
                                                 </td>
                                                 <td>
                                                     <input name="jumlah_diterima[]" type="number" class="jumlah-diterima-lpb form-control"
-                                                        value="$Top.countLPB($ID)" autocomplete="off">
+                                                        value="$JumlahDiterima" readonly autocomplete="off">
                                                 </td>
                                                 <td>
                                                     <input type="hidden" name="satuanid[]" value="$SatuanID">
@@ -136,27 +93,19 @@
                                                     <input name="harga[]" class="form-control harga-lpb" type="text"
                                                         value="$Harga" readonly autocomplete="off" value="$Harga">
                                                 </td>
-                                                <%-- <td>
-                                                    <input name="diskon[]" class="form-control diskon-po-val" type="text"
-                                                        readonly autocomplete="off">
-                                                </td>
-                                                <td>
-                                                    <input name="diskon2[]" class="form-control diskon2-po-val" type="text"
-                                                        readonly autocomplete="off">
-                                                </td> --%>
                                                 <td>
                                                     <input name="subtotal[]" class="form-control subtotal-lpb" type="text"
-                                                        value="$Top.multiply($Top.countLPB($ID), $Harga)" autocomplete="off" readonly>
+                                                        value="$Total" autocomplete="off" readonly>
                                                 </td>
                                             </tr>
                                             <% end_loop %>
-                                            <tr id="row-total">
+                                            <!-- <tr id="row-total">
                                                 <td colspan="6">Jumlah</td>
                                                 <td><input id="total-akhir-lpb" name="total" class="form-control" type="text" value="{$TotalAkhir}"
                                                     autocomplete="off" readonly></td>
                                                 <td></td>
                                                 <td></td>
-                                            </tr>
+                                            </tr> -->
                                         </tbody>
                                     </table>
                                 </div>
@@ -164,14 +113,9 @@
                                     <label class="col-md-3 col-form-label">Keterangan :</label>
                                     <div class="col-md-9">
                                         <div class="input-group">
-                                            <textarea class="form-control"
-                                                name="note"><% if $note %>$note<% end_if %></textarea>
+                                            <textarea readonly class="form-control"
+                                                name="note">$Note</textarea>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="form-group form-material row">
-                                    <div class="col-md-9">
-                                        <button type="button" id="submit-lpb" class="btn-primary btn">Submit</button>
                                     </div>
                                 </div>
                             </form>

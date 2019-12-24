@@ -405,4 +405,9 @@ class DraftRBController extends PageController {
 			$drb->delete();
 		}
 	}
+
+	// public function historynya($id){
+	// 	$history1 = HistoryApproval::get()->where("DraftRBID = {$id}");
+	// 	$history2 = HistoryForwading::get()->where("DraftRBID = {$id}")
+	// }
 }

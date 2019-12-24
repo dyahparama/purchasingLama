@@ -1,4 +1,5 @@
 <?php
+use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Assets\Image;
 use SilverStripe\ORM\ValidationException;
@@ -37,4 +38,20 @@ class LPB extends DataObject
     // private static $owns = [
 	// 	'logo'
     // ];
+
+    public static function Getdetail($ID) {
+        $detailnya = LPBDetail::get()->where('LPBID = ' . $ID);
+        $temp = array();
+        $asu = new ArrayList();
+        foreach ($detailnya as $key) {
+            if ($key->NamaBarang != '') {
+                $temp['NamaBarang'] = $key->NamaBarang;
+                $temp['Jumlah'] = $key->Jumlah;
+                $temp['JumlahTerima'] = $key->JumlahTerima;
+                $temp['view_linknya'] = 'lpb/view/' . $ID;
+                $asu->push($temp);
+            }
+        }
+        return $asu;
+    }
 }

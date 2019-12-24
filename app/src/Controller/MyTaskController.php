@@ -41,6 +41,7 @@ class MyTaskController extends PageController {
 		$draftrbnya = DraftRB::get()->where('ForwardToID = ' . $pegawainya->ID);
 		$lpbnya = PO::get();
 		$rb = RB::get();
+		$IsBuat = 0;
 		$jumlahrb = 0;
 		$jumlahpo = 0;
 		$jumlahdraft = 0;
@@ -160,7 +161,7 @@ class MyTaskController extends PageController {
 			}
 		}
 		foreach ($lpbnya as $key5) {
-			if ($key5->DraftRB()->StatusID != 13 && $shownya == 1 && $key5->TerimaLPBID == $pegawainya->ID) {
+			if ($key5->DraftRB()->StatusID != 13 && $key5->TerimaLPBID == $pegawainya->ID) {
 					$temp3['ID'] = $key5->ID;
 					$temp3['KodePO'] = $key5->Kode;
 					$temp3['KodeRB'] = $key5->RB()->Kode;
@@ -168,12 +169,21 @@ class MyTaskController extends PageController {
 					$temp3['Tgl'] = date('d/m/Y', strtotime($key5->Tgl));
 					$temp3['Suplier'] = $key5->NamaSupplier;
 					// $temp3['isi'] = $key5->GetPO($key->ID);
-					$lpbbuat = LPB::get()->where("POID = '".$key5->ID."'");
-					$IsBuat = 0;
-					if($lpbbuat->ID){
-						$IsBuat = 1;
-						$temp3['tutup_PO'] = 'po/TutupPO/' . $key5->ID;
+					$lpbbuat = lpb::get()->where('POID = '.$key5->ID)->first();
+					// echo $lpbbuat->ID;
+					// echo $key5->ID;
+					// die();
+					// echo "<pre>";
+					// print_r($lpbbuat);
+					// die();
+					$temp3['IsBuat'] = 0;
+					if(isset($lpbbuat->ID)){
+						$temp3['IsBuat'] = 1;
+						$temp3['tutup_po'] = 'po/TutupPO/' . $key5->ID;
+						$temp3['isi'] =$lpbbuat->Getdetail($lpbbuat->ID);
 					}
+					// echo $temp3['IsBuat'];
+					// die();
 					$temp3['view_link'] = 'lpb/ApprovePage/' . $key5->ID;
 					$show3->push($temp3);
 					$jumlahlpb++;
@@ -188,6 +198,7 @@ class MyTaskController extends PageController {
 		$data = array(
 			"draftrbnya" => $show,
 			'shownya' => $shownya,
+			'IsBuat' => $IsBuat,
 			'siteParent' => 'My Task',
 			'PageTitle' => "My Task",
 			'Title' => 'My Task',

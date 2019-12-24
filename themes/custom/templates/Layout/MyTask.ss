@@ -20,12 +20,12 @@
                     	<a class="nav-link" data-toggle="tab" href="#listpo" aria-controls="listpo" role="tab"><span>PO </span><span class="badge badge-pill badge-dark">$jumlahpo</span>
                 		</a>
                   	</li>
+      				<% end_if %>
 	                <li class="nav-item" role="presentation">
 	                    <a class="nav-link" data-toggle="tab" href="#listlpb" aria-controls="listlpb" role="tab">
 		                  <span>LPB </span><span class="badge badge-pill badge-dark">$jumlahlpb</span>
 		                </a>
 	                </li>
-	                <% end_if %>
                 </ul>
                 <div class="tab-content p-20" style="width: 100%;">
                   <div class="tab-pane active" id="listdraftrb" role="tabpanel">
@@ -166,10 +166,17 @@
 			                	<td>$Total</td>
 			                	<td>
 			                		<% if $view_link!='' %>
-				                  	<div class="btn-group">
+			                		<% if $IsPo == 1 %>
+			                		<div class="btn-group">
+									  <a href="{$BaseHref}$view_link" type="button" class="btn btn-default view"><i class="text-info fa fa-eye"></i> View PO</a>
+									  <!-- <a href="'$delete_link'" type="button" class="btn btn-danger delete"><i class="text-info fa fa-eye"></i> Delete</a> --> 					 
+									</div>
+									<% else %>
+									<div class="btn-group">
 									  <a href="{$BaseHref}$view_link" type="button" class="btn btn-default view"><i class="text-info fa fa-eye"></i> Generate PO</a>
 									  <!-- <a href="'$delete_link'" type="button" class="btn btn-danger delete"><i class="text-info fa fa-eye"></i> Delete</a> --> 					 
 									</div>
+									<% end_if %>
 									<% end_if %>
 			                	</td>
 			                	<td></td>
@@ -182,6 +189,7 @@
 		              	<% end_loop %>
 		            </table>
                   </div>
+                    <% end_if %>
                   <div class="tab-pane" id="listlpb" role="tabpanel">
                    <table class="table table-hover dataTable table-striped w-full" data-plugin="dataTable">
 		              	<thead>
@@ -194,28 +202,71 @@
 			                  <th>Aksi</th>
 			                </tr>
 		              	</thead>
+		              	<% loop $lpbnya %>
 		              	<tbody>
-		              		<% loop $lpbnya %>
 			                <tr>
 			                  	<td>$KodePO</td>
 			                  	<td>$KodeRB</td>
 			                  	<td>$KodeDraftRB</td>
 			                  	<td>$Tgl</td>
 			                  	<td>$Suplier</td>
+			                  	<% if $IsBuat == 1 %>
 			                  	<td>
-				                  	<% if $view_link!='' %>
 				                  	<div class="btn-group">
-									  <a href="{$BaseHref}$view_link" type="button" class="btn btn-default view"><i class="text-info fa fa-eye"></i> Buat LPB</a>
-									  <!-- <a href="'$delete_link'" type="button" class="btn btn-danger delete"><i class="text-info fa fa-eye"></i> Delete</a> --> 					 
+										<a type="button" class="btn btn-default viewlpb" shownya='0' idnya="$ID"><i class="text-info fa fa-eye"></i> Lihat Detail</a>
+									</div>
+									<div class="btn-group">
+										<a href="'{$BaseHref}$tutup_po'" type="button" class="btn btn-danger delete"><i class="text-info fa fa-eye"></i> Tutup PO</a>
+									</div>
+								</td>
+								<% else %>
+								<td>
+									<% if $view_link!='' %>
+				                  	<div class="btn-group">
+									  <a href="{$BaseHref}$view_link" type="button" class="btn btn-default view"><i class="text-info fa fa-eye"></i> Buat LPB</a> 					 
 									</div>
 									<% end_if %>
 								</td>
+								<% end_if %>
 			                </tr>
-			       		    <% end_loop %>
 		              	</tbody>
+		              	<% if $IsBuat != 0 %>
+		              	<tbody>
+		              		<tr class="showdetaillpb$ID no-sort" style="display: none;">
+		              			<th></th>
+			                	<th>Nama Barang</th>
+			                	<th>Jumlah Dipesan</th>
+			                	<th>Jumlah Diterima</th>
+			                	<th colspan="2">Action</th>
+			                </tr>
+			                <% loop $isi %>
+			                <!-- $isi.GetSuplier(ID).debug -->
+			                <tr class="showdetaillpb$Up.ID no-sort" style="display: none;">
+			                	<td></td>
+			                	<td>$NamaBarang</td>
+			                	<td>$Jumlah</td>
+			                	<td>$JumlahTerima</td>
+			                	<% if $JumlahTerima  < $Jumlah %>
+			                	<td></td>
+			                	<% else %>
+			                	<td>
+				                  	<div class="btn-group">
+									  <a href="{$BaseHref}$up.view_link" type="button" class="btn btn-default view"><i class="text-info fa fa-eye"></i> Buat LPB</a>					 
+									</div>
+			                	</td>
+			                	<% end_if %>
+			                	<td>
+				                  	<div class="btn-group">
+									  <a href="{$BaseHref}$view_linknya" type="button" class="btn btn-default view"><i class="text-info fa fa-eye"></i> View LPB</a>				 
+									</div>
+			                	</td>
+			                </tr>
+			                <% end_loop %>
+		              	</tbody>
+		              	<% end_if %>
+		              	<% end_loop %>
 		            </table>
                   </div>
-                  <% end_if %>
                 </div>
               </div>
             </div>
