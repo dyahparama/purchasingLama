@@ -26,8 +26,15 @@
                                 <div class="form-group form-material row">
                                     <label class="col-md-3 col-form-label">Kode RB :</label>
                                     <div class="col-md-9">
-                                        <input class="form-control" id="nomor" name="nomor" type="text"
+                                        <input class="form-control" id="RBID" name="RBID" type="text"
                                             value="{$RB.Kode}" readonly autocomplete="off">
+                                    </div>
+                                </div>
+                                <div class="form-group form-material row">
+                                    <label class="col-md-3 col-form-label">Kode Draft RB :</label>
+                                    <div class="col-md-9">
+                                        <input class="form-control" id="DraftRBID" name="DraftRBID" type="text"
+                                            value="{$RB.DrafRB.Kode}" readonly autocomplete="off">
                                     </div>
                                 </div>
                                 <div class="form-group form-material row">
@@ -42,6 +49,17 @@
                                     <div class="col-md-9">
                                         <input class="form-control" id="nomor" name="nama-supplier" type="text"
                                             value="{$NamaSupplier}" readonly autocomplete="off">
+                                    </div>
+                                </div>
+                                <div class="form-group form-material row">
+                                    <label class="col-md-3 col-form-label">User Terima LPB :</label>
+                                    <div class="col-md-9">
+                                        <select id="draft-lama" class="form-control" data-plugin="select2">
+                                            <option>User Terima LPB</option>
+                                            <% loop $Terima %>
+                                            <option value="$ID">$Pegawai.Nama</option>
+                                            <% end_loop %>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="table-responsive">
@@ -169,11 +187,13 @@
                                         </tbody>
                                     </table>
                                 </div>
+                                <% if $RB.DraftRB.StatusID == 10 %>
                                 <div class="form-group form-material row">
                                     <div class="col-md-9">
                                         <button type="button" id="submit-po" class="btn-primary btn">Submit</button>
                                     </div>
                                 </div>
+                                <% end_if %>
                             </form>
                         </div>
                     </div>

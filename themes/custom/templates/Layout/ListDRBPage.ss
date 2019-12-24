@@ -3,14 +3,14 @@
 	<%-- panel filter --%>
 
 	<!-- Panel Select 2 -->
-    <div class="panel">
+    <div class="panel is-collapse">
       <div id="filterPanel">
         <div class="panel-heading">
           <h3 class="panel-title">
           	Filter - <span id="cur_status">$cur_status</span>
           </h3>
           <div class="panel-actions panel-actions-keep">
-            <a class="panel-action icon md-minus" aria-controls="exampleTransparentBody" aria-expanded="true" data-toggle="panel-collapse" aria-hidden="true"></a>
+            <a class="panel-action icon md-fullscreen" aria-controls="exampleTransparentBody" aria-expanded="true" data-toggle="panel-collapse" aria-hidden="true" style="font-size: 24px;"></a>
           </div>
         </div>
         <div class="panel-body container-fluid">
@@ -22,7 +22,7 @@
               <div>
                 <p>Kode Draft RB</p>
                 <div class="example">
-                	<input type="text" class="form-control" name="kodeDraftRb" id="kodeDraftRb" placeholder="Kode Draft RB">
+                	<input type="text" class="form-control" name="Kode" id="kodeDraftRb" placeholder="Kode Draft RB">
                 </div>
               </div>
               <!-- End Example Basic -->
@@ -33,7 +33,7 @@
               <div>
                 <p>Tanggal RB</p>
                 <div class="example">
-                  <input class="form-control" id="tgl-draft" name="tgl"
+                  <input class="form-control" id="tgl-draft" name="Tgl"
                   data-date-format="dd/mm/yyyy" data-now="{$Now.format('dd/MM/yyyy')}" data-plugin="datepicker"
                   type="text">
                 </div>
@@ -46,7 +46,7 @@
               <div>
                 <p>Jabatan / Cabang</p>
                 <div class="example">
-                  <select class="form-control" id="jabcab" name="pegawaipercab" data-plugin="select2" data-placeholder="Pilih jabatan/cabang" data-allow-clear="true">
+                  <select class="form-control" id="jabcab" name="PegawaiPerJabatanID" data-plugin="select2" data-placeholder="Pilih jabatan/cabang" data-allow-clear="true">
                     <option></option>
                   </select>
                 </div>
@@ -59,7 +59,7 @@
               <div>
                 <p>Pemohon</p>
                 <div class="example">
-                  <select class="form-control" id="pemohon" name="pemohonid" data-plugin="select2" data-placeholder="Pilih Pemohon" data-allow-clear="true">
+                  <select class="form-control" id="pemohon" name="PemohonID" data-plugin="select2" data-placeholder="Pilih Pemohon" data-allow-clear="true">
                     <option></option>
                   </select>
                 </div>
@@ -72,7 +72,7 @@
               <div>
                 <p>Jenis Permintaan</p>
                 <div class="example">
-                  <select class="form-control" id="jenisper" name="jenisper" data-plugin="select2" data-placeholder="Pilih Jenis Permintaan" data-allow-clear="true">
+                  <select class="form-control" id="jenisper" name="Jenis" data-plugin="select2" data-placeholder="Pilih Jenis Permintaan" data-allow-clear="true">
                     <option></option>
                     <option value="Event">Event</option>
                     <option value="Non Event">Non Event</option>
@@ -115,7 +115,7 @@
                 <p>Status</p>
                 <div class="example">
                   <div class="select2-primary">
-                    <select class="form-control" id="status" name="statusid" data-plugin="select2" data-placeholder="Pilih Status" data-allow-clear="true">
+                    <select class="form-control" id="status" name="StatusID" data-plugin="select2" data-placeholder="Pilih Status" data-allow-clear="true">
                       <option></option>
                     </select>
                   </div>

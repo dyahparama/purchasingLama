@@ -36,6 +36,7 @@ class POController extends PageController
                     "Detail" => $detail,
                     "mgeJS" => "po",
                     "NamaSupplier" => $nama,
+                    "Terima" => User::get(),
                     "Total" => $total
                 );
                 return $this->customise($data)
@@ -54,30 +55,36 @@ class POController extends PageController
     {
         Requirements::themedCSS('custom');
         // $data = array(
-        //     "RB" => DraftRB::get(),
+        //     "RB" => RB::get(),
+        //     "DraftRB" => DraftRB::get(),
         //     "Supplier" => Supplier::get(),
         //     "JenisBarang" => JenisBarang::get(),
         //     "Satuan" => Satuan::get(),
+        //     "Terima" => User::get(),
         //     "mgeJS" =>"po"
         // );
         // return $this->customise($data)
         //         ->renderWith(array(
         //             'POPage', 'Page',
         //         ));
-        if (isset($_REQUEST['id']) &&  $_REQUEST['id'] != "") {
-        }
+        // if (isset($_REQUEST['id']) &&  $_REQUEST['id'] != "") {
+
+        // }
     }
 
     public function doPostPO()
     {
         if (isset($_REQUEST['tgl-po']) && $_REQUEST['tgl-po'] != "") {
             $tgl = $_REQUEST['tgl-po'];
-
+            $drb = DraftRB::get()->byID($_REQUEST['DraftRBID'])->first();
+            $drb->StatusID = 10;
+            $drb->write();
             $po = new PO();
             $po->Tgl = AddOn::convertDateToDatabase($tgl);
             $po->Total = $_REQUEST['total-akhir-po'];
             $po->DraftRBID = $_REQUEST['DraftRBID'];
             $po->RBID = $_REQUEST['RBID'];
+            $po->TerimaLPBID = $_REQUEST['TerimaLPBID'];
             $po->NamaSupplier = $_REQUEST['nama-supplier'];
             $po->Tgl = AddOn::convertDateToDatabase($tgl);
             $idPO = $po->write();
@@ -314,7 +321,7 @@ class POController extends PageController
 
         $arr = array();
         foreach ($result as $row) {
-            if($row->DraftRB()->StatusID !=14){
+            if($row->DraftRB()->StatusID !=13){
                 $temp = array();
 
                 $idx = 0;

@@ -22,6 +22,7 @@ class PO extends DataObject {
 		'ApproveTo' => User::class,
 		'Supplier' => Supplier::class,
 		'Status' => StatusPermintaanBarang::class,
+		'TerimaLPB' => User::class,
 	];
 
 	private static $has_many = [

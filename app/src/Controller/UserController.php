@@ -60,6 +60,7 @@ class UserController extends ContentController
         $status = Auth::login($_POST);
         if ($status) {
             $user = User::get()->where("`Email` = '{$_POST['email']}'")->first();
+            // var_dump($user);die;
             // var_dump($user);
             // die;
             @session_unset('error_login');
@@ -78,7 +79,7 @@ class UserController extends ContentController
     }
 
     static function cekSession() {
-        if (isset($_SESSION['user_id'])) {
+        if (isset($_SESSION['user_id']) && !empty($_SESSION['user_id'])) {
             return true;
         }
         return false;

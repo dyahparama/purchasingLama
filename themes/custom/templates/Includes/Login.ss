@@ -10,7 +10,7 @@
                 <div class="brand">
                     <img
                         class="brand-img"
-                        src="{$BaseHref}public/_resources/themes/custom/assets/images/logo-colored.png"
+                        src="$ThemeDir/assets/images/apple-touch-icon.png"
                         alt="..."
                     />
                     <h2 class="brand-text font-size-18">Purchasing System</h2>

@@ -13,7 +13,7 @@
                 <div class="brand">
                     <img
                         class="brand-img"
-                        src="/_resources/themes/custom/assets//images/logo-colored.png"
+                        src="$ThemeDir/assets/images/apple-touch-icon.png"
                         alt="..."
                     />
                     <h2 class="brand-text font-size-18">Purchasing System</h2>
@@ -29,7 +29,7 @@
                 <fieldset>
                     <form
                         id="MemberLoginForm_LoginForm"
-                        action="dologin"
+                        action="{$BaseHref}user/dologin"
                         method="post"
                         enctype="application/x-www-form-urlencoded"
                     >

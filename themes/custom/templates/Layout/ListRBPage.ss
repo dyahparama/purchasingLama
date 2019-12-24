@@ -3,7 +3,7 @@
 	<%-- panel filter --%>
 
 	<!-- Panel Select 2 -->
-    <div class="panel">
+    <div class="panel is-collapse">
       <div id="filterPanel">
         <div class="panel-heading">
           <h3 class="panel-title">

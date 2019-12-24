@@ -8,9 +8,9 @@ class PegawaiAdmin extends ModelAdmin
         'Pegawai'
     ];
 
-    private static $url_segment = 'pegawai';
+    private static $url_segment = 'staff';
     private static $menu_icon_class = 'font-icon-tree';
-    private static $menu_title = 'Pegawai';
+    private static $menu_title = 'Staff';
 
     public function getList() 
     {

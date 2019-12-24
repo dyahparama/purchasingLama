@@ -28,6 +28,8 @@ class DraftRBController extends PageController {
 	];
 	public function init() {
 		parent::init();
+        // $this->getStrukturDrb(22);
+        // die;
 		if (!UserController::cekSession()) {
 			return $this->redirect(Director::absoluteBaseURL() . "user/login");
 		}
@@ -53,8 +55,7 @@ class DraftRBController extends PageController {
 			$cek = DraftRB::get()->where("PemohonID = '" . $_SESSION['user_id'] . "' AND ForwardToID = 0")->limit(1);
 			if (!empty($cek->count())) {
 				$cek = $cek->first();
-				$kode = $cek->Kode;
-				$dateNow = date("d/m/Y");
+				$kode = $cek->ID;
 				$Jenis = $cek->Jenis;
 				$Deadline = $this->dateFormat($cek->Deadline, "-", "/");
 				$Alasan = $cek->Alasan;
@@ -65,14 +66,17 @@ class DraftRBController extends PageController {
 				$kepalaCabang = $kepalaCabang->Cabang()->Kacab()->Pegawai()->Nama;
 				$detail = $cek->Detail();
 			} else {
-				$drafRB = DraftRB::get()->sort("ID", "DESC")->limit(1);
-				if ($drafRB->count()) {
-					$kode = "DRB-" . $this->GenerateKode($drafRB->first()->Kode);
-				} else {
-					$kode = "DRB-00001";
-				}
-				$dateNow = date("d/m/Y");
+				// $drafRB = DraftRB::get()->sort("ID", "DESC")->limit(1);
+				// if ($drafRB->count()) {
+				// 	$kode = "DRB-" . $this->GenerateKode($drafRB->first()->Kode);
+				// } else {
+				// 	$kode = "DRB-00001";
+				// }
+                $drafRB = DraftRB::create();
+                //$draftRB->StatusID=0;
+                $kode = $drafRB->write();
 			}
+            $dateNow = date("d/m/Y");
 
 			$oldData = DraftRB::get()->where("PemohonID = '" . $_SESSION['user_id'] . "' AND ForwardToID <> 0");
 			$user = User::get()->byID($_SESSION['user_id']);
@@ -184,13 +188,13 @@ class DraftRBController extends PageController {
 	//     echo json_encode($kepalaCabang->Cabang()->Kacab()->Pegawai()->Nama);
 	// }
 	public function saveMasterDRB() {
-		$drb = DraftRB::get()->where("Kode = '" . $_POST["nomor"] . "'")->limit(1);
-		if (empty($drb->count())) {
-			$drb = DraftRB::create();
-		} else {
-			$drb = $drb->first();
-		}
-		$drb->Kode = $_POST["nomor"];
+		$drb = DraftRB::get()->where("ID = '" . $_POST["nomor"] . "'")->limit(1)->first();
+		// if (empty($drb->count())) {
+		// 	$drb = DraftRB::create();
+		// } else {
+		// 	$drb = $drb->first();
+		// }
+		//$drb->Kode = $_POST["nomor"];
 		$drb->Tgl = $this->dateFormat($_POST["tgl"], "/", "-");
 		$drb->PemohonID = $_SESSION['user_id'];
 		$drb->JenisID = $_POST["jenis"];
@@ -204,7 +208,7 @@ class DraftRBController extends PageController {
 	}
 
 	public function saveDetailDRB() {
-		$drb = DraftRB::get()->where("Kode = '" . $_POST["nomor"] . "'")->limit(1);
+		$drb = DraftRB::get()->where("ID = '" . $_POST["nomor"] . "'")->limit(1);
 		$drb = $drb->first();
 
 		$detail = DraftRBDetail::create();
@@ -221,8 +225,7 @@ class DraftRBController extends PageController {
 	}
 
 	public function saveDetailFile() {
-		$dr = DraftRBDetail::get()->first();
-		$type = AddOn::mime2ext($_FILES['file']['type']);
+		
 
 		$upload = new Upload();
 		$file = Penawaran::create();
@@ -233,14 +236,23 @@ class DraftRBController extends PageController {
 
 	public function forwardTo() {
 
-		$cek = DraftRB::get()->where("Kode = '" . $_POST['kode'] . "'")->limit(1)->first();
-		$kepalaCabang = PegawaiPerJabatan::get()->byID($cek->PegawaiPerJabatan()->ID);
-
-		$kepalaCabang = $kepalaCabang->Cabang()->Kacab()->ID;
+        $drafRB = DraftRB::get()->where("Kode LIKE '%DRB%'")->sort("Kode", "DESC")->limit(1);
+                if ($drafRB->count()) {
+                 $kode = "DRB-" . $this->GenerateKode($drafRB->first()->Kode);
+                } else {
+                 $kode = "DRB-00001";
+                }
+		$cek = DraftRB::get()->byID($_POST["kode"]);
+		$Cabang = PegawaiPerJabatan::get()->byID($cek->PegawaiPerJabatan()->ID);
+		$kepalaCabang = $Cabang->Cabang()->Kacab()->ID;
+        $asisten = $Cabang->Cabang()->Approver()->ID;
 		$cek->ForwardToID = $kepalaCabang;
 		$cek->ApproveToID = $kepalaCabang;
+        $cek->AssistenApproveTo = $asisten;
 		$cek->TglSubmit = date("Y/m/d");
 		$cek->StatusID = 1;
+        $cek->Kode = $kode;
+        $cek->Notes=$_POST["note"];
 		$cek->write();
 
         if ($cek->ID) {
@@ -326,16 +338,12 @@ class DraftRBController extends PageController {
 	public function loadDraft() {
 		$drafRB = DraftRB::get()->sort("ID", "DESC")->limit(1);
 		$drb = DraftRB::get()->byID($_POST["id"]);
-		$cek = DraftRB::get()->where("PemohonID = '" . $_SESSION['user_id'] . "' AND ForwardToID = 0")->limit(1);
-		if (!empty($cek->count())) {
-			$newDrb = $cek->first();
+		$cek = DraftRB::get()->byID($_POST["idNow"]);
+		
+			$newDrb = $cek;
 			foreach ($newDrb->Detail() as $key) {
 				$key->delete();
 			}
-		} else {
-			$newDrb = DraftRB::create();
-			$newDrb->Kode = "DRB-" . $this->GenerateKode($drafRB->first()->Kode);
-		}
 		$newDrb->Tgl = date("d/m/Y");
 		$newDrb->PemohonID = $_SESSION['user_id'];
 		$newDrb->JenisID = $drb->JenisID;
@@ -384,7 +392,7 @@ class DraftRBController extends PageController {
         echo json_encode(['status' => TRUE]);
 	}
 	public function clearData() {
-		$drb = DraftRB::get()->where("Kode = '" . $_POST["nomor"] . "'")->limit(1);
+		$drb = DraftRB::get()->where("ID = '" . $_POST["nomor"] . "'")->limit(1);
 		if ($drb->count()) {
 			$drb = $drb->first();
 			$id = $drb->ID;

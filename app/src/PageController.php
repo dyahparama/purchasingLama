@@ -9,6 +9,15 @@ namespace {
 	use SilverStripe\View\Requirements;
 
 	class PageController extends ContentController {
+		// for didin
+// 		ApproveRB(String $note,Object $rb,ID $approver)
+
+// submitStaffPembelian(String $drb,Boolean $isTPS)
+
+// forwardDrb(String $note,Object $drb,ID $from,ID $to)
+
+// rejectDRB(String $note,Object $drb,ID $approver)
+
 		/**
 		 * An array of actions that can be accessed via a request. Each array element should be an action name, and the
 		 * permissions or conditions required to allow the user to access it.
@@ -76,26 +85,31 @@ namespace {
 			case 1:
 				$targetStatus = 2;
 				$target = CabangJenisBarang::get()->where("CabangID = {$idCabangRegional} AND JenisBarangID = {$idJenis}")->first()->Kadep()->ID;
+				$asisten = "0";
 				// var_dump($idCabangRegional);
 				// var_dump($idJenis);
     //             var_dump($target);
 				// die;
-				return (["user" => $target, "status" => $targetStatus]);
+				return (["user" => $target, "status" => $targetStatus, "asisten" => $asisten]);
 				break;
 			case 2:
 				$targetStatus = 3;
 				$target = $cabangRegional->Kacab()->ID;
-				return (["user" => $target, "status" => $targetStatus]);
+				$asisten = $cabangRegional->Approver()->ID;
+				return (["user" => $target, "status" => $targetStatus,"asisten" => $asisten]);
 				break;
 			case 3:
 				$targetStatus = 4;
-				$target = CabangJenisBarang::get()->where("CabangID = {$idCabangPusat} AND JenisBarangID = {$idJenis}")->first()->JenisBarang()->Kadep()->ID;
-				return (["user" => $target, "status" => $targetStatus]);
+				$jenisBarang= CabangJenisBarang::get()->where("CabangID = {$idCabangPusat} AND JenisBarangID = {$idJenis}")->first()->JenisBarang();
+				$target = $jenisBarang->Kadep()->ID;
+				$asisten = $jenisBarang->Approver()->ID;
+				return (["user" => $target, "status" => $targetStatus,"asisten" => $asisten]);
 				break;
 			case 4:
 				$targetStatus = 5;
 				$target = 0;
-				return (["user" => $target, "status" => $targetStatus]);
+				$asisten = 0;
+				return (["user" => $target, "status" => $targetStatus,"asisten" => $asisten]);
 				break;
 
 			default:
@@ -117,28 +131,6 @@ namespace {
 		public static function ApproveDrb($note, $drb, $approver) {
 			$stop = false;
 			while ($stop == false) {
-				if ($drb->Status()->ID == 5) {
-					$history = HistoryApproval::create();
-					$history->Note = $note;
-					$history->ApprovedByID = $approver;
-					$history->DraftRBID = $drb->ID;
-					$history->StatusID = 6;
-					$history->write();
-					$drb->StatusID = "6";
-					$drb->ApproveToID = "0";
-					$drb->ForwardToID = "0";
-					$drb->write();
-					$RB = RB::get()->sort("ID", "DESC")->limit(1);
-					if ($drafRB->count()) {
-						$kode = "RB-" . AddOn::GenerateKode($drafRB->first()->Kode);
-					} else {
-						$kode = "RB-00001";
-					}
-					$newRB = RB::create();
-					$newRB->Kode = $kode;
-					$newRB->write();
-					$stop = true;
-				} else {
 					$target = self::getNextTarget($drb);
 					$history = HistoryApproval::create();
 					$history->Note = $note;
@@ -149,7 +141,20 @@ namespace {
 					$drb->StatusID = $target["status"];
 					$drb->ApproveToID = $target["user"];
 					$drb->ForwardToID = $target["user"];
+					$drb->AssistenApproveToID = $target["asisten"];
 					$drb->write();
+				if ($target['status']==5||$target['status']=="5") {
+					$RB = RB::get()->sort("Kode", "DESC")->limit(1);
+					if ($RB->count()) {
+						$kode = "RB-" . AddOn::GenerateKode($RB->first()->Kode);
+					} else {
+						$kode = "RB-00001";
+					}
+					$newRB = RB::create();
+					$newRB->Kode = $kode;
+					$newRB->DraftRBID = $drb->ID;
+					$newRB->write();
+					$stop = true;
 				}
 				if (!self::cekSudahApprove($target["user"], $drb)) {
 					$stop = true;
@@ -173,9 +178,9 @@ namespace {
 			$history->Note = $note;
 			$history->ApprovedByID = $approver;
 			$history->DraftRBID = $drb->ID;
-			$history->StatusID = '14';
+			$history->StatusID = '13';
 			$history->write();
-			$drb->StatusID = '14';
+			$drb->StatusID = '13';
 			$drb->write();
 		}
 
@@ -197,16 +202,13 @@ namespace {
 				return "Staff Pembelian";
 				break;
 			case 7:
-				return "Kepala Pembelian";
-				break;
-			case 8:
 				return "Tim TPS";
 				break;
-			case 9:
-				return "Finance";
+			case 8:
+				return "Kepala Pembelian";
 				break;
-			case 10:
-				return "Pimpinan";
+			case 9:
+				return "Kepala Finance";
 				break;
 			default:
 				return "lain-lain";
@@ -214,13 +216,28 @@ namespace {
 			}
 		}
 
+		public function getPosisiTerakhir($draft_rb)
+		{
+			$history = HistoryApproval::get()->where("DraftRBID={$draft_rb->ID}")->sort("StatusID DESC")->first();
+			// foreach ($history as $value) {
+				// echo $history->StatusID . "=>" . $history->ApprovedByID."</br>";
+			// }
+
+			return $history;
+		}
+
 		public static function getTglTerima($HistoryID) {
 			$history = HistoryApproval::get()->byID($HistoryID);
+			// var_dump($history);die();
 			if ($history->Status()->ID <= 2) {
 
 				$date = $history->DraftRB()->TglSubmit;
 			} else {
 				$status = $history->Status()->ID - 1;
+				$cek = HistoryApproval::get()->where("StatusID = {$status} AND DraftRBID = {$history->DraftRB()->ID}");
+				if(!$cek->count()){
+					$status-=1;
+				}
 				$date = HistoryApproval::get()->where("StatusID = {$status} AND DraftRBID = {$history->DraftRB()->ID}")->first()->Created;
 				$date = explode(" ", $date);
 				$date = $date[0];
@@ -274,81 +291,59 @@ namespace {
 			return ["canForward" => $canForward, "canApprove" => $canApprove];
 		}
 
-		public static function getNextTargetRB($rb) {
+		public static function getNextTargetRB($drb) {
 			$siteconfig = SiteConfig::current_site_config();
-			$drb = $rb->DraftRB();
-			$total = $rb->Total;
 			$nominalTPS = $siteconfig->NominalTPS;
 			$nominalPimpinan = $siteconfig->NominalPimpinan;
 			$kepalaPusat = $drb->PegawaiPerJabatan()->Cabang()->Pusat()->Kacab()->ID;
-
+			$status = $drb->Status()->ID;
 			switch ($status) {
 			case 6:
 				$targetStatus = 7;
 				$target = $siteconfig->KepalaPembelian()->ID;
-				return (["user" => $target, "status" => $targetStatus]);
+				$asisten = $siteconfig->AsistenPembelian()->ID;
+				return (["user" => $target, "status" => $targetStatus, "asisten"=>$asisten]);
 				break;
 			case 7:
-				if ($total >= $nominalTPS) {
+				
 					$targetStatus = 8;
-					$target = "0";
-				} else {
-					$targetStatus = 9;
 					$target = $siteconfig->KepalaFinance()->ID;
-				}
-				return (["user" => $target, "status" => $targetStatus]);
+					$asisten = $siteconfig->AsistenFinance()->ID;
+				return (["user" => $target, "status" => $targetStatus,"asisten"=>$asisten]);
 				break;
 			case 8:
 				$targetStatus = 9;
-				$target = $siteconfig->KepalaFinance()->ID;
-				return (["user" => $target, "status" => $targetStatus]);
-				break;
-			case 9:
-				if ($total >= $nominalPimpinan) {
-					$targetStatus = 10;
-					$target = $kepalaPusat;
-				} else {
-					$targetStatus = 11;
-					$target = $kepalaPusat;
-				}
-
-				return (["user" => $target, "status" => $targetStatus]);
-				break;
-			case 10:
-				$targetStatus = 11;
-				$target = $kepalaPusat;
-
-				return (["user" => $target, "status" => $targetStatus]);
+				$target = 0;
+				$asisten = 0;
+				return (["user" => $target, "status" => $targetStatus,"asisten"=>$asisten]);
 				break;
 
 			default:
 				break;
 			}
 		}
-		public static function cekSudahApproveRB($nextUser, $rb) {
+		public static function cekSudahApproveRB($nextUser, $drb) {
 			$siteconfig = SiteConfig::current_site_config();
-			$drb = $rb->DraftRB();
-			$nominalTPS = $siteconfig->NominalTPS;
-			$nominalPimpinan = $siteconfig->NominalPimpinan;
+			// $nominalTPS = $siteconfig->NominalTPS;
 			$userTps = [];
 			$history = [];
-			$kepalaPusat = $drb->PegawaiPerJabatan()->Cabang()->Pusat()->Kacab()->ID;
-			if ($drb->Status()->ID == 7 && $rb->Total >= $nominalTPS) {
-				$timTps = Pegawai::get()->where("IsTPS = 1");
-				$historyRB = HistoryApproval::get()->where("Status > 6 AND Status < 10");
-				foreach ($timTps as $key) {
-					$userTps[] = $key->User()->ID;
-				}
-				foreach ($historyRB as $key) {
-					$history[] = $key->ApprovedBy()->ID;
-				}
-				$irisan = array_intersect($history, $userTps);
-				if (count($irisan)) {
-					return true;
-				}
-			}
-			$history = HistoryApproval::get()->where("Status > 6 AND Status < 10")->where("ApprovedByID = {$nextUser} AND DraftRBID = $drb->ID")->count();
-			if (empty($history)) {
+			// $kepalaPusat = $drb->PegawaiPerJabatan()->Cabang()->Pusat()->Kacab()->ID;
+			// if ($drb->Status()->ID == 6 && $rb->Total >= $nominalTPS) {
+			// 	$timTps = Pegawai::get()->where("IsTPS = 1");
+			// 	$historyRB = HistoryApproval::get()->where("Status > 6 AND Status < 10");
+			// 	foreach ($timTps as $key) {
+			// 		$userTps[] = $key->User()->ID;
+			// 	}
+			// 	foreach ($historyRB as $key) {
+			// 		$history[] = $key->ApprovedBy()->ID;
+			// 	}
+			// 	$irisan = array_intersect($history, $userTps);
+			// 	if (count($irisan)) {
+			// 		return true;
+			// 	}
+			// }
+			$history = HistoryApproval::get()->where("StatusID > 6 AND StatusID < 10")->where("ApprovedByID = {$nextUser} AND DraftRBID = $drb->ID")->count();
+			if (empty($history)||$nextUser == 0 ||$nextUser == "0") {
 				return false;
 			}
 			return true;
@@ -368,6 +363,7 @@ namespace {
 				$drb->StatusID = $target["status"];
 				$drb->ApproveToID = $target["user"];
 				$drb->ForwardToID = $target["user"];
+				$drb->AssistenApproveToID = $target["asisten"];
 				$drb->write();
 				if (!self::cekSudahApproveRB($target["user"], $drb)) {
 					$stop = true;
@@ -375,10 +371,72 @@ namespace {
 			}
 		}
 
+		public static function submitStaffPembelian($drb,$isTPS) {
+			$siteconfig = SiteConfig::current_site_config();
+				if($isTPS){
+				$drb->StatusID = "6";
+				$drb->ApproveToID = "0";
+				$drb->ForwardToID = "0";
+				}else{
+				$drb->StatusID = "7";
+				$drb->ApproveToID = $siteconfig->KepalaPembelian()->ID;
+				$drb->ForwardToID = $siteconfig->KepalaPembelian()->ID;
+				$drb->AssistenApproveTo = $siteconfig->AsistenPembelian()->ID;
+				}
+				$drb->write();
+				
+			}
+
 		public function getUsername() {
 			$user = User::get()->byID($_SESSION['user_id']);
 			$name = $user->Pegawai()->Nama;
 			return $name;
+		}
+
+		public function getStrukturDrb($drb) {
+			$id = $drb;
+			$drb=DraftRB::get()->byID($drb);
+
+			$jenis = DraftRBDetail::get()->where("DraftRBID = {$id}")->first()->Jenis();
+			$jenisID = $jenis->ID;
+			$jenisNama = $jenis->Nama;
+			$kadepPusatNama = $jenis->Kadep()->Pegawai()->Nama;
+			$kadepPusatID = $jenis->Kadep()->ID;
+			$idppc = $drb->PegawaiPerJabatan()->ID;
+			$pegawaiPerJabatan = PegawaiPerJabatan::get()->byID($idppc);
+			$pemohon = $pegawaiPerJabatan->Pegawai()->Nama;
+			$pemohonID = $pegawaiPerJabatan->Pegawai()->User()->ID;
+			$cabangLokal = $pegawaiPerJabatan->Cabang();
+			$cabangRegion = $pegawaiPerJabatan->Cabang()->Regional();
+			$cabangPusat = $pegawaiPerJabatan->Cabang()->Pusat();
+			$cabangRegionID = $cabangRegion->ID; 
+			$kacabLokalID = $cabangLokal->Kacab()->ID;
+			$kacabLokalNama = $cabangLokal->Kacab()->Pegawai()->Nama;
+			// var_dump([$cabangRegionID,$jenisID]);
+			// die;
+			$kadepRegion = CabangJenisBarang::get()->where("JenisBarangID = {$jenisID} AND CabangID = {$cabangRegionID}")->first();
+			$kadepNama = $kadepRegion->Kadep()->Pegawai()->Nama;
+			$kadepID = $kadepRegion->Kadep()->ID;
+			$kacabRegion = $cabangRegion->Kacab();
+			$kacabRegionID = $kacabRegion->ID;
+			$kacabRegionNama =  $kacabRegion->Pegawai()->Nama;
+			//$kadepPusat = Jenis 
+			//header("Content-Type:Application/json");
+			echo "<pre>";
+			  var_dump([
+				"jenisID"=> $jenisID,
+				"jenisNama"=>$jenisNama,
+				"kepalaCabangID"=>$kacabLokalID,
+				"kepalaCabangNama"=>$kacabLokalNama,
+				"kadepRegionID"=>$kadepID,
+				"kadepRegionNama"=>$kadepNama,
+				"kacabRegionID"=>$kacabRegionID,
+				"kadepPusatID"=>$kadepPusatID,
+				"kadepPusatNama"=>$kadepPusatNama,
+				"pemohonID"=>$pemohonID,
+				"PemohonNama"=>$pemohon
+			]);
+			  echo "</pre>";
 		}
 
 		public function getTotalTask() {

@@ -11,6 +11,7 @@ use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\HiddenField;
 use SilverStripe\Forms\ReadonlyField;
+use SilverStripe\Forms\CheckboxField;
 use SilverStripe\Forms\TabSet;
 use SilverStripe\AssetAdmin\Forms\UploadField;
 use SilverStripe\Forms\RequiredFields;
@@ -42,7 +43,17 @@ class Supplier extends DataObject
         'Alamat' => 'Varchar(255)',
         'NoTelp' => 'Varchar(15)',
         'NoWa' => 'Varchar(15)',
-        'TglExpKontrak' => "Date"
+        'TglExpKontrak' => "Date",
+        'IsLangganan' => "Boolean",
+        'NIB' => "Varchar(100)",
+        'Alamat' => 'Text',
+        'PenanggungJawab' => 'Varchar(100)',
+        'NamaBank' => 'Varchar(100)',
+        'NomorRek' => 'Varchar(100)',
+        'NamaRek' => 'Varchar(100)',
+        'NPWP' => 'Varchar(100)',
+        'NamaNPWP' => 'Varchar(100)'
+
     ];
     // private static $has_many = [
     //     'LampiranKontrak' => LampiranKontrakFile::class,
@@ -106,12 +117,22 @@ class Supplier extends DataObject
         $fields->addFieldsToTab("Root.Main", new TextAreaField("Alamat", "Alamat"));
         $fields->addFieldsToTab("Root.Main", new TextField("NoTelp", "No. HP"));
         $fields->addFieldsToTab("Root.Main", new TextField("NoWa", "No. Wa"));
-        $fields->addFieldsToTab("Root.Main", new UploadField("LampiranKontrak", "Lampiran Kontra"));
 
+        $fields->addFieldsToTab("Root.Main", new TextField("NIB", "NIB"));
+        $fields->addFieldsToTab("Root.Main", new TextAreaField("PenanggungJawab", "Penanggung Jawab"));
+        $fields->addFieldsToTab("Root.Main", new TextField("NamaBank", "Nama Bank"));
+        $fields->addFieldsToTab("Root.Main", new TextField("NomorRek", "No. Rekening"));
+        $fields->addFieldsToTab("Root.Main", new TextField("NamaRek", "Nama Pemilik Rekening"));
+        $fields->addFieldsToTab("Root.Main", new TextField("NPWP", "NPWP"));
+        $fields->addFieldsToTab("Root.Main", new TextField("NamaNPWP", "Nama Pemilik NPWP"));
+
+        $fields->addFieldsToTab("Root.Main", new UploadField("LampiranKontrak", "Lampiran Kontrak"));
         $tgl = new DateField("TglExpKontrak", "Tanggal Expired Kontrak");
         $tgl->setDatepickerFormat('dd/MM/yyyy');
         // $tgl->setDateFormat('dd/MM/yyyy');
         $fields->addFieldsToTab("Root.Main", $tgl);
+
+        $fields->addFieldToTab("Root.Main", new CheckboxField('IsLangganan', 'Supplier Langganan'));
 
         $grid = new GridField(
             'BarangGrid',
@@ -155,5 +176,12 @@ class Supplier extends DataObject
         $fields->addFieldsToTab("Root.Main", $grid);
 
         return $fields;
+    }
+
+    public function onBeforeWrite() {
+        parent::onBeforeWrite();
+        if (!$this->ID) {
+            $this->Kode = AddOn::createKode("Supplier", "Supplier");
+        }
     }
 }

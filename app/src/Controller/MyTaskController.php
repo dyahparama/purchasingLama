@@ -47,7 +47,7 @@ class MyTaskController extends PageController {
 		$jumlahlpb = 0;
 		// print_r($rb);
 		foreach ($rb as $key) {
-			if ($key->DraftRB()->ForwardToID == $pegawainya->ID && $key->DraftRB()->Status()->ID != 11) {
+			if (in_array(strtoupper($jabatannya), $jabatanpegawai) && in_array(strtoupper($departemennya), $departemenpegawai) && $key->DraftRB()->Status()->ID == 5) {
 				$temp1['Tgl'] = date('d/m/Y', strtotime($key->Tgl));
 				$temp1['Kode'] = $key->Kode;
 				$temp1['Deadline'] = date('d/m/Y', strtotime($key->DraftRB()->Deadline));
@@ -64,7 +64,58 @@ class MyTaskController extends PageController {
 				$show1->push($temp1);
 				$jumlahrb++;
 			}
-			if ($key->DraftRB()->Status()->ID == 11 && $shownya == 1) {
+			else if ($key->DraftRB()->Status->ID == 6 && $pegawainya->Pegawai()->IsTPS == 1) {
+				$temp1['Tgl'] = date('d/m/Y', strtotime($key->Tgl));
+				$temp1['Kode'] = $key->Kode;
+				$temp1['Deadline'] = date('d/m/Y', strtotime($key->DraftRB()->Deadline));
+				$temp1['Atasan'] = $key->DraftRB()->PegawaiPerJabatan()->Jabatan()->Nama . " / " . $key->DraftRB()->PegawaiPerJabatan()->Cabang()->Nama . " / " . $key->DraftRB()->PegawaiPerJabatan()->Cabang()->Kacab()->Pegawai()->Nama;
+				$temp1['Pemohon'] = $key->DraftRB()->Pemohon()->Pegawai()->Nama;
+				$temp1['Jenis'] = $key->DraftRB()->Jenis;
+				$detail = DraftRBDetail::get()->where('DraftRBID = ' . $key->DraftRB()->ID)->limit(1);
+				foreach ($detail as $key1) {
+					$temp1['JenisBarang'] = $key1->Jenis()->Nama;
+					$temp1['Deskripsi'] = $key1->Deskripsi;
+				}
+				$temp1['Status'] = $key->DraftRB()->Status()->Status;
+				$temp1['view_link'] = 'rb/ApprovePage/' . $key->ID;
+				$show1->push($temp1);
+				$jumlahrb++;
+			}
+			else if (($key->DraftRB()->ForwardToID == $pegawainya->ID || $key->DraftRB()->AssistenApproveToID == $pegawainya->ID) && $key->DraftRB()->Status()->ID == 7) {
+				$temp1['Tgl'] = date('d/m/Y', strtotime($key->Tgl));
+				$temp1['Kode'] = $key->Kode;
+				$temp1['Deadline'] = date('d/m/Y', strtotime($key->DraftRB()->Deadline));
+				$temp1['Atasan'] = $key->DraftRB()->PegawaiPerJabatan()->Jabatan()->Nama . " / " . $key->DraftRB()->PegawaiPerJabatan()->Cabang()->Nama . " / " . $key->DraftRB()->PegawaiPerJabatan()->Cabang()->Kacab()->Pegawai()->Nama;
+				$temp1['Pemohon'] = $key->DraftRB()->Pemohon()->Pegawai()->Nama;
+				$temp1['Jenis'] = $key->DraftRB()->Jenis;
+				$detail = DraftRBDetail::get()->where('DraftRBID = ' . $key->DraftRB()->ID)->limit(1);
+				foreach ($detail as $key1) {
+					$temp1['JenisBarang'] = $key1->Jenis()->Nama;
+					$temp1['Deskripsi'] = $key1->Deskripsi;
+				}
+				$temp1['Status'] = $key->DraftRB()->Status()->Status;
+				$temp1['view_link'] = 'rb/ApprovePage/' . $key->ID;
+				$show1->push($temp1);
+				$jumlahrb++;
+			}
+			else if (($key->DraftRB()->ForwardToID == $pegawainya->ID || $key->DraftRB()->AssistenApproveToID == $pegawainya->ID) && $key->DraftRB()->Status()->ID == 8) {
+				$temp1['Tgl'] = date('d/m/Y', strtotime($key->Tgl));
+				$temp1['Kode'] = $key->Kode;
+				$temp1['Deadline'] = date('d/m/Y', strtotime($key->DraftRB()->Deadline));
+				$temp1['Atasan'] = $key->DraftRB()->PegawaiPerJabatan()->Jabatan()->Nama . " / " . $key->DraftRB()->PegawaiPerJabatan()->Cabang()->Nama . " / " . $key->DraftRB()->PegawaiPerJabatan()->Cabang()->Kacab()->Pegawai()->Nama;
+				$temp1['Pemohon'] = $key->DraftRB()->Pemohon()->Pegawai()->Nama;
+				$temp1['Jenis'] = $key->DraftRB()->Jenis;
+				$detail = DraftRBDetail::get()->where('DraftRBID = ' . $key->DraftRB()->ID)->limit(1);
+				foreach ($detail as $key1) {
+					$temp1['JenisBarang'] = $key1->Jenis()->Nama;
+					$temp1['Deskripsi'] = $key1->Deskripsi;
+				}
+				$temp1['Status'] = $key->DraftRB()->Status()->Status;
+				$temp1['view_link'] = 'rb/ApprovePage/' . $key->ID;
+				$show1->push($temp1);
+				$jumlahrb++;
+			}
+			if ($key->DraftRB()->Status()->ID == 9 && $shownya == 1) {
 				$temp2['ID'] = $key->ID;
 				$temp2['Tgl'] = date('d/m/Y', strtotime($key->Tgl));
 				$temp2['Kode'] = $key->Kode;
@@ -88,7 +139,7 @@ class MyTaskController extends PageController {
 			}
 		}
 		foreach ($draftrbnya as $key) {
-			if ($key->Status()->ID <= 6) {
+			if ($key->Status()->ID <= 5) {
 				$temp['ID'] = $key->ID;
 				$temp['Tgl'] = date('d/m/Y', strtotime($key->Tgl));
 				$temp['Kode'] = $key->Kode;
@@ -109,17 +160,19 @@ class MyTaskController extends PageController {
 			}
 		}
 		foreach ($lpbnya as $key5) {
-			if ($key5->DraftRB()->StatusID != 14 && $shownya == 1) {
-				$temp3['ID'] = $key->ID;
-				$temp3['KodePO'] = $key5->Kode;
-				$temp3['KodeRB'] = $key5->RB()->Kode;
-				$temp3['KodeDraftRB'] = $key5->DraftRB()->Kode;
-				$temp3['Tgl'] = date('d/m/Y', strtotime($key5->Tgl));
-				$temp3['Suplier'] = $key5->NamaSupplier;
-				// $temp3['isi'] = $key5->GetPO($key->ID);
-				$temp3['view_link'] = 'lpb/ApprovePage/' . $key5->ID;
-				$show3->push($temp3);
-				$jumlahlpb++;
+			if ($key5->DraftRB()->StatusID != 13 && $shownya == 1) {
+				if($key5->DraftRB()->ForwardToID == $pegawainya->ID){
+					$temp3['ID'] = $key->ID;
+					$temp3['KodePO'] = $key5->Kode;
+					$temp3['KodeRB'] = $key5->RB()->Kode;
+					$temp3['KodeDraftRB'] = $key5->DraftRB()->Kode;
+					$temp3['Tgl'] = date('d/m/Y', strtotime($key5->Tgl));
+					$temp3['Suplier'] = $key5->NamaSupplier;
+					// $temp3['isi'] = $key5->GetPO($key->ID);
+					$temp3['view_link'] = 'lpb/ApprovePage/' . $key5->ID;
+					$show3->push($temp3);
+					$jumlahlpb++;
+				}
 			}
 		}
 		// echo "<pre>";
@@ -127,7 +180,7 @@ class MyTaskController extends PageController {
 		// die();
 		// $total = $this->TotalTask();
 		// echo $pegawainya->ID;
-		echo $shownya;
+		// echo "Internetmu lemot bos";
 		$data = array(
 			"draftrbnya" => $show,
 			'shownya' => $shownya,

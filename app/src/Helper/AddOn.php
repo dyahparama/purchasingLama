@@ -8,6 +8,11 @@ use SilverStripe\Control\Director;
 
 class AddOn
 {
+    public static function convertDate($date, $format = 'Y-m-d')
+    {
+        $date = date('Y-m-d', strtotime(str_replace('/', '-', $date)));
+        return $date;
+    }
     /**
      * Convert obj to Array
      */
@@ -115,7 +120,7 @@ class AddOn
         return $arr;
     }
 
-    public static function groupConcat($data = [], $colNameRelation = '', $sep = ', ')
+    public static function groupConcat($data = [], $colNameRelation = '', $sep = ', ', $isUnique = FALSE)
     {
         $arr = [];
         foreach ($data as $row) {
@@ -139,6 +144,9 @@ class AddOn
                 $arr[] = $row->$colNameRelation;
             }
         }
+        if ($isUnique)
+            $arr = array_keys(array_flip($arr));
+        
         return implode($sep, $arr);
     }
 

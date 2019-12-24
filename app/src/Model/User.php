@@ -77,7 +77,10 @@ class User extends DataObject
                 $tempArr[] = $val->PegawaiID;
             }
             $strArr = implode(', ', $tempArr);
-            $user = $user->where("ID NOT IN ({$strArr})");
+            if ($strArr != "")
+                $user = $user->where("ID NOT IN ({$strArr})");
+            else
+                $user = $user;
         }
         // var_dump();die;
         // $user = User::get()->innerJoin("pegawai", "\"pegawai\".\"ID\" <> \"user\".\"PegawaiID\"");

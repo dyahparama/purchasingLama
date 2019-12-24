@@ -12,11 +12,12 @@
 					<!-- Example Horizontal Form -->
 					<div class="example-wrap">
 						<div class="example">
+						<div id="draf-rb-id" data-id="{$kode}"></div>
 							<form id="form-drb" action="javascript:void(0);">
 								<div class="form-group form-material row">
 									<label class="col-md-3 col-form-label">*Nomor Draft RB :</label>
 									<div class="col-md-3">
-										<input class="form-control" id="nomor" name="nomor" type="text" value="{$kode}"
+										<input class="form-control" id="nomor" name="nomor" type="text" value="Auto Generate"
 											readonly autocomplete="off">
 									</div>
 									<div class="col-md-3">
@@ -296,7 +297,7 @@
 									<label class="col-md-3 col-form-label">Note :</label>
 									<div class="col-md-9">
 										<div class="input-group">
-											<textarea class="form-control"
+											<textarea id="note-master" class="form-control"
 												name="note"><% if $note %>$note<% end_if %></textarea>
 										</div>
 									</div>

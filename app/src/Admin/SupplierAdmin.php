@@ -10,7 +10,7 @@ class SupplierAdmin extends ModelAdmin
 
     private static $url_segment = 'Supplier';
     private static $menu_icon_class = 'font-icon-tree';
-    private static $menu_title = 'Supplier Langganan';
+    private static $menu_title = 'Supplier';
 
     public function getList()
     {

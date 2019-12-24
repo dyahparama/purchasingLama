@@ -1,6 +1,8 @@
 let baseURL=$("#baseURL").data("url");
 var uri_segment = "rb";
 
+var penawaranRow = 0
+
 $('.add-detail').on('click', function () {
     let parent = $(this).parent().parent()
     parent.find('tbody').append('<tr>' + parent.find('tr.table-row:last').html() + '</tr>')
@@ -13,10 +15,10 @@ $('.add-detail').on('click', function () {
         highlight: true,
         minLength: 1
     },
-        {
-            name: 'states',
-            source: substringMatcher(states)
-        }
+    {
+        name: 'states',
+        source: substringMatcher(states)
+    }
     )
 })
 
@@ -27,11 +29,11 @@ $(document).on('click', '.close-modal', function(){
 $(".add-detail").click(function (e) {
     $(".select2-container").addClass("z-index-1");
     $(".select2-modal")
-        .next()
-        .removeClass("z-index-1");
+    .next()
+    .removeClass("z-index-1");
     $(".select2-modal")
-        .next()
-        .css("width", "100%");
+    .next()
+    .css("width", "100%");
 });
 
 $(".close-modal").click(function (e) {
@@ -78,8 +80,8 @@ $(document).on('change', '.supplier-nama', function(){
     if ($(this).val()) {
         let parent = $(this).parent().parent().parent()
         $.ajax({
-            url: baseURL+uri_segment+"/rb/getKodeSupplier",
-            type: "post", //form method
+            url: baseURL+uri_segment+"/getKodeSupplier",
+            type: "get", //form method
             data: {
                 nama: $(this).val()
             },
@@ -141,7 +143,85 @@ $('.typeahead').typeahead({
     highlight: true,
     minLength: 1
 },
-    {
-        name: 'states',
-        source: substringMatcher(states)
-    });
+{
+    name: 'states',
+    source: substringMatcher(states)
+});
+
+$(document).on('click', '.radio-respond', function() {
+    if ($(this).val() == "forward"){
+        $('#forward-to').css('display', '')
+    } else {
+        $('#forward-to').css('display', 'none')
+    }
+})
+
+$('.add-detail-penawaran').on('click', function () {
+    penawaranRow += 1
+    let parent = $(this).parent().parent()
+    parent.find('tbody').append('<tr>' + parent.find('tr:last').html() + '</tr>')
+    parent.find('tr:last td').each(function () {
+        $(this).val("")
+    })
+    parent.find('.row-total').appendTo(parent.find('tbody'))
+    parent.find('.id_tes:last').val(penawaranRow)
+    html = '<div class="penawaran-file-div"'
+    html += '<button class="btn btn-danger penawaran-file-button btn-xs waves-effect waves-classic modal-select2-show waves-effect waves-classic" type="button" disabled="">'
+    html += 'Delete'
+    html += '</button>'
+    html += '<input class="penawaran-file first-only" type="file" name="penawaran_file_' + penawaranRow + '[]">'
+    html += '</div>'
+    $('.penawaran-file-td:last .td-input-file').html(html)
+})
+
+$(document).on('click', '.delete-detail-penawaran', function () {
+    // alert($('#table-body tr').length)
+    let parent = $(this).parent().parent().parent().parent()
+    // console.log(parent.html())
+    if (parent.find('tbody tr').length > 1) {
+        // alert("Detailsss")
+        let c = confirm("Apakah yakin akan menghapus data?")
+        if (c)
+            $(this).parent().parent().remove()
+    }
+    else {
+        alert("Detail harus ada")
+    }
+})
+
+
+$(document).on('change', '.penawaran-file', function() {
+    if ($(this).val() && $(this).hasClass('first-only')) {
+        let html = '<div class="penawaran-file-div"><button class="btn btn-danger btn-xs waves-effect waves-classic modal-select2-show waves-effect waves-classic" type="button" disabled>Delete</button>'
+        html += '<input class="penawaran-file first-only" type="file" name="penawaran_file_'+penawaranRow+'[]"></div>'
+        
+        let parent_td = $(this).parent().parent()
+        let parent_div = $(this).parent()
+
+        $(this).removeClass('first-only')
+        parent_td.find(".penawaran-file-div").each(function() {
+            $(this).find('button').removeAttr('disabled')
+        })
+
+        parent_td.append(html)
+    }
+})
+
+$(document).on('click', '.penawaran-file-button', function(){
+    let parent_div = $(this).parent()
+    parent_div.remove()
+})
+
+// $('#penawaran-file').filepond({
+//     allowMultiple: true,
+//     server: {
+//         process: 'rb/doSubmitRB'
+//     }
+// })
+
+// $(document).find('#form-rb').dropzone({
+//     autoProcessQueue: false,
+//     parallelUploads: 10,
+//     addRemoveLinks: true,
+//     // url: "/purchasing/rb/doSubmitRB"
+// })

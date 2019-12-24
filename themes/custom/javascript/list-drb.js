@@ -31,9 +31,25 @@ $(document).ready(function(){
     $('#form_filter').submit(function(evt, ui){
     	evt.preventDefault();
     	$(document).find('#filterPanel').parent().addClass('is-collapse');
+		$(document).find('.panel-action').removeClass('md-minus').addClass('md-fullscreen');	
+
     	params = $(this).serialize();
 
     	table.ajax.reload();
+    })
+
+    $(document).on('click', '.panel-action', function(evt, ui){
+    	var is_collapse = $(document).find('#filterPanel').parent().hasClass('is-collapse');
+    	var panel_action = $(document).find('.panel-action');
+    	if (is_collapse) {
+    		// alert('is collapse')
+    		panel_action.removeClass('md-minus').addClass('md-fullscreen');	
+	    	$(document).find('#filterPanel').parent().addClass('is-collapse');
+    	}else{
+    		// alert('is maximize')
+    		panel_action.removeClass('md-fullscreen').addClass('md-minus');	
+	    	$(document).find('#filterPanel').parent().removeClass('is-collapse');
+    	}
     })
 
 	var substringMatcher = function(strs) {
@@ -60,16 +76,16 @@ $(document).ready(function(){
 
 	// ---- list data ---
 	/**get kdrb**/
-	var kdrb = getData('kddrb');
+	var kdrb = getData('kddrb', cur_status);
 
 	/**get cabang**/
-	var cabang = getData('cbg');
+	var cabang = getData('cbg', cur_status);
 
 	/**get pemohon**/
 	var pemohon = getData('pemohon', cur_status);
 
 	/**get jenis barang**/
-	var jbarang = getData('jbarang');
+	var jbarang = getData('jbarang',cur_status);
 
 	/**get status**/
 	var mstatus = getData('mstatus');
@@ -96,11 +112,30 @@ $(document).ready(function(){
 
 
 	/**fill pemohon dropdown**/
-	$.each(pemohon, function(idx, data){
-		var newOption = new Option(data, idx, false, false);
-		$('#pemohon').append(newOption).trigger('change');
-		id_pemohon = idx;
-	});
+	if (cur_status == "Teams") {
+		var select = '';
+		$.each(pemohon, function(idx, data){
+			select += '<optgroup label="' + idx + '">';
+			
+			var option = '';
+			$.each(data, function(idx_pemohon, data_pemohon){
+		        option += '<option value="' + idx_pemohon + '">' + data_pemohon + '</option>';
+			});
+
+			select += option;
+			select += '</optgroup>';
+		});
+
+		$('#pemohon').select2('destroy');
+		$('#pemohon').append(select);
+		$('#pemohon').select2();
+	}else{
+		$.each(pemohon, function(idx, data){
+			var newOption = new Option(data, idx, false, false);
+			$('#pemohon').append(newOption).trigger('change');
+			id_pemohon = idx;
+		});
+	}
 
 	if (cur_status == 'Me') {
 		$('#pemohon').val(id_pemohon).trigger('change');
@@ -127,8 +162,8 @@ $(document).ready(function(){
             'zeroRecords': 'Maaf data tidak ditemukan',
             'info': 'Menampilkan halaman _PAGE_ dari _PAGES_ halaman',
             'infoEmpty': 'Tidak ada data',
-            'processing':  'Sedang memproses permintaan anda...',
-            // 'processing':  '<img src="{$ThemeDir}/img/spinner.gif"></img>',
+            // 'processing':  'Sedang memproses permintaan anda...',
+            'processing':  '<img src="' + baseURL + 'public/_resources/themes/custom/images/spinner.gif"></img>',
             'infoFiltered': '(filter dari _MAX_ total data)',
             'searchPlaceholder': 'Cari data ?',
             'paginate': {

@@ -56,6 +56,9 @@ class Pegawai extends DataObject
     // private static $many_many = [
     //     'Departemens' => Departemen::class,
     // ];
+    private static $plural_name = "Staff";
+    private static $singular_name = "Staff";
+
     private static $has_many = [
         'Jabatans' => PegawaiPerJabatan::class,
     ];

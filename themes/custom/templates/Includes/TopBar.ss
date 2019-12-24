@@ -73,7 +73,7 @@
 			<a class="nav-link navbar-avatar" data-toggle="dropdown" href="#" aria-expanded="false"
 			  data-animation="scale-up" role="button">
 			  <span class="avatar avatar-online">
-				<img src="/_resources/themes/custom/assets/images/no-profile.png" alt="...">
+				<img src="{$ThemeDir}/assets/images/no-profile.png" alt="...">
 				<i></i>
 			  </span>
 			</a>

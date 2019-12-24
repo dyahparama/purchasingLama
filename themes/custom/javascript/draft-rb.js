@@ -1,7 +1,7 @@
 $("#penawaran").dropzone({
     autoProcessQueue: false,
     parallelUploads: 10,
-    addRemoveLinks: true
+    addRemoveLinks: true,
     // renameFile:function(fileName){
     //   return new Date().getTime();
     // }
@@ -32,6 +32,7 @@ $(document).ready(function() {
     });
 
     $("#add-detail").click(function(e) {
+        let drbID = $("#draf-rb-id").data("id");
         let pass = true;
         let data = $("#form-drb").serializeArray();
         data.forEach(element => {
@@ -39,6 +40,8 @@ $(document).ready(function() {
                 pass = false;
             }
         });
+        data[0].value = drbID;
+        console.log(data);
         if (pass) {
             $("#exampleNiftyFadeScale").modal("show");
             $(".select2-container").addClass("z-index-1");
@@ -51,7 +54,7 @@ $(document).ready(function() {
             $.ajax({
                 url: baseURL+"draf-rb/saveMasterDRB",
                 type: "post", //form method
-                data: $("#form-drb").serialize(),
+                data: data,
                 dataType: "json",
                 beforeSend: function() {},
                 success: function(result) {},
@@ -86,7 +89,7 @@ $(document).ready(function() {
                 "supplier-lokal": $("#supplier-lokal").val(),
                 spesifikasi: $("#spesifikasi").val(),
                 "kode-inventaris": $("#kode-inventaris").val(),
-                nomor: $("#nomor").val()
+                nomor: $("#draf-rb-id").data("id"),
             };
             let newId;
             $.ajax({
@@ -99,6 +102,9 @@ $(document).ready(function() {
                 },
                 success: function(result) {
                     newId = result;
+                     if ($(".dz-details").length==0) {
+                        location.reload();
+                    }
                 },
                 complete: function(result) {
                     Dropzone.forElement("#penawaran").on("sending", function(
@@ -110,19 +116,18 @@ $(document).ready(function() {
                     });
                     Dropzone.forElement("#penawaran").processQueue();
 
-                    if (!Dropzone.forElement("#penawaran").getQueuedFiles().length) {
-                        location.reload();
-                    }
+                    
                     Dropzone.forElement("#penawaran").on(
                         "queuecomplete",
                         function(file) {
-
                             location.reload();
                         }
                     );
+
                 },
                 error: function(xhr, Status, err) {}
             });
+
         } else {
             alert("data belum lengkap");
         }
@@ -131,7 +136,8 @@ $(document).ready(function() {
         var elem = $(this).prop('disabled', true);
         if ($(".data-detail").length) {
             let data = {
-                kode: $("#nomor").val()
+                kode: $("#draf-rb-id").data("id"),
+                note:$("#note-master").val()
             };
             $.ajax({
                 url: baseURL+"draf-rb/forwardTo",
@@ -140,20 +146,10 @@ $(document).ready(function() {
                 dataType: "json",
                 beforeSend: function() {},
                 success: function(result) {
-                    var datas = JSON.parse(result);
-                    // alert(baseURL+"list-drb/index/Me");
-                    //location.reload();
-                    if (datas.msg) {
                         window.location.href = baseURL+"list-drb/index/Me";
-                    }
                 },
                 complete: function(result) {
-                    var datas = result.responseText;
-                    // alert(baseURL+"list-drb/index/Me");
-                    //location.reload();
-                    if (datas.msg) {
-                        window.location.href = baseURL+"list-drb/index/Me";
-                    }  
+                        window.location.href = baseURL+"list-drb/index/Me";  
                     // window.location.href = baseURL+"list-drb/index/Me";
                     //location.reload();
                 },
@@ -224,15 +220,16 @@ $(document).ready(function() {
                 url: baseURL+"draf-rb/loadDraft",
                 type: "post", //form method
                 data: {
-                    id: $("#draft-lama").val()
+                    id: $("#draft-lama").val(),
+                    idNow:$("#draf-rb-id").data("id")
                 },
                 dataType: "json",
                 beforeSend: function() {},
                 success: function(result) {
-                    location.reload();
+                   location.reload();
                 },
                 complete: function(result) {
-                    location.reload();
+                   location.reload();
                 },
                 error: function(xhr, Status, err) {}
             });
@@ -277,7 +274,7 @@ $(document).ready(function() {
             });
         });
         $("#clear-data").click(function (e) { 
-            let nomor = $("#nomor").val();
+            let nomor = $("#draf-rb-id").data("id");
             data = {
                 nomor:nomor
             };

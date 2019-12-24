@@ -121,7 +121,7 @@
 													<a href="{$Link}$FileFileName">$Name</a><% end_loop %></td>
 												<td>$Spesifikasi</td>
 												<td>$KodeInventaris</td>
-												<% if $canApprove %>
+												<% if $Top.canApprove %>
 												<td>
 													<button data-target="#editModal-{$ID}" data-toggle="modal"
 														class="btn btn-info btn-xs waves-effect waves-classic modal-select2-show"
@@ -145,6 +145,12 @@
 														</div>
 														<div class="modal-body">
 															<div class="example">
+																<!-- <div class="form-group form-material row">
+																	<label class="col-md-3 col-form-label">Jumlah :</label>
+																	<div class="col-md-9">
+																		<input name="add-detail-form-3" id="jumlah-{$ID}" class="form-control" type="number" value="$Jumlah" autocomplete="off">
+																	</div>
+																</div> -->
 																<div class="form-group form-material row">
 																	<label class="col-md-3 col-form-label">Spesifikasi
 																		Barang :</label>
@@ -234,45 +240,7 @@
 					</div>
 					<!-- End Example Horizontal Form -->
 				</div>
-				<div class="col-md-12 col-lg-12">
-					<h5>History Approval</h5>
-				</div>
-				<div class="col-md-12 col-lg-12">
-					<div class="example table-responsive">
-						<table class="table table-striped">
-							<thead>
-								<tr>
-									<th>Nama</th>
-									<th>Jabatan</th>
-									<th>Tanggal Diterima</th>
-									<th>Tanggal Approve</th>
-									<th>Notes</th>
-								</tr>
-							</thead>
-							<tbody>
-								<% loop $history %>
-								<tr>
-									<td>
-										$ApprovedBy.Pegawai.Nama
-									</td>
-									<td>
-										$Top.getJabatanFromStatus($Status.ID)		
-									</td>
-									<td>
-										$Top.getTglTerima($ID)
-									</td>
-									<td>
-										$Top.getTglApprove($Created)
-									</td>
-									<td>
-										$Note
-									</td>
-								</tr>
-								<% end_loop %>
-							</tbody>
-						</table>
-					</div>
-				</div>
+				<% include HistoryApproval %>
 			</div>
 		</div>
 	</div>

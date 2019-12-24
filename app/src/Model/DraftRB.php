@@ -25,6 +25,7 @@ class DraftRB extends DataObject
         'Pemohon' => User::class,
         'ForwardTo'=> User::class,
         'ApproveTo'=> User::class,
+        'AssistenApproveTo'=> User::class,
         'PegawaiPerJabatan' => PegawaiPerJabatan::class,
         'Status' => StatusPermintaanBarang::class
     ];
