@@ -216,6 +216,9 @@
 										<a type="button" class="btn btn-default viewlpb" shownya='0' idnya="$ID"><i class="text-info fa fa-eye"></i> Lihat Detail</a>
 									</div>
 									<div class="btn-group">
+										<a type="button" href="{$BaseHref}$view_link" class="btn btn-default"><i class="text-info fa fa-eye"></i> Buat LPB</a>
+									</div>
+									<div class="btn-group">
 										<a href="'{$BaseHref}$tutup_po'" type="button" class="btn btn-danger delete"><i class="text-info fa fa-eye"></i> Tutup PO</a>
 									</div>
 								</td>
@@ -251,7 +254,7 @@
 			                	<% else %>
 			                	<td>
 				                  	<div class="btn-group">
-									  <a href="{$BaseHref}$up.view_link" type="button" class="btn btn-default view"><i class="text-info fa fa-eye"></i> Buat LPB</a>					 
+									  <a href="{$BaseHref}$Up.view_link" type="button" class="btn btn-default view"><i class="text-info fa fa-eye"></i> Buat LPB</a>					 
 									</div>
 			                	</td>
 			                	<% end_if %>

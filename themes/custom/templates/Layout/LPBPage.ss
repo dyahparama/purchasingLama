@@ -69,7 +69,7 @@
                                     <label class="col-md-3 col-form-label">SJ Supplier :</label>
                                     <div class="col-md-9">
                                         <input class="form-control" id="surat_jalan" name="surat_jalan" type="text"
-                                            value="" readonly autocomplete="off">
+                                            value="" autocomplete="off">
                                     </div>
                                 </div>
                                 <%-- <div class="form-group form-material row">
@@ -117,7 +117,7 @@
                                                 </td>
                                                 <td>
                                                     <input name="nama_barang[]" class="form-control"
-                                                        value="$NamaBarang" readonly autocomplete="off">
+                                                        value="$NamaBarang" autocomplete="off">
                                                 </td>
                                                 <td>
                                                     <input name="jumlah[]" class="form-control jumlah-lpb" readonly

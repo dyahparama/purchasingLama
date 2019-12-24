@@ -147,6 +147,7 @@ class POController extends PageController
             $po->Nama = $_REQUEST['nama_deliver'];
             $po->Alamat = $_REQUEST['alamat'];
             $po->Kontak = $_REQUEST['kontak'];
+            $po->SuratJalan = $_REQUEST['surat_jalan'];
             $idPO = $po->write();
 
             $jenisBarang = $_REQUEST['jenis_barangid'];

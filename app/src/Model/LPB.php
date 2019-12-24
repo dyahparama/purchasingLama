@@ -49,6 +49,7 @@ class LPB extends DataObject
                 $temp['Jumlah'] = $key->Jumlah;
                 $temp['JumlahTerima'] = $key->JumlahTerima;
                 $temp['view_linknya'] = 'lpb/view/' . $ID;
+                $temp['view_link'] = 'lpb/ApprovePage/' . $key->LPB()->PO()->ID;
                 $asu->push($temp);
             }
         }

@@ -88,8 +88,8 @@ $(document).on('change', '.supplier-nama', function(){
             dataType: "text",
             beforeSend: function () { },
             success: function (result) {
-                console.log(parent)
-                parent.find('.supplier-kode').val(result)
+                console.log(parent.find('.supplier-kode'));
+                parent.find('.supplier-kode').val(result);
             },
             complete: function (result) { },
             error: function (xhr, Status, err) { }
