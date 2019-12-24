@@ -7,6 +7,7 @@ namespace {
 	use SilverStripe\Control\HTTPRequest;
 	use Silverstripe\SiteConfig\SiteConfig;
 	use SilverStripe\View\Requirements;
+	use SilverStripe\ORM\DB;
 
 	class PageController extends ContentController {
 		// for didin
@@ -38,6 +39,7 @@ namespace {
 		protected function init() {
 			Requirements::themedCSS('custom');
 			parent::init();
+		
 		}
 		public static function getBaseURL() {
 			return Director::absoluteBaseURL();
@@ -60,6 +62,25 @@ namespace {
 		public function dateFormat($param, $separator, $separatorShow) {
 			$arr = explode("$separator", $param);
 			return $arr[2] . "$separatorShow" . $arr[1] . "$separatorShow" . $arr[0];
+		}
+
+		public function countLPB($id) {
+			$jumlah1 = DB::query("SELECT SUM(Jumlah) FROM detailrbpersupplier WHERE ID = {$id}")->value();
+			$jumlah2 = DB::query("SELECT SUM(JumlahTerima) FROM lpbdetail WHERE DetailPerSupplierID = {$id}")->value();
+
+			if (!$jumlah1) {
+				$jumlah1 = 0;
+			}
+
+			if (!$jumlah2) {
+				$jumlah2 = 0;
+			}
+
+			return $jumlah1 - $jumlah2;
+		}
+
+		public function multiply($val1, $val2) {
+			return (float)$val1 * (float)$val2;
 		}
 
 		public static function getNextTarget($drb) {
@@ -231,24 +252,33 @@ namespace {
 			// var_dump($history);die();
 			if ($history->Status()->ID <= 2) {
 
-				$date = $history->DraftRB()->TglSubmit;
+				$date = $history->DraftRB()->Created;
+				$date = explode(" ", $date);
+				$date = $date[0];
+				$jam = $date[1];
 			} else {
 				$status = $history->Status()->ID - 1;
 				$cek = HistoryApproval::get()->where("StatusID = {$status} AND DraftRBID = {$history->DraftRB()->ID}");
 				if(!$cek->count()){
 					$status-=1;
+					$cek = HistoryApproval::get()->where("StatusID = {$status} AND DraftRBID = {$history->DraftRB()->ID}");
+					if (!$cek->count()) {
+						$status-=1;
+					}
 				}
 				$date = HistoryApproval::get()->where("StatusID = {$status} AND DraftRBID = {$history->DraftRB()->ID}")->first()->Created;
 				$date = explode(" ", $date);
 				$date = $date[0];
+				$jam = $date[1];
 			}
-			return (new self)->dateFormat($date, "-", "/");
+			return $jam." ".(new self)->dateFormat($date, "-", "/");
 		}
 
 		public static function getTglApprove($date) {
 			$date = explode(" ", $date);
 			$date = $date[0];
-			return (new self)->dateFormat($date, "-", "/");
+			$jam = $date[1];
+			return $jam." ".(new self)->dateFormat($date, "-", "/");
 		}
 
 		public static function getApprover($drb) {

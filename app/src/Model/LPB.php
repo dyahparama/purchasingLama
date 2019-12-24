@@ -8,6 +8,7 @@ class LPB extends DataObject
     private static $db = [
         'Kode' => 'Varchar(25)',
         'Tgl' => 'Date',
+        'Note' => 'Text'
     ];
     private static $indexes = [
         'Kode' =>[

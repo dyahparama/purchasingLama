@@ -8,6 +8,11 @@ class PO extends DataObject {
 		'Tgl' => 'Date',
 		'Total' => 'Double',
 		'NamaSupplier' => 'Varchar(50)',
+		'Note' => 'Text',
+		'Alamat' => 'Text',
+		'Nama' => 'Varchar(50)',
+		'Kontak' => 'Varchar(50)',
+		'IsClosed' => 'Boolean',
 	];
 	private static $indexes = [
 		'Kode' => [

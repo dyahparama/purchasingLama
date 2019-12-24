@@ -21,7 +21,8 @@ class LPBDetail extends DataObject
         'LPB' => LPB::class,
         'Jenis' => JenisBarang::class,
         'Satuan' => Satuan::class,
-        'DetailPO' => PODetail::class
+        'DetailPO' => PODetail::class,
+        'DetailPerSupplier' => DetailRBPerSupplier::class
     ];
 
 }

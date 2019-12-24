@@ -34,11 +34,16 @@ class LPBController extends PageController
     public function doPostLPB()
     {
         if (isset($_REQUEST['tgl-lpb']) && $_REQUEST['tgl-lpb'] != "") {
+            $note = "";
+
+            if (isset($_REQUEST['note']) && $_REQUEST['note'] != "")
+                $note = $_REQUEST['note'];
             $tgl = $_REQUEST['tgl-lpb'];
 
             $po = new LPB();
             $po->Tgl = AddOn::convertDateToDatabase($tgl);
             $po->POID = $_REQUEST['POID'];
+            $po->Note = $note;
             $idPO = $po->write();
 
             $jenisBarang = $_REQUEST['jenis_barangid'];
@@ -49,6 +54,7 @@ class LPBController extends PageController
             $harga = $_REQUEST['harga'];
             $subtotal = $_REQUEST['subtotal'];
             $parentid = $_REQUEST['parentid'];
+            $detailPerSupplier = $_REQUEST['detail_id'];
 
             foreach ($jenisBarang as $key => $val) {
                 $poDetail = new LPBDetail();
@@ -62,6 +68,7 @@ class LPBController extends PageController
                 $poDetail->Total = $subtotal[$key];
                 $poDetail->LPBID = $idPO;
                 $poDetail->DetailPOID = $parentid[$key];
+                $poDetail->DetailPerSupplierID = $detailPerSupplier[$key];
 
                 $poDetail->write();
             }
@@ -247,7 +254,7 @@ class LPBController extends PageController
             }
 
 
-            $view_link = Director::absoluteBaseURL().'draf-rb/ApprovePage/'.$id;
+            $view_link = Director::absoluteBaseURL().'lpb/view/'.$id;
             $delete_link = $this->Link().'deletereqcost/'.$id;
 
             $temp[] = '

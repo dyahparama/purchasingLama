@@ -21,7 +21,8 @@ class DraftRBDetail extends DataObject
         'Supplier'=>'Varchar(255)',
         'Spesifikasi'=>'Varchar(100)',
         'KodeInventaris'=>'Varchar(50)',
-        'NamaBarang' => 'Varchar(50)'
+        'NamaBarang' => 'Varchar(50)',
+        'JumlahDisetujui' => 'Double'
     ];
 
     private static $has_one = [

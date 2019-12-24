@@ -36,3 +36,23 @@ $(document).on('keyup', '.jumlah-diterima-lpb', function () {
     })
     $('#total-akhir-lpb').val(totalakhir)
 })
+
+$("#submit-lpb").click(function(e) {
+        let pass = true;
+        let data = $("#form-lpb").serializeArray();
+        data.forEach(element => {
+            if ((element.value == "" && !element.name.includes("kode_supplier")) 
+                && (element.value == "" && !element.name.includes("Pemohon")) 
+                && (element.value == "" && !element.name.includes("user_forward"))
+                && (element.value == "" && !element.name.includes("keterangan"))
+                ) {
+                pass = false;
+            }
+        });
+        console.log(data);
+        if (pass) {
+            $("#form-lpb").submit();
+        } else {
+            alert("data belum lengkap");
+        }
+    });

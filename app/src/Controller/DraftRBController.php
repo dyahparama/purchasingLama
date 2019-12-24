@@ -52,7 +52,7 @@ class DraftRBController extends PageController {
 			$kepalaCabang = false;
 			$detail = new ArrayList();
 			$oldData = new ArrayList();
-			$cek = DraftRB::get()->where("PemohonID = '" . $_SESSION['user_id'] . "' AND ForwardToID = 0")->limit(1);
+			$cek = DraftRB::get()->where("PemohonID = '" . $_SESSION['user_id'] . "' AND ForwardToID = 0 AND StatusID = 0")->limit(1);
 			if (!empty($cek->count())) {
 				$cek = $cek->first();
 				$kode = $cek->ID;
@@ -143,6 +143,7 @@ class DraftRBController extends PageController {
 		$detail = $drb->Detail();
 		$history = HistoryApproval::get()->where("DraftRBID = {$drb->ID}");
 		$isCan = $this->getApprover($drb);
+        $approver = $drb->ApproveTo()->ID;
 		$data = [
 			"PageTitle" => "Approval Draft RB",
 			"kode" => $drb->Kode,
@@ -162,7 +163,7 @@ class DraftRBController extends PageController {
 			"canApprove" => $isCan["canApprove"],
 			"canForward" => $isCan["canForward"],
 			"history" => $history,
-
+            "ApproveTo" => $approver,
 			"mgeJS" => "draft-rb",
 		];
 		return $this->customise($data)
@@ -251,6 +252,7 @@ class DraftRBController extends PageController {
         $cek->AssistenApproveTo = $asisten;
 		$cek->TglSubmit = date("Y/m/d");
 		$cek->StatusID = 1;
+        $cek->Created = date("Y/m/d H:i:s");
         $cek->Kode = $kode;
         $cek->Notes=$_POST["note"];
 		$cek->write();

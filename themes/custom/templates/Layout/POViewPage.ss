@@ -21,69 +21,66 @@
                                     <label class="col-md-3 col-form-label">Kode PO :</label>
                                     <div class="col-md-9">
                                         <input class="form-control" id="nomor" name="nomor" type="text"
-                                            value="<Auto Generate>" readonly autocomplete="off">
+                                            value="$PO.Kode" readonly autocomplete="off">
                                     </div>
                                 </div>
                                 <div class="form-group form-material row">
                                     <label class="col-md-3 col-form-label">Kode RB :</label>
                                     <div class="col-md-9">
                                         <input class="form-control" id="RBID" name="RBID" type="text"
-                                            value="{$RB.Kode}" readonly autocomplete="off">
+                                            value="$PO.RB.Kode" readonly autocomplete="off">
                                     </div>
                                 </div>
                                 <div class="form-group form-material row">
                                     <label class="col-md-3 col-form-label">Kode Draft RB :</label>
                                     <div class="col-md-9">
                                         <input class="form-control" id="DraftRBID" name="DraftRBID" type="text"
-                                            value="{$RB.DraftRB.Kode}" readonly autocomplete="off">
+                                            value="{$PO.DraftRB.Kode}" readonly autocomplete="off">
                                     </div>
                                 </div>
                                 <div class="form-group form-material row">
                                     <label class="col-md-3 col-form-label">Tanggal :</label>
                                     <div class="col-md-9">
                                         <input class="form-control" id="nomor" name="tgl-po" type="text"
-                                            value="$Now.format(dd/MM/yyyy)" readonly autocomplete="off">
+                                            value="$PO.Tgl.Nice" readonly autocomplete="off">
                                     </div>
                                 </div>
                                 <div class="form-group form-material row">
                                     <label class="col-md-3 col-form-label">Supplier :</label>
                                     <div class="col-md-9">
                                         <input class="form-control" id="nomor" name="nama-supplier" type="text"
-                                            value="{$NamaSupplier}" readonly autocomplete="off">
+                                            value="{$PO.NamaSupplier}" readonly autocomplete="off">
                                     </div>
                                 </div>
                                 <div class="form-group form-material row">
                                     <label class="col-md-3 col-form-label">User Terima LPB :</label>
                                     <div class="col-md-9">
-                                        <select name="TerimaLPBID" id="draft-lama" class="form-control" data-plugin="select2">
-                                            <option>User Terima LPB</option>
-                                            <% loop $Terima %>
-                                            <option value="$ID">$Pegawai.Nama</option>
-                                            <% end_loop %>
-                                        </select>
+                                        <input class="form-control" id="nomor" name="nama-supplier" type="text"
+                                            value="{$PO.TerimaLPB.Pegawai.Nama}" readonly autocomplete="off">
                                     </div>
                                 </div>
                                 <div class="form-group form-material row">
                                     <label class="col-md-3 col-form-label">Nama :</label>
                                     <div class="col-md-9">
-                                        <input class="form-control" id="nomor" name="nama_deliver" type="text"
-                                            value="" autocomplete="off">
+                                        <input class="form-control" id="nomor" readonly name="nama_deliver" type="text"
+                                            value="{$Nama}" autocomplete="off">
                                     </div>
                                 </div>
                                 <div class="form-group form-material row">
                                     <label class="col-md-3 col-form-label">Alamat Pengiriman :</label>
                                     <div class="col-md-9">
                                         <div class="input-group">
-                                            <textarea class="form-control"
-                                                name="alamat"></textarea>
+                                            <textarea readonly="" class="form-control"
+                                                name="alamat">$Alamat</textarea>
                                         </div>
                                     </div>
-                                </div><div class="form-group form-material row">
+                                </div>
+                                <div class="form-group form-material row">
                                     <label class="col-md-3 col-form-label">Kontak :</label>
                                     <div class="col-md-9">
                                         <div class="input-group">
-                                            <textarea class="form-control"
-                                                name="kontak"></textarea>
+                                            <textarea readonly class="form-control"
+                                                name="kontak">$Kontak</textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -109,25 +106,20 @@
                                             <% loop $Detail %>
                                             <tr class="table-row">
                                                 <td class="jenis-barang">
-                                                    <input type="hidden" name="parentid[]" value="$ID">
-                                                    <input name="jenis_barang[]" class="form-control"
-                                                        value="$DraftRBDetail.Jenis.Nama" readonly autocomplete="off">
-                                                    <input name="jenis_barangid[]" class="form-control" type="hidden"
-                                                        value="$DraftRBDetail.JenisID" readonly autocomplete="off">
+                                                    <input name="jenis_barangid[]" class="form-control" 
+                                                        value="$Jenis.Nama" readonly autocomplete="off">
                                                 </td>
                                                 <td>
                                                     <input name="nama_barang[]" class="form-control"
-                                                        value="$DraftRBDetail.NamaBarang" readonly autocomplete="off">
+                                                        value="$NamaBarang" readonly autocomplete="off">
                                                 </td>
                                                 <td>
                                                     <input name="jumlah[]" class="jumlah-po form-control jumlah-po-val" readonly
                                                         value="$Jumlah" autocomplete="off">
                                                 </td>
                                                 <td>
-                                                    <input name="satuan[]" class="form-control" readonly
-                                                    value="$DraftRBDetail.Satuan.Nama" autocomplete="off">
                                                     <input name="satuanid[]" class="jumlah-po form-control jumlah-po-val" readonly
-                                                        value="$DraftRBDetail.SatuanID" autocomplete="off" type="hidden">
+                                                        value="$Satuan.Nama" autocomplete="off">
                                                 </td>
                                                 <td>
                                                     <input name="harga[]" class="form-control harga-po-val" type="text"
@@ -141,7 +133,7 @@
                                             <% end_loop %>
                                             <tr id="row-total">
                                                 <td colspan="5">Jumlah</td>
-                                                <td><input id="total-akhir-po" name="total-akhir-po" class="form-control" type="text" value="{$Total}"
+                                                <td><input id="total-akhir-po" name="total-akhir-po" class="form-control" type="text" value="{$PO.Total}"
                                                     autocomplete="off" readonly></td>
                                             </tr>
                                         </tbody>
@@ -151,17 +143,17 @@
                                     <label class="col-md-3 col-form-label">Note :</label>
                                     <div class="col-md-9">
                                         <div class="input-group">
-                                            <textarea class="form-control"
-                                                name="note"><% if $note %>$note<% end_if %></textarea>
+                                            <textarea readonly="" class="form-control"
+                                                name="note">$PO.Note</textarea>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="example">
-                                    <div class="col-md-3">
+                                    <!-- <div class="col-md-3">
                                         <button class="btn btn-block btn-primary waves-effect waves-classic" id="add-detail-termin" type="button">
                                             Add Termin
                                         </button>
-                                    </div>
+                                    </div> -->
                                     <table class="table-striped table table-responsive">
                                         <thead>
                                             <tr>
@@ -169,57 +161,43 @@
                                                 <th>Jenis</th>
                                                 <th>Keterangan</th>
                                                 <th>Jumlah (Rp)</th>
-                                                <th></th>
                                             </tr>
                                         </thead>
                                         <tbody id="table-termin">
+                                            <% loop $Termin %>
                                             <tr class="table-row-termin no-1">
                                                 <td>
-                                                    <input class="form-control tgl" id="tgl-termin" name="tgl-termin[]"
-                                                        data-date-format="dd/mm/yyyy" data-now="$dateNow"
-                                                        data-plugin="datepicker" type="text">
+                                                    <input class="form-control" readonly="" id="tgl-termin" name="tgl-termin[]" value="$Tanggal.Nice" type="text">
                                                 </td>
                                                 <td>
-                                                    <select name="jenis-termin[]"
-                                                        class="form-control required-field">
-                                                        <option>Pilih Jenis</option>
-                                                        <option value="DP">DP</option>
-                                                        <option value="LPB">LPB</option>
-                                                        <option value="Pelunasan">Pelunasan</option>
-                                                    </select>
+                                                    <input class="form-control" id="tgl-termin" name="tgl-termin[]" value="$Jenis" type="text">
                                                 </td>
                                                 <td>
-                                                    <textarea class="form-control" name="keterangan-termin[]"></textarea>
+                                                    <textarea class="form-control" name="keterangan-termin[]">$Keterangan</textarea>
                                                 </td>
                                                 <td>
                                                     <input name="total-termin[]" class="form-control jumlah-termin required-field" type="number"
-                                                        value="0" autocomplete="off">
-                                                </td>
-                                                <td>
-                                                    <button
-                                                        class="btn btn-danger delete-row-termin btn-xs waves-effect waves-classic modal-select2-show waves-effect waves-classic"
-                                                        type="button" idremove="1">
-                                                        Delete
-                                                    </button>
+                                                        value="$Jumlah" autocomplete="off">
                                                 </td>
                                             </tr>
+                                             <% end_loop %>
                                         </tbody>
-                                        <tbody>
+                                        <!-- <tbody>
                                             <tr id="row-total-termin">
                                                 <td colspan="3">Jumlah</td>
                                                 <td><input id="total-akhir-termin-po" name="total-akhir-termin" class="form-control" type="text" value="0"
                                                     autocomplete="off" readonly></td>
                                                 <td></td>
                                             </tr>
-                                        </tbody>
+                                        </tbody> -->
                                     </table>
                                 </div>
                                 
-                                <div class="form-group form-material row">
+                                <!-- <div class="form-group form-material row">
                                     <div class="col-md-9">
                                         <button type="button" id="submit-po" class="btn-primary btn">Submit</button>
                                     </div>
-                                </div>
+                                </div> -->
                                 
                             </form>
                         </div>

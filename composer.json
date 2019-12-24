@@ -13,7 +13,8 @@
         "sendgrid/sendgrid": "^7.4",
         "silverware/datepicker": "^1.0",
         "sheadawson/silverstripe-dependentdropdownfield": "^2.0",
-        "sheadawson/silverstripe-zenvalidator": "dev-master"
+        "sheadawson/silverstripe-zenvalidator": "dev-master",
+        "mpdf/mpdf": "^8.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^5.7"

@@ -12,7 +12,7 @@
                     <!-- Example Horizontal Form -->
                     <div class="example-wrap">
                         <div class="example">
-                            <form action="{$BaseHref}/lpb/doPostLPB" method="post">
+                            <form action="{$BaseHref}/lpb/doPostLPB" id="form-lpb" method="post">
                             <input type="hidden" value="{$PO.ID}" name="POID">
                                 <div class="form-group form-material row">
                                     <label class="col-md-3 col-form-label">Kode LPB :</label>
@@ -94,6 +94,7 @@
                                         <tbody id="table-body">
                                             <% loop $Detail %>
                                             <tr class="table-row">
+                                                <input type="hidden" value="$ID" name="detail_id[]"> 
                                                 <td class="jenis-barang">
                                                     <input type="hidden" name="parentid[]" value="$ID">
                                                     <input type="hidden" name="jenis_barangid[]" value="$JenisID">
@@ -106,11 +107,11 @@
                                                 </td>
                                                 <td>
                                                     <input name="jumlah[]" class="form-control jumlah-lpb" readonly
-                                                    value="$Jumlah" autocomplete="off">
+                                                    value="$Top.countLPB($ID)" autocomplete="off">
                                                 </td>
                                                 <td>
                                                     <input name="jumlah_diterima[]" type="number" class="jumlah-diterima-lpb form-control"
-                                                        value="$Jumlah" autocomplete="off">
+                                                        value="$Top.countLPB($ID)" autocomplete="off">
                                                 </td>
                                                 <td>
                                                     <input type="hidden" name="satuanid[]" value="$SatuanID">
@@ -119,7 +120,7 @@
                                                 </td>
                                                 <td>
                                                     <input name="harga[]" class="form-control harga-lpb" type="text"
-                                                        value="$Jumlah" readonly autocomplete="off" value="$Harga">
+                                                        value="$Harga" readonly autocomplete="off" value="$Harga">
                                                 </td>
                                                 <%-- <td>
                                                     <input name="diskon[]" class="form-control diskon-po-val" type="text"
@@ -131,17 +132,17 @@
                                                 </td> --%>
                                                 <td>
                                                     <input name="subtotal[]" class="form-control subtotal-lpb" type="text"
-                                                        value="$Total" autocomplete="off" readonly>
+                                                        value="$Top.multiply($Top.countLPB($ID), $Harga)" autocomplete="off" readonly>
                                                 </td>
                                             </tr>
                                             <% end_loop %>
-                                            <tr id="row-total">
+                                            <!-- <tr id="row-total">
                                                 <td colspan="6">Jumlah</td>
                                                 <td><input id="total-akhir-lpb" name="total" class="form-control" type="text" value="{$TotalAkhir}"
                                                     autocomplete="off" readonly></td>
                                                 <td></td>
                                                 <td></td>
-                                            </tr>
+                                            </tr> -->
                                         </tbody>
                                     </table>
                                 </div>
@@ -156,7 +157,7 @@
                                 </div>
                                 <div class="form-group form-material row">
                                     <div class="col-md-9">
-                                        <button type="submit" class="btn-primary btn">Submit</button>
+                                        <button type="button" id="submit-lpb" class="btn-primary btn">Submit</button>
                                     </div>
                                 </div>
                             </form>

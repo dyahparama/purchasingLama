@@ -395,6 +395,13 @@
 						$temp[] = $status;
 					}elseif ($col['ColumnDb'] == 'ForwardToID') {
 						$ForwardTo = $row->ForwardTo()->Pegawai()->Nama;
+						
+						if(!$ForwardTo){
+		                    $last_pos = $this->getPosisiTerakhir($row);
+
+		                    $ForwardTo = StatusPermintaanBarang::get()->byID($last_pos->StatusID + 1)->Status;
+		                }
+
 						$temp[] = $ForwardTo;
 					}elseif($col['Type'] == 'Date')
 						$temp[] = date('d-m-Y', strtotime($row->{$col['ColumnDb']}));

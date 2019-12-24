@@ -115,7 +115,7 @@ class MyTaskController extends PageController {
 				$show1->push($temp1);
 				$jumlahrb++;
 			}
-			if ($key->DraftRB()->Status()->ID == 9 && $shownya == 1) {
+			if (($key->DraftRB()->Status()->ID == 9 || $key->DraftRB()->Status()->ID == 10) && $shownya == 1) {
 				$temp2['ID'] = $key->ID;
 				$temp2['Tgl'] = date('d/m/Y', strtotime($key->Tgl));
 				$temp2['Kode'] = $key->Kode;
@@ -160,19 +160,23 @@ class MyTaskController extends PageController {
 			}
 		}
 		foreach ($lpbnya as $key5) {
-			if ($key5->DraftRB()->StatusID != 13 && $shownya == 1) {
-				if($key5->DraftRB()->ForwardToID == $pegawainya->ID){
-					$temp3['ID'] = $key->ID;
+			if ($key5->DraftRB()->StatusID != 13 && $shownya == 1 && $key5->TerimaLPBID == $pegawainya->ID) {
+					$temp3['ID'] = $key5->ID;
 					$temp3['KodePO'] = $key5->Kode;
 					$temp3['KodeRB'] = $key5->RB()->Kode;
 					$temp3['KodeDraftRB'] = $key5->DraftRB()->Kode;
 					$temp3['Tgl'] = date('d/m/Y', strtotime($key5->Tgl));
 					$temp3['Suplier'] = $key5->NamaSupplier;
 					// $temp3['isi'] = $key5->GetPO($key->ID);
+					$lpbbuat = LPB::get()->where("POID = '".$key5->ID."'");
+					$IsBuat = 0;
+					if($lpbbuat->ID){
+						$IsBuat = 1;
+						$temp3['tutup_PO'] = 'po/TutupPO/' . $key5->ID;
+					}
 					$temp3['view_link'] = 'lpb/ApprovePage/' . $key5->ID;
 					$show3->push($temp3);
 					$jumlahlpb++;
-				}
 			}
 		}
 		// echo "<pre>";

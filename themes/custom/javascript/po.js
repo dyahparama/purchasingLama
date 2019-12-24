@@ -168,16 +168,83 @@ $(document).ready(function(){
     });
 });
 
-$(document).on('click', '#submit-po', function() {
-    // let postForm = true
-    // $('.required-field').each(function(){
-    //     // if (!$(this).val()) {
-    //         postForm = false
-    //     // }
-    // })
 
-    // if (postForm == false)
-    //     alert("Data belum lengkap")
-    // // else
-        $('#form-po').submit()
+var no = 1;
+$(document).on('click', "#add-detail-termin", function (e) {
+      console.log(no);
+      e.preventDefault();
+        no++;
+        $('#table-termin').append(`
+            <tr class="table-row-termin no-`+no+`">
+                <td>
+                    <input class="form-control tgl" id="tgl-termin" name="tgl-termin[]"
+                        data-date-format="dd/mm/yyyy" data-now="$dateNow"
+                        data-plugin="datepicker" type="text">
+                </td>
+                <td>
+                    <select name="jenis-termin[]"
+                        class="form-control required-field">
+                        <option>Pilih Jenis</option>
+                        <option value="DP">DP</option>
+                        <option value="LPB">LPB</option>
+                        <option value="Pelunasan">Pelunasan</option>
+                    </select>
+                </td>
+                <td>
+                    <textarea class="form-control" name="keterangan-termin[]"></textarea>
+                </td>
+                <td>
+                    <input name="total-termin[]" class="form-control jumlah-termin required-field" type="number"
+                        value="0" autocomplete="off">
+                </td>
+                <td>
+                    <button
+                        class="btn btn-danger delete-row-termin btn-xs waves-effect waves-classic modal-select2-show waves-effect waves-classic"
+                        type="button" idremove="`+no+`">
+                        Delete
+                    </button>
+                </td>
+            </tr>`);
+        $('.tgl').datepicker();
+});
+
+$(document).on('click', '.delete-row-termin', function () {
+  var idremove = $(this).attr('idremove');
+   let jumlahAkhir = 0
+  if ($('.table-row-termin').length > 1) {
+     $(".no-" + idremove).remove();
+      no + 1;
+      // max++;
+      $('.jumlah-termin').each(function(){
+            jumlahAkhir += parseInt($(this).val())
+        })
+        $('#total-akhir-termin-po').val(jumlahAkhir)
+  } else {
+    alert("Detail harus ada")
+  }
+});
+
+$(document).on('keyup', '.jumlah-termin', function(){
+     let jumlahAkhir = 0
+    $('.jumlah-termin').each(function(){
+            jumlahAkhir += parseInt($(this).val())
+        })
+        $('#total-akhir-termin-po').val(jumlahAkhir)
 })
+
+$("#submit-po").click(function(e) {
+        let pass = true;
+        let data = $("#form-po").serializeArray();
+        data.forEach(element => {
+            if ((element.value == "" && !element.name.includes("satuanid")) 
+                ) {
+                pass = false;
+            }
+        });
+        console.log(data);
+        if (pass) {
+            $("#form-po").submit();
+        } else {
+            alert("data belum lengkap");
+        }
+    });

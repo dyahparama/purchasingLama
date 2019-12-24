@@ -70,9 +70,10 @@ $(document).on('keyup', '.harga-detail, .jumlah-detail', function() {
     parentTable.find('.subtotal-akhir').val(subTotalAkhir)
 
     let grandTotal = 0
-    $(document).find('.subtotal-akhir').each(function(){
+    $(document).find('.subtotal-detail').each(function(){
         grandTotal += parseInt($(this).val())
     })
+     console.log(grandTotal)
     $('#grand-total').val(grandTotal)
 })
 
@@ -211,6 +212,27 @@ $(document).on('click', '.penawaran-file-button', function(){
     let parent_div = $(this).parent()
     parent_div.remove()
 })
+
+$("#submit-master").click(function(e) {
+        let pass = true;
+        let data = $("#form-rb").serializeArray();
+        data.forEach(element => {
+            if ((element.value == "" && !element.name.includes("kode_supplier")) 
+                && (element.value == "" && !element.name.includes("Pemohon")) 
+                && (element.value == "" && !element.name.includes("user_forward"))
+                && (element.value == "" && !element.name.includes("keterangan"))
+                && (element.value == "" && !element.name.includes("note"))
+                ) {
+                pass = false;
+            }
+        });
+        console.log(data);
+        if (pass) {
+            $("#form-rb").submit();
+        } else {
+            alert("data belum lengkap");
+        }
+    });
 
 // $('#penawaran-file').filepond({
 //     allowMultiple: true,

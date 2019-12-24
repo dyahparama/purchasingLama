@@ -12,10 +12,11 @@
                     <!-- Example Horizontal Form -->
                     <div class="example-wrap">
                         <div class="example">
-                            <form action="{$BaseHref}rb/doSubmitRB" method="post" enctype="multipart/form-data">
+                            <form action="{$BaseHref}rb/doSubmitRB" method="post" id="form-rb" enctype="multipart/form-data">
                                 <input type="hidden" value="{$mode}" name="SubmitMode">
-                                <input class="form-control" name="RBID" type="hidden"
-                                value="{$RB.ID}" readonly autocomplete="off">
+                                <input type="hidden" value="{$RB.ID}" name="RBID">
+                                <input class="form-control" name="DraftRB_ID" type="hidden"
+                                value="{$RB.DraftRBID}" readonly autocomplete="off">
                                 <div class="form-group form-material row">
                                     <label class="col-md-3 col-form-label">Kode RB :</label>
                                     <div class="col-md-9">
@@ -193,7 +194,7 @@
                                     <tr class="table-row">
                                         <td class="supplier">
                                             <select id="supplier-nama" class="form-control" name="supplier_id_penawaran[]">
-                                                <option>Pilih Supplier</option>
+                                                <option value="">Pilih Supplier</option>
                                                 <% loop $SupplierNama %>
                                                 <option value="$ID">$Nama</option>
                                                 <% end_loop %>
@@ -264,11 +265,11 @@
                                         <label for="RadioForward">Forward</label>
                                     </div>
                                 </div>
-                                <div class="col-md-5" id="forward-to">
+                                <div class="col-md-5" id="forward-to" style="display: none">
                                     <label class="col-md-3 col-form-label">Forward To :</label>
                                     <div class="col-md-9">
-                                        <select id="select-forward-to" class="form-control" name="user_forward" data-plugin="select2" style="display: none">
-                                            <option>Pilih Pegawai</option>
+                                        <select id="select-forward-to" class="form-control" name="user_forward" data-plugin="select2">
+                                            <option value="">Pilih Pegawai</option>
                                             <% loop $pegawai %>
                                             <option value="$ID">$Pegawai.Nama</option>
                                             <% end_loop %>
@@ -280,16 +281,16 @@
                             <% if $mode != 3 %>
                             <div class="form-group form-material row">
                                 <div class="col-md-9">
-                                    <button type="submit" class="btn-primary btn">Submit</button>
+                                    <button id="submit-master" type="button" class="btn-primary btn">Submit</button>
                                 </div>
                             </div>
                             <% end_if %>
 
-                            <% loop $DetailRB %>
+                            <% loop $Top.DetailRB %>
                             <div id="modal-detail_$ID" class="modal fade example-modal-lg" aria-hidden="true"
                             aria-labelledby="exampleOptionalLarge" role="dialog" tabindex="-1"
                             data-backdrop="static">
-                            <div class="modal-dialog modal-simple modal-lg">
+                            <div class="modal-dialog modal-simple modal-lg" style="min-height: 100px">
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <button type="button" class="close close-modal"
@@ -302,12 +303,9 @@
                                     <div class="table-responsive">
                                          <% if $Top.mode == 1 %>
                                         <div class="col-md-3">
-                                            <button
-                                            class="btn btn-block btn-primary waves-effect waves-classic add-detail"
-                                            type="button">
+                                            <button class="btn btn-block btn-primary waves-effect waves-classic add-detail" type="button">
                                             Add Detail
                                         </button>
-
                                     </div>
                                     <% end_if %>
                                     <table class="table-striped table">

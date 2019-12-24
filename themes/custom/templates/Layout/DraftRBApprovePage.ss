@@ -219,7 +219,7 @@
 												data-plugin="select2">
 												<option>Pilih Pegawai</option>
 												<% loop $pegawai %>
-												<option value="$ID">
+												<option <% if $Top.ApproveTo == '$ID' %> selected <% end_if %> value="$Pegawai.User().ID">
 													$Pegawai.Nama</option>
 												<% end_loop %>
 											</select>

@@ -18,7 +18,15 @@ class RBController extends PageController
         'ApprovePage',
         'View'
     ];
+    public function init() {
+        parent::init();
+        // $this->getStrukturDrb(22);
+        // die;
+        if (!UserController::cekSession()) {
+            return $this->redirect(Director::absoluteBaseURL() . "user/login");
+        }
 
+    }
     public function ApprovePage(HTTPRequest $request)
     {
         if (isset($request->params()["ID"])) {
@@ -29,26 +37,28 @@ class RBController extends PageController
                 if ($rb->DraftRB()->StatusID == 5) {
                     $mode = 1;
                 }
-                else if ($rb->DraftRB()->StatusID == 6 || $rb->DraftRB()->StatusID == 7) {
+                else if ($rb->DraftRB()->StatusID == 6 || $rb->DraftRB()->StatusID == 7 || $rb->DraftRB()->StatusID == 8) {
                     $mode = 2;
                 }
                 else {
                     $mode = 3;
                 }
-
+                $drb=$rb->DraftRB();
+                $approver = $drb->ApproveTo()->ID;
                 $data = array(
                     "SupplierList" => json_encode(AddOn::getOneField(Supplier::get(), "Nama")),
                     "RB" => $rb,
                     "DraftRB" => RB::get()->byID($id)->DraftRB(),
                     // "DetailRB" => DraftRBDetail::get()->where("DraftRBID = {}"),
                     "DetailRB" => RB::get()->byID($id)->DraftRB()->Detail(),
-                    // "penawaran"  => $rb->PenawaranSupplierDetail(),
+                    "penawaran"  => PenawaranSupplierDetail::get()->where("RBID = {$id}"),
                     "mgeJS" => "rb",
                     "SupplierNama" => Supplier::get(),
                     "New" => 1,
                     "mode" => $mode,
                     "history" => HistoryApproval::get()->where("DraftRBID = {$rb->DraftRBID}"),
-                    "pegawai" => User::get()
+                    "pegawai" => User::get(),
+                    "ApproveTo" => $approver,
                 );
                 return $this->customise($data)
                 ->renderWith(array(
@@ -88,7 +98,7 @@ class RBController extends PageController
                     "RB" => $rb,
                     "DraftRB" => RB::get()->byID($id)->DraftRB(),
                     // "DetailRB" => DraftRBDetail::get()->where("DraftRBID = {}"),
-                    "penawaran"  => DetailRBPerSupplier::get()->where("RBID = {$id}"),
+                    "penawaran"  => PenawaranSupplierDetail::get()->where("RBID = {$id}"),
                     "DetailRB" => RB::get()->byID($id)->DraftRB()->Detail(),
                     "DetailPenawaran" => RB::get()->byID($id)->PenawaranSupplier(),
                     "mgeJS" => "rb",
@@ -126,10 +136,12 @@ class RBController extends PageController
             $namaBarang = $_REQUEST['nama_barang'];
             $sepesifikasiBarang = $_REQUEST['spesifikasi_barang'];
             $kodeInvetaris = $_REQUEST['inventaris_barang'];
+            $jumlahDisetujui = $_REQUEST['jumlah_disetujui'];
 
             foreach ($namaBarang as $key => $value) {
                 $draftRBDetail = DraftRBDetail::get()->byID($key);
                 $draftRBDetail->NamaBarang = $namaBarang[$key];
+                $draftRBDetail->jumlahDisetujui = $jumlahDisetujui[$key];
                 $draftRBDetail->Spesifikasi = $sepesifikasiBarang[$key];
                 $draftRBDetail->KodeInventaris = $kodeInvetaris[$key];
                 $draftRBDetail->write();
@@ -184,9 +196,11 @@ class RBController extends PageController
               }
           }
 
+          $i = 0;
+          $supplierList = $_REQUEST['supplier_id_penawaran'];
           foreach ($idTes as $key => $value) {
             $penawaranDetail = new PenawaranSupplierDetail();
-            $penawaranDetail->SupplierID = 1;
+            $penawaranDetail->SupplierID = $supplierList[$i];
             $penawaranDetail->RBID = $rbID;
             $penawaranDetail = $penawaranDetail->write();
             if ($arquivo) {
@@ -198,6 +212,7 @@ class RBController extends PageController
                     $file->write();
                 }
             }
+            $i += 1;
         }
 
         PageController::submitStaffPembelian($rb->DraftRB(), $isTPS);
@@ -214,9 +229,6 @@ class RBController extends PageController
             PageController::forwardDrb($note, $rb->DraftRB(), $user_id, $_REQUEST['user_forward']);
         }
     }
-
-
-
     return $this->redirect(Director::absoluteBaseURL()."rb");
 }
 }
@@ -454,9 +466,12 @@ function searchRb()
                 $status = $row->RB()->Kode;
                 $temp[] = $status;
             } elseif ($col['ColumnDb'] == 'ForwardToID') {
-                // $last_pos = $this->getPosisiTerakhir($row);
-                $ForwardTo = $row->ApproveTo()->Pegawai()->Nama;
+                $ForwardTo = $row->ForwardTo()->Pegawai()->Nama;
+                if(!$ForwardTo){
+                    $last_pos = $this->getPosisiTerakhir($row);
 
+                    $ForwardTo = StatusPermintaanBarang::get()->byID($last_pos->StatusID + 1)->Status;
+                }
                 
                 /*echo $row->ID."</br>";
                 echo $last_pos->ApprovedByID."</br>";*/

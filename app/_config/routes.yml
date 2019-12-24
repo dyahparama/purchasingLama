@@ -14,3 +14,4 @@ SilverStripe\Control\Director:
     'ta': 'MyTaskController'
     'rj': 'RejectedController'
     'prfl': 'ProfileController'
+    'new': 'NewController'

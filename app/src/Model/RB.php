@@ -18,7 +18,9 @@ class RB extends DataObject {
 	];
 	private static $has_one = [
 		'DraftRB' => DraftRB::class,
+		'DraftRBOld' => DraftRB::class,
 	];
+
 	private static $has_many = [
 		'PenawaranSupplier' => PenawaranSupplierDetail::class
 	];

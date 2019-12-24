@@ -12,7 +12,7 @@ use SilverStripe\Control\Controller;
 class POController extends PageController
 {
     private static $allowed_actions = [
-        "doPostPO", "getDetailRB", 'PoList', 'getData', 'searchdrb', 'ApprovePage'
+        "doPostPO", "getDetailRB", 'PoList', 'getData', 'searchdrb', 'ApprovePage', 'view','printPO'
     ];
 
     public function ApprovePage(HTTPRequest $request)
@@ -51,6 +51,30 @@ class POController extends PageController
         }
     }
 
+    public function view(HTTPRequest $request) {
+ if (isset($request->params()["ID"])) {
+            $id = $request->params()["ID"];
+            // $nama = $request->params()['Name'];
+            // $nama = urldecode($nama);
+            // var_dump($nama);
+            $PO = PO::get()->byID($id);
+            $detailPO = $PO->Detail();
+            $termin = $PO->Termin();
+
+        $data = array(
+            "PO" => $PO,
+            "Detail" => $detailPO,
+            "Termin"=>$termin
+                );
+        return $this->customise($data)
+                    ->renderWith(array(
+                        'POViewPage', 'Page',
+                    ));
+                     } else {
+            return $this->redirect(Director::absoluteBaseURL() . "po");
+        }
+    }
+
     public function index(HTTPRequest $request)
     {
         Requirements::themedCSS('custom');
@@ -75,18 +99,31 @@ class POController extends PageController
     public function doPostPO()
     {
         if (isset($_REQUEST['tgl-po']) && $_REQUEST['tgl-po'] != "") {
+            $note = "";
+
+            if (isset($_REQUEST['note']) && $_REQUEST['note'] != "")
+                $note = $_REQUEST['note'];
+
+            $draftRBID = $_REQUEST['DraftRB_ID'];
+            $RBID = $_REQUEST['RB_ID'];
+
+            // var_dump($draftRBID);die;
+
             $tgl = $_REQUEST['tgl-po'];
-            $drb = DraftRB::get()->byID($_REQUEST['DraftRBID'])->first();
+            $drb = DraftRB::get()->byID($draftRBID);
+            // var_dump($_REQUEST['TerimaLPBID']);die;
             $drb->StatusID = 10;
             $drb->write();
             $po = new PO();
             $po->Tgl = AddOn::convertDateToDatabase($tgl);
             $po->Total = $_REQUEST['total-akhir-po'];
-            $po->DraftRBID = $_REQUEST['DraftRBID'];
-            $po->RBID = $_REQUEST['RBID'];
+            $po->DraftRBID = $draftRBID;
+            $po->RBID = $RBID;
             $po->TerimaLPBID = $_REQUEST['TerimaLPBID'];
             $po->NamaSupplier = $_REQUEST['nama-supplier'];
+            $po->Alamat = $_REQUEST['alamat'];
             $po->Tgl = AddOn::convertDateToDatabase($tgl);
+            $po->Note = $note;
             $idPO = $po->write();
 
             $jenisBarang = $_REQUEST['jenis_barangid'];
@@ -129,7 +166,7 @@ class POController extends PageController
                 $poTermin->write();
             }
 
-            return $this->redirect(Director::absoluteBaseURL() . "po");
+            return $this->redirect(Director::absoluteBaseURL() . "po/PoList");
         }
     }
 
@@ -366,8 +403,8 @@ class POController extends PageController
                 }
 
 
-                $view_link = $this->Link() . 'view/' . $id;
-                $delete_link = $this->Link() . 'deletereqcost/' . $id;
+                $view_link =  'view/' . $id;
+                $delete_link = 'deletereqcost/' . $id;
 
                 $temp[] = '
                     <div class="btn-group">

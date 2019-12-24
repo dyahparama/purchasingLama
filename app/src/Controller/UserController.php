@@ -79,7 +79,7 @@ class UserController extends ContentController
     }
 
     static function cekSession() {
-        if (isset($_SESSION['user_id']) && !empty($_SESSION['user_id'])) {
+        if (isset($_SESSION['user_id']) || !empty($_SESSION['user_id'])) {
             return true;
         }
         return false;
