@@ -60,7 +60,7 @@
 				                  	<% if $view_link!='' %>
 				                  	<div class="btn-group">
 									  <a href="{$BaseHref}$view_link" type="button" class="btn btn-default view"><i class="text-info fa fa-eye"></i> View</a>
-									  <!-- <a href="'$delete_link'" type="button" class="btn btn-danger delete"><i class="text-info fa fa-eye"></i> Delete</a> --> 					 
+									  <!-- <a href="'$delete_link'" type="button" class="btn btn-danger delete"><i class="text-info fa fa-eye"></i> Delete</a> -->
 									</div>
 									<% end_if %>
 								</td>
@@ -101,7 +101,7 @@
 				                  	<% if $view_link!='' %>
 				                  	<div class="btn-group">
 									  <a href="{$BaseHref}$view_link" type="button" class="btn btn-default view"><i class="text-info fa fa-eye"></i> View</a>
-									  <!-- <a href="'$delete_link'" type="button" class="btn btn-danger delete"><i class="text-info fa fa-eye"></i> Delete</a> --> 					 
+									  <!-- <a href="'$delete_link'" type="button" class="btn btn-danger delete"><i class="text-info fa fa-eye"></i> Delete</a> -->
 									</div>
 									<% end_if %>
 								</td>
@@ -140,7 +140,7 @@
 				                <td>
 				                  	<div class="btn-group">
 									  <a type="button" class="btn btn-default viewpo" shownya='0' idnya="$ID"><i class="text-info fa fa-eye"></i> Lihat Detail</a>
-									  <!-- <a href="'$delete_link'" type="button" class="btn btn-danger delete"><i class="text-info fa fa-eye"></i> Delete</a> --> 					 
+									  <!-- <a href="'$delete_link'" type="button" class="btn btn-danger delete"><i class="text-info fa fa-eye"></i> Delete</a> -->
 									</div>
 				                </td>
 			                </tr>
@@ -169,12 +169,12 @@
 			                		<% if $IsPo == 1 %>
 			                		<div class="btn-group">
 									  <a href="{$BaseHref}$view_link" type="button" class="btn btn-default view"><i class="text-info fa fa-eye"></i> View PO</a>
-									  <!-- <a href="'$delete_link'" type="button" class="btn btn-danger delete"><i class="text-info fa fa-eye"></i> Delete</a> --> 					 
+									  <!-- <a href="'$delete_link'" type="button" class="btn btn-danger delete"><i class="text-info fa fa-eye"></i> Delete</a> -->
 									</div>
 									<% else %>
 									<div class="btn-group">
 									  <a href="{$BaseHref}$view_link" type="button" class="btn btn-default view"><i class="text-info fa fa-eye"></i> Generate PO</a>
-									  <!-- <a href="'$delete_link'" type="button" class="btn btn-danger delete"><i class="text-info fa fa-eye"></i> Delete</a> --> 					 
+									  <!-- <a href="'$delete_link'" type="button" class="btn btn-danger delete"><i class="text-info fa fa-eye"></i> Delete</a> -->
 									</div>
 									<% end_if %>
 									<% end_if %>
@@ -219,14 +219,14 @@
 										<a type="button" href="{$BaseHref}$view_link" class="btn btn-default"><i class="text-info fa fa-eye"></i> Buat LPB</a>
 									</div>
 									<div class="btn-group">
-										<a href="{$BaseHref}$tutup_po" type="button" class="btn btn-danger delete"><i class="text-info fa fa-eye"></i> Tutup PO</a>
+										<a data-po="{$BaseHref}$tutup_po" href="javascript:void(0)" type="button" class="btn btn-danger delete button-tutup-po"><i class="text-info fa fa-eye"></i> Tutup PO</a>
 									</div>
 								</td>
 								<% else %>
 								<td>
 									<% if $view_link!='' %>
 				                  	<div class="btn-group">
-									  <a href="{$BaseHref}$view_link" type="button" class="btn btn-default view"><i class="text-info fa fa-eye"></i> Buat LPB</a> 					 
+									  <a href="{$BaseHref}$view_link" type="button" class="btn btn-default view"><i class="text-info fa fa-eye"></i> Buat LPB</a>
 									</div>
 									<% end_if %>
 								</td>
@@ -254,13 +254,13 @@
 			                	<% else %>
 			                	<td>
 				                  	<div class="btn-group">
-									  <a href="{$BaseHref}$Up.view_link" type="button" class="btn btn-default view"><i class="text-info fa fa-eye"></i> Buat LPB</a>					 
+									  <a href="{$BaseHref}$Up.view_link" type="button" class="btn btn-default view"><i class="text-info fa fa-eye"></i> Buat LPB</a>
 									</div>
 			                	</td>
 			                	<% end_if %>
 			                	<td>
 				                  	<div class="btn-group">
-									  <a href="{$BaseHref}$view_linknya" type="button" class="btn btn-default view"><i class="text-info fa fa-eye"></i> View LPB</a>				 
+									  <a href="{$BaseHref}$view_linknya" type="button" class="btn btn-default view"><i class="text-info fa fa-eye"></i> View LPB</a>
 									</div>
 			                	</td>
 			                </tr>

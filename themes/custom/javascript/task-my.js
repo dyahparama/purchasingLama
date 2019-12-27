@@ -11,7 +11,7 @@ $(document).on('click','.viewpo',function(){
 		$(this).attr('shownya','1');
 	}
 	if (show==1) {
-		$('.showdetail'+link).hide();	
+		$('.showdetail'+link).hide();
 		$(this).attr('shownya','0');
 	}
 });
@@ -24,7 +24,13 @@ $(document).on('click','.viewlpb',function(){
 		$(this).attr('shownya','1');
 	}
 	if (show==1) {
-		$('.showdetaillpb'+link).hide();	
+		$('.showdetaillpb'+link).hide();
 		$(this).attr('shownya','0');
 	}
 });
+
+$(document).on('click', '.button-tutup-po', function(){
+    let c = confirm("Apakah yakin akan menutup po dan membuat rb baru?")
+        if (c)
+            window.location.href = $(this).data('po')
+})

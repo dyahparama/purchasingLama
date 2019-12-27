@@ -479,46 +479,57 @@ namespace {
 
 		public function getTotalTask() {
 			$idnya = $_SESSION['user_id'];
-			$pegawainya = User::get()->byID($idnya)->Pegawai();
-			$config = SiteConfig::current_site_config();
-			$jabatannya = $config->StafPencarianHargaID;
-			$departemennya = $config->DepartemenPencairanHargaID;
-			$jabatanpegawai = [];
-			$departemenpegawai = [];
 			$shownya = 0;
-			foreach ($pegawainya->Jabatans() as $key) {
-				$jabatanpegawai[] = $key->JabatanID;
-				$departemenpegawai[] = $key->DepartemenID;
+		$pegawainya = User::get()->byID($idnya);
+		$config = SiteConfig::current_site_config();
+		$jabatannya = $config->StafPencarianHargaID;
+		$kepala = $config->KepalaFinanceID;
+		$departemennya = $config->DepartemenPencairanHargaID;
+		$jabatanpegawai = [];
+		$departemenpegawai = [];
+		foreach ($pegawainya->Pegawai()->Jabatans() as $key) {
+			$jabatanpegawai[] = $key->JabatanID;
+			$departemenpegawai[] = $key->DepartemenID;
+		}
+		if ((in_array(strtoupper($jabatannya), $jabatanpegawai) && in_array(strtoupper($departemennya), $departemenpegawai)) || $kepala == $pegawainya->ID) {
+			$shownya = 1;
+		}
+		$draftrbnya = DraftRB::get()->where('ForwardToID = ' . $pegawainya->ID);
+		$lpbnya = PO::get();
+		$rb = RB::get();
+		$IsBuat = 0;
+		$jumlahrb = 0;
+		$jumlahpo = 0;
+		$jumlahdraft = 0;
+		$jumlahlpb = 0;
+		// print_r($rb);
+		foreach ($rb as $key) {
+			if (in_array(strtoupper($jabatannya), $jabatanpegawai) && in_array(strtoupper($departemennya), $departemenpegawai) && $key->DraftRB()->Status()->ID == 5) {
+				$jumlahrb++;
 			}
-			if (in_array(strtoupper($jabatannya), $jabatanpegawai) && in_array(strtoupper($departemennya), $departemenpegawai)) {
-				$shownya = 1;
+			else if ($key->DraftRB()->Status->ID == 6 && $pegawainya->Pegawai()->IsTPS == 1) {
+				$jumlahrb++;
 			}
-			$draftrbnya = DraftRB::get()->where('ForwardToID = ' . $pegawainya->ID);
-			$lpbnya = PO::get();
-			$rb = RB::get();
-			$jumlahrb = 0;
-			$jumlahpo = 0;
-			$jumlahdraft = 0;
-			$jumlahlpb = 0;
-			// print_r($rb);
-			foreach ($rb as $key) {
-				if ($key->DraftRB()->ForwardToID == $pegawainya->ID && $key->DraftRB()->Status()->ID != 11) {
-					$jumlahrb++;
-				}
-				if ($key->DraftRB()->Status()->ID == 11 && $shownya == 1) {
-					$jumlahpo++;
-				}
+			else if (($key->DraftRB()->ForwardToID == $pegawainya->ID || $key->DraftRB()->AssistenApproveToID == $pegawainya->ID) && $key->DraftRB()->Status()->ID == 7) {
+				$jumlahrb++;
 			}
-			foreach ($draftrbnya as $key) {
-				if ($key->Status()->ID <= 6 && $shownya == 1) {
-					$jumlahdraft++;
-				}
+			else if (($key->DraftRB()->ForwardToID == $pegawainya->ID || $key->DraftRB()->AssistenApproveToID == $pegawainya->ID) && $key->DraftRB()->Status()->ID == 8) {
+				$jumlahrb++;
 			}
-			foreach ($lpbnya as $key5) {
-				if ($key5->DraftRB()->StatusID != 14 && $shownya == 1) {
+			if (($key->DraftRB()->Status()->ID == 9 || $key->DraftRB()->Status()->ID == 10) && $shownya == 1) {
+				$jumlahpo++;
+			}
+		}
+		foreach ($draftrbnya as $key) {
+			if ($key->Status()->ID <= 5) {
+				$jumlahdraft++;
+			}
+		}
+		foreach ($lpbnya as $key5) {
+			if ($key5->DraftRB()->StatusID != 13 && $key5->TerimaLPBID == $pegawainya->ID) {
 					$jumlahlpb++;
-				}
 			}
+		}
 			$totalnya = $jumlahdraft + $jumlahrb + $jumlahpo + $jumlahlpb;
 			return $totalnya;
 		}

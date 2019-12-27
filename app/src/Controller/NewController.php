@@ -7,6 +7,7 @@ use SilverStripe\Control\Director;
 use SilverStripe\Control\Controller;
 use SilverStripe\Dev\Debug;
 use SilverStripe\ORM\DB;
+use SilverStripe\Assets\File;
 
 class NewController extends PageController
 {
@@ -34,6 +35,13 @@ class NewController extends PageController
         $rbDetailArr = array_unique($rbDetailArr);
 
         if ($rbDetailArr) {
+            // $drafRB = DraftRB::get()->where("Kode LIKE '%DRB%'")->sort("Kode", "DESC")->limit(1);
+            //     if ($drafRB->count()) {
+            //      $kode = "DRB-" . DraftRBController::GenerateKode($drafRB->first()->Kode);
+            //     } else {
+            //      $kode = "DRB-00001";
+            //     }
+
             $draftRB2 = DraftRBDetail::get()->byID($rbDetailArr[0])->DraftRB();
             $cek = DraftRB::create();
             $cek->ForwardToID = 0;
@@ -42,9 +50,9 @@ class NewController extends PageController
             $cek->TglSubmit = $draftRB2->TglSubmit;
             $cek->StatusID = 5;
             $cek->Created = date("Y/m/d H:i:s");
-            $cek->Kode = $kode;
+            $cek->Kode = AddOn::createKode("DraftRB", "DRB");
             $cek->Notes= $draftRB2->Notes;
-
+            $cek->DraftRBLamaID = $draftRB2->ID;
             $cek->Tgl = $draftRB2->Tgl;
 		    $cek->PemohonID = $draftRB2->PemohonID;
 		    $cek->JenisID = $draftRB2->JenisID;
@@ -53,6 +61,11 @@ class NewController extends PageController
 		    $cek->NomorProyek = $draftRB2->NomorProyek;
 		    $cek->PegawaiPerJabatanID = $draftRB2->PegawaiPerJabatanID;
             $draftRBID = $cek->write();
+
+            $rb = RB::create();
+            $rb->Kode = AddOn::createKode("RB", "RB");
+            $rb->DraftRBID = $draftRBID;
+            $rb->write();
 
             foreach ($rbDetailArr as $detail) {
                 $draftRBDetail = DraftRBDetail::get()->byID($detail);
@@ -80,11 +93,34 @@ class NewController extends PageController
                 $detail->KodeInventaris = $draftRBDetail->KodeInvetaris;
                 $detail->JenisID = $draftRBDetail->JenisID;
                 $detail->DraftRBID = $draftRBDetail->DraftRBID;
-                $id = $detail->write();
+                $idDetail = $detail->write();
+
+                foreach ($draftRBDetail->Penawaran() as $gambar) {
+                    $gambarObjectOld = File::get()->byID($gambar->ID);
+
+                    $gambarObjectNew = File::create();
+                    $gambarObjectNew->ClassName = $gambarObjectOld->ClassName;
+                    $gambarObjectNew->Version = $gambarObjectOld->Version;
+                    $gambarObjectNew->CanViewType = $gambarObjectOld->CanViewType;
+                    $gambarObjectNew->CanEditType = $gambarObjectOld->CanEditType;
+                    $gambarObjectNew->Name = $gambarObjectOld->Name;
+                    $gambarObjectNew->Title = $gambarObjectOld->Title;
+                    $gambarObjectNew->ShowInSearch = $gambarObjectOld->ShowInSearch;
+                    $gambarObjectNew->ParentID = $gambarObjectOld->ParentID;
+                    $gambarObjectNew->OwnerID = $gambarObjectOld->OwnerID;
+                    $gambarObjectNew->FileHash = $gambarObjectOld->FileHash;
+                    $gambarObjectNew->FileFilename = $gambarObjectOld->FileFilename;
+                    $gambarObjectNew->FileVariant = $gambarObjectOld->FileVariant;
+                    $idGambar = $gambarObjectNew->write();
+
+                    DB::query("INSERT INTO penawaran (ID, DraftRBDetailID) VALUES ({$idGambar}, {$idDetail})");
+                }
+
 
                 // foreach(Penawaran::get()->where())
             }
         }
+        return $this->redirect(Director::absoluteBaseURL() . "ta");
         // // $po->IsClosed = 1;
         // // $po->write();
 

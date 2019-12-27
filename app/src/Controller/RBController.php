@@ -43,6 +43,29 @@ class RBController extends PageController
                 else {
                     $mode = 3;
                 }
+
+                $historyApproval = HistoryApproval::get()->where("DraftRBID = {$rb->DraftRBID}");
+                $historyForward = HistoryForwarding::get()->where("DraftRBID = {$rb->DraftRBID}");
+
+                $history =  new ArrayList();
+                foreach ($historyApproval as $value) {
+                    $history->push([
+                        "Created"=>$this::FormatDate("H:i d/m/Y",$value->Created) ,
+                        "By"=>$value->ApprovedBy()->Pegawai()->Nama ."[".$this::getJabatanFromStatus($value->Status()->ID)."]",
+                        "Status"=>$value->Status()->Status,
+                        "Note"=>$value->Note]);
+                }
+
+                foreach ($historyForward as $value) {
+                    $history->push([
+                        "Created"=>$this::FormatDate("H:i d/m/Y",$value->Created) ,
+                        "By"=>$value->ForwardForm()->Pegawai()->Nama ."[Pengirim]",
+                        "Status"=>"Dikirim ke ".$value->ForwardTo()->Pegawai()->Nama,
+                        "Note"=>$value->Note]);
+                }
+
+                $history=$history->sort("Created","ASC");
+
                 $drb=$rb->DraftRB();
                 $approver = $drb->ApproveTo()->ID;
                 $data = array(
@@ -56,7 +79,7 @@ class RBController extends PageController
                     "SupplierNama" => Supplier::get(),
                     "New" => 1,
                     "mode" => $mode,
-                    "history" => HistoryApproval::get()->where("DraftRBID = {$rb->DraftRBID}"),
+                    "history" => $history,
                     "pegawai" => User::get(),
                     "ApproveTo" => $approver,
                 );
@@ -123,7 +146,6 @@ class RBController extends PageController
                     "DetailRB" => RB::get()->byID($id)->DraftRB()->Detail(),
                     "DetailPenawaran" => RB::get()->byID($id)->PenawaranSupplier(),
                     "mgeJS" => "rb",
-                    "history" => $history,
                     "mode" => 3
                 );
                 return $this->customise($data)

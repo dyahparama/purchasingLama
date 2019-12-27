@@ -1,9 +1,9 @@
 <div class="page-header">
 	<h1 class="page-title">$PageTitle</h1>
-	<ol class="breadcrumb">
+	<!-- <ol class="breadcrumb">
 	  <li class="breadcrumb-item"><a href="/">Home</a></li>
 	  <li class="breadcrumb-item active">$PageTitle</li>
-	</ol>
+	</ol> -->
 	
 	<div class="page-header-actions">
 		<% if $linkNew %>

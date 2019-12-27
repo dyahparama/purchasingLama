@@ -179,7 +179,7 @@ class MyTaskController extends PageController {
 					$temp3['IsBuat'] = 0;
 					if(isset($lpbbuat->ID)){
 						$temp3['IsBuat'] = 1;
-						$temp3['tutup_po'] = 'po/TutupPO/' . $key5->ID;
+						$temp3['tutup_po'] = 'new/tutup_po/' . $key5->ID;
 						$temp3['isi'] =$lpbbuat->Getdetail($lpbbuat->ID);
 					}
 					// echo $temp3['IsBuat'];
