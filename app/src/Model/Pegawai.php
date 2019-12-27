@@ -79,7 +79,7 @@ class Pegawai extends DataObject
 
     private static $field_labels = [
         'Nama' => 'Nama',
-        'NoInduk' => 'No. Induk Pegawai',
+        'NoInduk' => 'No. Induk Staff',
         'Alamat' => 'Alamat',
         'NoTelp' => 'No. HP',
         'TimTPS' => 'Team TPS'
@@ -111,7 +111,7 @@ class Pegawai extends DataObject
         $fields->add(new TabSet("Root"));
 
         $fields->addFieldToTab("Root.Main", new TextField('Nama', 'Nama'));
-        $fields->addFieldToTab("Root.Main", new TextField('NoInduk', 'No. Induk Pegawai'));
+        $fields->addFieldToTab("Root.Main", new TextField('NoInduk', 'No. Induk Staff'));
         $fields->addFieldToTab("Root.Main", new TextAreaField('Alamat', 'Alamat'));
         $fields->addFieldToTab("Root.Main", new TextField('TempatLahir', 'Tempat Lahir'));
 
@@ -125,7 +125,7 @@ class Pegawai extends DataObject
 
         $grid = new GridField(
             'JabatanGrid',
-            'Jabatan Pegawai',
+            'Jabatan Staff',
             $this->Jabatans(),
             GridFieldConfig::create()
                 ->addComponent(new GridFieldButtonRow('before'))

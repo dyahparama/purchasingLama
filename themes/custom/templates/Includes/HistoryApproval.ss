@@ -6,10 +6,9 @@
 		<table class="table table-striped">
 			<thead>
 				<tr>
-					<th>Nama</th>
-					<th>Jabatan</th>
-					<th>Tanggal Diterima</th>
-					<th>Tanggal Approve</th>
+                    <th>Tanggal</th>
+					<th>Nama [Jabatan]</th>
+					<th>Status</th>
 					<th>Notes</th>
 				</tr>
 			</thead>
@@ -17,16 +16,13 @@
 				<% loop $history %>
 				<tr>
 					<td>
-						$ApprovedBy.Pegawai.Nama
+						$Created
 					</td>
 					<td>
-						$Top.getJabatanFromStatus($Status.ID)		
+						$By
 					</td>
 					<td>
-						$Top.getTglTerima($ID)
-					</td>
-					<td>
-						$Top.getTglApprove($Created)
+						$Status
 					</td>
 					<td>
 						$Note

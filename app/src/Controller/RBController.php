@@ -92,6 +92,27 @@ class RBController extends PageController
                 else {
                     $mode = 3;
                 }
+                $historyApproval = HistoryApproval::get()->where("DraftRBID = {$rb->DraftRBID}");
+                $historyForward = HistoryForwarding::get()->where("DraftRBID = {$rb->DraftRBID}");
+
+                $history =  new ArrayList();
+                foreach ($historyApproval as $value) {
+                    $history->push([
+                        "Created"=>$this::FormatDate("H:i d/m/Y",$value->Created) ,
+                        "By"=>$value->ApprovedBy()->Pegawai()->Nama ."[".$this::getJabatanFromStatus($value->Status()->ID)."]",
+                        "Status"=>$value->Status()->Status,
+                        "Note"=>$value->Note]);
+                }
+
+                foreach ($historyForward as $value) {
+                    $history->push([
+                        "Created"=>$this::FormatDate("H:i d/m/Y",$value->Created) ,
+                        "By"=>$value->ForwardForm()->Pegawai()->Nama ."[Pengirim]",
+                        "Status"=>"Dikirim ke ".$value->ForwardTo()->Pegawai()->Nama,
+                        "Note"=>$value->Note]);
+                }
+
+                $history=$history->sort("Created","ASC");
 
                 $data = array(
                     "SupplierList" => json_encode(AddOn::getOneField(Supplier::get(), "Nama")),
@@ -102,7 +123,7 @@ class RBController extends PageController
                     "DetailRB" => RB::get()->byID($id)->DraftRB()->Detail(),
                     "DetailPenawaran" => RB::get()->byID($id)->PenawaranSupplier(),
                     "mgeJS" => "rb",
-                    "history" => HistoryApproval::get()->where("DraftRBID = {$rb->DraftRBID}"),
+                    "history" => $history,
                     "mode" => 3
                 );
                 return $this->customise($data)
@@ -141,7 +162,7 @@ class RBController extends PageController
             foreach ($namaBarang as $key => $value) {
                 $draftRBDetail = DraftRBDetail::get()->byID($key);
                 $draftRBDetail->NamaBarang = $namaBarang[$key];
-                $draftRBDetail->jumlahDisetujui = $jumlahDisetujui[$key];
+                $draftRBDetail->JumlahDisetujui = $jumlahDisetujui[$key];
                 $draftRBDetail->Spesifikasi = $sepesifikasiBarang[$key];
                 $draftRBDetail->KodeInventaris = $kodeInvetaris[$key];
                 $draftRBDetail->write();
@@ -220,7 +241,7 @@ class RBController extends PageController
         $note = $_REQUEST['note'];
         $user_id = $_SESSION['user_id'];
         $respond = $_REQUEST['respond'];
-        
+
         if ($respond == "approve") {
             PageController::ApproveRB($note, $rb, $user_id);
         } else if ($respond == "reject") {
@@ -474,12 +495,12 @@ function searchRb()
 
                     $ForwardTo = StatusPermintaanBarang::get()->byID($last_pos->StatusID + 1)->Status;
                 }
-                
+
                 /*echo $row->ID."</br>";
                 echo $last_pos->ApprovedByID."</br>";*/
-                
+
                 // $ForwardTo = User::get()->byID($last_pos->ApprovedByID)->Pegawai()->Nama;
-                $temp[] = $ForwardTo;   
+                $temp[] = $ForwardTo;
             }else
             $temp[] = $row->{$col['ColumnDb']};
 

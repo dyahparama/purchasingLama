@@ -78,7 +78,7 @@ $(document).on('keyup', '.harga-detail, .jumlah-detail', function() {
 
 $(document).on('change', '.supplier-nama', function(){
     if ($(this).val()) {
-        let parent = $(this).parent().parent().parent().parent()
+        let parent = $(this).closest( "tr" )
         $.ajax({
             url: baseURL+uri_segment+"/getKodeSupplier",
             type: "get", //form method
@@ -192,9 +192,9 @@ $(document).on('click', '.delete-detail-penawaran', function () {
 
 $(document).on('change', '.penawaran-file', function() {
     if ($(this).val() && $(this).hasClass('first-only')) {
-        let html = '<div class="penawaran-file-div"><button class="btn btn-danger btn-xs waves-effect waves-classic modal-select2-show waves-effect waves-classic" type="button" disabled>Delete</button>'
+        let html = '<div class="penawaran-file-div"><button class="penawaran-file-button btn btn-danger btn-xs waves-effect waves-classic modal-select2-show waves-effect waves-classic" type="button" disabled>Delete</button>'
         html += '<input class="penawaran-file first-only" type="file" name="penawaran_file_'+penawaranRow+'[]"></div>'
-        
+
         let parent_td = $(this).parent().parent()
         let parent_div = $(this).parent()
 
@@ -216,11 +216,12 @@ $("#submit-master").click(function(e) {
         let pass = true;
         let data = $("#form-rb").serializeArray();
         data.forEach(element => {
-            if ((element.value == "" && !element.name.includes("kode_supplier")) 
-                && (element.value == "" && !element.name.includes("Pemohon")) 
+            if ((element.value == "" && !element.name.includes("kode_supplier"))
+                && (element.value == "" && !element.name.includes("Pemohon"))
                 && (element.value == "" && !element.name.includes("user_forward"))
                 && (element.value == "" && !element.name.includes("keterangan"))
                 && (element.value == "" && !element.name.includes("note"))
+                && (element.value == "" && !element.name.includes("inventaris_barang"))
                 ) {
                 pass = false;
             }

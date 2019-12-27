@@ -205,6 +205,14 @@ namespace {
 			$drb->write();
 		}
 
+		static function MoneyFormat($prefix, $value) {
+			return $prefix . " " . number_format($value, 2, ",", ".");
+		}
+
+		static function FormatDate($format, $value) {
+			return date($format, strtotime($value));
+		  }
+
 		public static function getJabatanFromStatus($status) {
 			switch ($status) {
 			case 2:

@@ -276,3 +276,25 @@
 		</div>
 	</div>
 </div>
+
+<div class="modal fade modal-fade-in-scale-up" id="printPO" aria-hidden="true"
+	aria-labelledby="exampleModalTitle" role="dialog" tabindex="-1">
+	<div class="modal-dialog modal-simple modal-sm">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close close-modal" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">×</span>
+				</button>
+				<h4 class="modal-title">Modal Title</h4>
+			</div>
+			<div class="modal-body">
+				<div class="example">
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary">Print Tanpa Termin</button>
+          <button type="button" class="btn btn-primary">Print Dengan Termin</button>
+			</div>
+		</div>
+	</div>
+</div>

@@ -8,6 +8,7 @@ use SilverStripe\View\Requirements;
 use SilverStripe\ORM\DB;
 use SilverStripe\Control\Controller;
 use Mpdf\Mpdf;
+use Silverstripe\SiteConfig\SiteConfig;
 
 
 class POController extends PageController
@@ -18,22 +19,34 @@ class POController extends PageController
 
     public function printPO(HTTPRequest $request){
         $id = $request->params()["ID"];
+        $isTermin=false;
+        if (!empty($request->params()["Name"])) {
+            $isTermin=true;
+        }
         $PO = PO::get()->byID($id);
         $detailPO = $PO->Detail();
         $termin = $PO->Termin();
-
+        $siteconfig = SiteConfig::current_site_config();
+        $totalTermin=0;
+        
+        foreach ($termin as $value) {
+            $totalTermin+=$value->Jumlah;
+        }
         $data=[
             "NamaPerusahaan"=>"Purchase",
             "PO" => $PO,
             "Detail" => $detailPO,
-            "Termin"=>$termin
+            "Termin"=>$termin,
+            "SiteConfig"=>$siteconfig,
+            "TotalTermin"=>$totalTermin,
+            "IsTermin"=>$isTermin
         ];
-        echo( $this->customise($data)->renderWith('PrintPDF'));
+        //echo( $this->customise($data)->renderWith('PrintPDF'));
         // die;
         
-        // $mpdf = new Mpdf();
-        // $mpdf->WriteHTML($this->customise($data)->renderWith('PrintPDF'));
-        // $mpdf->Output();
+        $mpdf = new Mpdf();
+        $mpdf->WriteHTML($this->customise($data)->renderWith('PrintPDF'));
+        $mpdf->Output();
     }
     public function ApprovePage(HTTPRequest $request)
     {
@@ -432,15 +445,37 @@ class POController extends PageController
 
 
                 $view_link =  'view/' . $id;
-                $delete_link = 'deletereqcost/' . $id;
+                $print_link = 'printPO/' . $id;
+                $print_link_termin = 'printPO/' . $id.'/Termin';
 
                 $temp[] = '
                     <div class="btn-group">
-                      <a href="' . $view_link . '" type="button" class="btn btn-default view"><i class="text-info fa fa-eye"></i> View</a>
-                      <a href="' . $delete_link . '" type="button" class="btn btn-danger delete"><i class="text-info fa fa-eye"></i> Delete</a>
+                        <a href="' . $view_link . '" type="button" class="btn btn-default view"><i class="text-info fa fa-eye"></i>
+                            View</a>
+                        <button type="button" data-id="'.$id.'" class="btn btn-danger print-po"><i class="text-info fa fa-eye"></i>
+                            Print PDF</button>
                     </div>
-                    ';
-
+                    <div class="modal fade modal-fade-in-scale-up" id="printPO-'.$id.'" aria-hidden="true" aria-labelledby="exampleModalTitle"
+                        role="dialog" tabindex="-1">
+                        <div class="modal-dialog modal-simple modal-md">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close close-modal" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                    <h4 class="modal-title">Print PO</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="example">
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <a type="button" href="' . $print_link . '" class="btn btn-primary">Print Tanpa Termin</a>
+                                    <a type="button" href="' . $print_link_termin . '" class="btn btn-primary">Print Dengan Termin</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>';
                 $arr[] = $temp;
             }
         }

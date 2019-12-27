@@ -141,7 +141,26 @@ class DraftRBController extends PageController {
 		$jabatanPerCabang = $jabatan->Jabatan()->Nama . "/" . $jabatan->Cabang()->Nama;
 		$pegawai = User::get()->where("ID <> {$_SESSION['user_id']}");
 		$detail = $drb->Detail();
-		$history = HistoryApproval::get()->where("DraftRBID = {$drb->ID}");
+		$history =  new ArrayList();
+		$historyApproval = HistoryApproval::get()->where("DraftRBID = {$drb->ID}");
+        $historyForward = HistoryForwarding::get()->where("DraftRBID = {$drb->ID}");
+		foreach ($historyApproval as $value) {
+			$history->push([
+				"Created"=>$this::FormatDate("H:i d/m/Y",$value->Created) ,
+				"By"=>$value->ApprovedBy()->Pegawai()->Nama ."[".$this::getJabatanFromStatus($value->Status()->ID)."]",
+				"Status"=>$value->Status()->Status,
+				"Note"=>$value->Note]);
+		}
+
+		foreach ($historyForward as $value) {
+			$history->push([
+				"Created"=>$this::FormatDate("H:i d/m/Y",$value->Created) ,
+				"By"=>$value->ForwardForm()->Pegawai()->Nama ."[Pengirim]",
+				"Status"=>"Dikirim ke ".$value->ForwardTo()->Pegawai()->Nama,
+				"Note"=>$value->Note]);
+		}
+
+		$history=$history->sort("Created","ASC");
 		$isCan = $this->getApprover($drb);
         $approver = $drb->ApproveTo()->ID;
 		$data = [

@@ -232,11 +232,17 @@ $(document).on('keyup', '.jumlah-termin', function(){
         $('#total-akhir-termin-po').val(jumlahAkhir)
 })
 
+
+
 $("#submit-po").click(function(e) {
         let pass = true;
         let data = $("#form-po").serializeArray();
+        if ($('#total-akhir-termin-po').val() != $('#total-akhir-po').val()) {
+            alert("Jumlah termin tidak sesuai")
+            pass = false
+        }
         data.forEach(element => {
-            if ((element.value == "" && !element.name.includes("satuanid")) 
+            if ((element.value == "" && !element.name.includes("satuanid"))
                 ) {
                 pass = false;
             }
@@ -248,3 +254,23 @@ $("#submit-po").click(function(e) {
             alert("data belum lengkap");
         }
     });
+
+    $(document).on('click', '.print-po', function () {
+        //console.log("xxx");
+        $("#printPO-"+$(this).data("id")).modal("show");
+            $(".select2-container").addClass("z-index-1");
+            $(".select2-modal")
+                .next()
+                .removeClass("z-index-1");
+            $(".select2-modal")
+                .next()
+                .css("width", "100%");
+      });
+
+    $(".close-modal").click(function(e) {
+        setTimeout(() => {
+            $(".select2-container").removeClass("z-index-1");
+        }, 500);
+    });
+
+

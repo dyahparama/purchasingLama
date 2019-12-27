@@ -219,7 +219,7 @@
 										<a type="button" href="{$BaseHref}$view_link" class="btn btn-default"><i class="text-info fa fa-eye"></i> Buat LPB</a>
 									</div>
 									<div class="btn-group">
-										<a href="'{$BaseHref}$tutup_po'" type="button" class="btn btn-danger delete"><i class="text-info fa fa-eye"></i> Tutup PO</a>
+										<a href="{$BaseHref}$tutup_po" type="button" class="btn btn-danger delete"><i class="text-info fa fa-eye"></i> Tutup PO</a>
 									</div>
 								</td>
 								<% else %>

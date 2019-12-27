@@ -260,7 +260,7 @@ class LPBController extends PageController
                     $kode = $row->PO()->RB()->DraftRB()->Kode;
                     $temp[] = $kode;
                 }elseif ($col['ColumnDb'] == 'supplier') {
-                    $kode = $row->PO()->Supplier()->Nama;
+                    $kode = $row->PO()->NamaSupplier;
                     $temp[] = $kode;
                 }else
                     $temp[] = $row->{$col['ColumnDb']};

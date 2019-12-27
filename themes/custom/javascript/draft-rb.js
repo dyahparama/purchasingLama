@@ -266,7 +266,6 @@ $(document).ready(function() {
                     location.reload();
                 },
                 complete: function(result) {
-                    alert('Berhasil simpan')
                     location.reload();
 
                 },

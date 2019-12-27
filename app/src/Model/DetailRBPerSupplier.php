@@ -22,4 +22,8 @@ class DetailRBPerSupplier extends DataObject
         'RB' => RB::class,
         'Supplier' => Supplier::class
     ];
+
+    private static $has_many = [
+        'DetailLPB' => LPBDetail::class
+    ];
 }

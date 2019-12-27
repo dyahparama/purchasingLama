@@ -23,6 +23,19 @@ $(document).on('change', '#nama-supplier', function(){
     }
 })
 
+$(document).on('change', '.jumlah-diterima-lpb', function () {
+    let parent = $(this).parent().parent()
+    let jumlahKirim = parent.find(".jumlah-lpb").val() ? parent.find(".jumlah-lpb").val() : 0
+    let jumlahTerima = parent.find(".jumlah-diterima-lpb").val() ? parent.find(".jumlah-diterima-lpb").val() : 0
+
+    console.log("aaaa")
+
+    if (jumlahKirim < jumlahTerima) {
+        alert("Jumlah diterima salah")
+        $(this).val(parseInt(jumlahKirim))
+    }
+})
+
 $(document).on('keyup', '.jumlah-diterima-lpb', function () {
     let parent = $(this).parent().parent()
     let harga = parent.find(".harga-lpb").val() ? parent.find(".harga-lpb").val() : 0
@@ -41,8 +54,8 @@ $("#submit-lpb").click(function(e) {
         let pass = true;
         let data = $("#form-lpb").serializeArray();
         data.forEach(element => {
-            if ((element.value == "" && !element.name.includes("kode_supplier")) 
-                && (element.value == "" && !element.name.includes("Pemohon")) 
+            if ((element.value == "" && !element.name.includes("kode_supplier"))
+                && (element.value == "" && !element.name.includes("Pemohon"))
                 && (element.value == "" && !element.name.includes("user_forward"))
                 && (element.value == "" && !element.name.includes("keterangan"))
                 ) {

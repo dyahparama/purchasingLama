@@ -17,7 +17,7 @@ class DraftRB extends DataObject
     ];
     private static $indexes = [
         'Kode' =>[
-            'type' => 'unique', 
+            'type' => 'unique',
             'columns' => ['Kode',]
         ],
     ];
@@ -27,7 +27,8 @@ class DraftRB extends DataObject
         'ApproveTo'=> User::class,
         'AssistenApproveTo'=> User::class,
         'PegawaiPerJabatan' => PegawaiPerJabatan::class,
-        'Status' => StatusPermintaanBarang::class
+        'Status' => StatusPermintaanBarang::class,
+        'DraftRBLama' => DraftRB::class
     ];
 
     private static $has_many = [

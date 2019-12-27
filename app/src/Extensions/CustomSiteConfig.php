@@ -26,7 +26,11 @@ class CustomSiteConfig extends DataExtension
         'email_from'        => 'Text',
         'email_from_name'    => 'Text',
         'NominalTPS' => 'Double',
-        'NominalPimpinan' => 'Double'
+        'NominalPimpinan' => 'Double',
+        'Alamat' => 'Varchar(255)',
+        'Telp' => 'Varchar(15)',
+        'Fax' => 'Varchar(50)',
+        'Perusahaan' => 'Varchar(50)'
     ];
 
     private static $has_one = [
@@ -89,6 +93,20 @@ class CustomSiteConfig extends DataExtension
         $text = new TextField("NominalPimpinan", "Nominal Approval Pimpinan");
         $fields->addFieldsToTab("Root.Approval Khusus", $text);
 
+        $text = new TextField("Perusahaan", "Nama Perusahaan");
+        $fields->addFieldsToTab("Root.Main", $text);
+
+        $text = new TextField("Alamat", "Alamat Perusahaan");
+        $fields->addFieldsToTab("Root.Main", $text);
+
+        $text = new TextField("Telp", "Telp. Perusahaan");
+        $fields->addFieldsToTab("Root.Main", $text);
+
+        $text = new TextField("Fax", "Fax. Perusahaan");
+        $fields->addFieldsToTab("Root.Main", $text);
+
+        $fields->removeByName("Title");
+        $fields->removeByName("Tagline");
 
         $grid = new GridField(
             'BarangGrid',
