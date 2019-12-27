@@ -67,7 +67,7 @@
                                         <tbody id="table-body">
                                             <% loop $LPB.Detail %>
                                             <tr class="table-row">
-                                                <input type="hidden" value="$ID" name="detail_id[]"> 
+                                                <input type="hidden" value="$ID" name="detail_id[]">
                                                 <td class="jenis-barang">
                                                     <input name="jenis_barang[]" class="form-control"
                                                         value="$Jenis.Nama" readonly autocomplete="off">
@@ -82,7 +82,7 @@
                                                 </td>
                                                 <td>
                                                     <input name="jumlah_diterima[]" type="number" class="jumlah-diterima-lpb form-control"
-                                                        value="$JumlahDiterima" readonly autocomplete="off">
+                                                        value="$JumlahTerima" readonly autocomplete="off">
                                                 </td>
                                                 <td>
                                                     <input type="hidden" name="satuanid[]" value="$SatuanID">

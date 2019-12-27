@@ -28,9 +28,10 @@ $(document).on('change', '.jumlah-diterima-lpb', function () {
     let jumlahKirim = parent.find(".jumlah-lpb").val() ? parent.find(".jumlah-lpb").val() : 0
     let jumlahTerima = parent.find(".jumlah-diterima-lpb").val() ? parent.find(".jumlah-diterima-lpb").val() : 0
 
-    console.log("aaaa")
+    console.log(jumlahKirim)
+    console.log(jumlahTerima)
 
-    if (jumlahKirim < jumlahTerima) {
+    if (parseFloat(jumlahKirim) < parseFloat(jumlahTerima)) {
         alert("Jumlah diterima salah")
         $(this).val(parseInt(jumlahKirim))
     }

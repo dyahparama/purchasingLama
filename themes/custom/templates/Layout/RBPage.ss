@@ -38,10 +38,17 @@
                                             <span class="input-group-addon">
                                                 <i class="icon md-calendar" aria-hidden="true"></i>
                                             </span>
+                                            <% if $DraftRB.Tgl %>
+                                            <input class="form-control" id="tgl-draft" name="tgl-rb"
+                                            data-date-format="dd/mm/yyyy"
+                                            value="$DraftRB.Tgl.format(dd/MM/yyyy)" readonly data-plugin="datepicker"
+                                            type="text">
+                                            <% else %>
                                             <input class="form-control" id="tgl-draft" name="tgl-rb"
                                             data-date-format="dd/mm/yyyy" data-now="$dateNow"
                                             value="$Now.format(dd/MM/yyyy)" data-plugin="datepicker"
                                             type="text">
+                                            <% end_if %>
                                         </div>
                                     </div>
                                 </div>
@@ -100,15 +107,15 @@
                                     <table class="table table-striped">
                                         <thead>
                                             <tr>
-                                                <th>Jenis Barang</th>
-                                                <th>Nama Barang</th>
-                                                <th>Jumlah</th>
-                                                <th>Jumlah Disetujui</th>
-                                                <th>Satuan</th>
-                                                <th>Spesifikasi Barang</th>
-                                                <th>Supplier Lokal</th>
-                                                <th>Penawaran</th>
-                                                <th>Kode Inventaris</th>
+                                                <th class="th-detail">Jenis Barang</th>
+                                                <th class="th-detail">Nama Barang</th>
+                                                <th class="th-detail">Jumlah</th>
+                                                <th class="th-detail">Jumlah Disetujui</th>
+                                                <th class="th-detail">Satuan</th>
+                                                <th class="th-detail">Spesifikasi Barang</th>
+                                                <th class="th-detail">Supplier Lokal</th>
+                                                <th class="th-detail">Penawaran</th>
+                                                <th class="th-detail">Kode Inventaris</th>
                                                 <th></th>
                                             </tr>
                                         </thead>
@@ -126,7 +133,7 @@
                                                     <!-- <input type="hidden" val="jumlah" class="jumlah_total_{$ID}" <% if $Top.mode != 1 %>readonly<% end_if %>> -->
                                                 </td>
                                                 <td>
-                                                    <input name="jumlah_disetujui[$ID]" class="form-control jumlah_total_{$ID} harga-detail" type="text" 
+                                                    <input name="jumlah_disetujui[$ID]" class="form-control jumlah_total_{$ID} harga-detail" type="text"
                                                     <% if $JumlahDisetujui %>
                                                     value="$JumlahDisetujui"
                                                     <% else %>
@@ -271,7 +278,8 @@
                                         <select id="select-forward-to" class="form-control" name="user_forward" data-plugin="select2">
                                             <option value="">Pilih Pegawai</option>
                                             <% loop $pegawai %>
-                                            <option value="$ID">$Pegawai.Nama</option>
+                                            <option <% if $Top.ApproveTo == $Pegawai.User().ID %> selected <% end_if %> value="$Pegawai.User().ID">
+                                                $Pegawai.Nama</option>
                                             <% end_loop %>
                                         </select>
                                     </div>

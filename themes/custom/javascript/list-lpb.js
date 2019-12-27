@@ -120,8 +120,8 @@ $(document).ready(function(){
 		  name: 'kdrb',
 		  source: substringMatcher(kdrb)
 	});
-	
-	
+
+
 
 	/**fill vendor dropdown (select2)**/
 	$.each(vendor, function(idx, data){
@@ -151,6 +151,12 @@ $(document).ready(function(){
       	'dom': '<"top"l>rt<"bottom"ip><"clear">',
 		'processing': true,
 		'serverSide': true,
+		'columnDefs': [
+			{
+				targets: 6,
+				orderable: false
+			}
+		],
 		// 'responsive': true,
 		// 'columnDefs': [{
 		// 	targets: 7,

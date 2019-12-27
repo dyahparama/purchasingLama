@@ -4,7 +4,7 @@
 	  <li class="breadcrumb-item"><a href="/">Home</a></li>
 	  <li class="breadcrumb-item active">$PageTitle</li>
 	</ol> -->
-	
+
 	<div class="page-header-actions">
 		<% if $linkNew %>
 	  <a href="{$BaseHref}{$linkNew}" type="button" class="btn  btn-icon btn-primary btn-round" data-toggle="tooltip"
@@ -23,5 +23,5 @@
 		<i class="icon md-settings" aria-hidden="true"></i>
 	  </button> -->
 	</div>
-	
+
   </div>

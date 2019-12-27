@@ -22,7 +22,7 @@
               <div>
                 <p>Kode PO</p>
                 <div class="example">
-                  <input type="text" class="form-control" name="kodeDraftRb" id="kodeDraftRb" placeholder="Kode Draft RB">
+                  <input type="text" class="form-control" name="Kode" id="Kode" placeholder="Kode PO">
                 </div>
               </div>
               <!-- End Example Basic -->
@@ -32,7 +32,7 @@
               <div>
                 <p>Draft RB</p>
                 <div class="example">
-                	<input type="text" class="form-control" name="kodeDraftRb" id="kodeDraftRb" placeholder="Kode Draft RB">
+                	<input type="text" class="form-control" name="KodeDRB" id="KodeDRB" placeholder="Kode Draft RB">
                 </div>
               </div>
               <!-- End Example Basic -->
@@ -42,7 +42,7 @@
               <div>
                 <p>Kode RB</p>
                 <div class="example">
-                  <input type="text" class="form-control" name="kodeDraftRb" id="kodeDraftRb" placeholder="Kode Draft RB">
+                  <input type="text" class="form-control" name="KodeRB" id="KodeRB" placeholder="Kode RB">
                 </div>
               </div>
               <!-- End Example Basic -->
@@ -53,7 +53,7 @@
               <div>
                 <p>Tanggal PO</p>
                 <div class="example">
-                  <input class="form-control" id="tgl-draft" name="tgl"
+                  <input class="form-control" id="Tgl" name="Tgl"
                   data-date-format="dd/mm/yyyy" data-now="{$Now.format('dd/MM/yyyy')}" data-plugin="datepicker"
                   type="text">
                 </div>
@@ -114,17 +114,6 @@
                   </div>
                 </div>
 
-              </div>
-              <!-- End Example Color -->
-            </div>
-
-            <div class="col-md-6 col-xl-4">
-              <!-- Example Color -->
-              <div>
-                <p>Deskripsi Kebutuhan</p>
-                <div class="example">
-                  <textarea class="form-control" name="deskripsi" id="deskripsi" rows="2"></textarea>
-                </div>
               </div>
               <!-- End Example Color -->
             </div>
@@ -215,14 +204,6 @@
 								<option value="$ID">{$Nama}</option>
 								<% end_loop %>
 							</select>
-						</div>
-					</div>
-					<div class="form-group form-material row">
-						<label class="col-md-3 col-form-label">Deskripsi Kebutuhan :</label>
-						<div class="col-md-9">
-							<div class="input-group">
-								<textarea class="form-control"></textarea>
-							</div>
 						</div>
 					</div>
 					<div class="form-group form-material row">

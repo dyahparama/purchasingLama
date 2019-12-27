@@ -177,10 +177,20 @@ $(document).ready(function(){
 		'processing': true,
 		'serverSide': true,
 		// 'responsive': true,
-		'columnDefs': [{
-			targets: 7,
-			render: $.fn.dataTable.render.ellipsis( 25, true )
-		}],
+		'columnDefs': [
+			{
+				targets: 7,
+				render: $.fn.dataTable.render.ellipsis( 25, true )
+			},
+			{
+				targets: [6,7,10],
+				orderable: false
+			}
+		],
+		// 'columnDefs': [{
+		// 	targets: 7,
+		// 	orderable: false
+		// }],
 		// 'order': [[0,'desc']],
 		// <%-- 'pagingType': 'full_numbers', --%>
 		// <%-- 'lengthMenu'    : [5, 10, 15, 20], --%>

@@ -86,10 +86,11 @@
 
     <!-- <script src="$ThemeDir/global/vendor/formvalidation/formValidation.min.js"></script>
     <script src="$ThemeDir/global/vendor/formvalidation/framework/bootstrap4.min.js"></script> -->
-    
+
     <%-- typeahead  --%>
     <script src="$ThemeDir/global/vendor/typeahead-js/bloodhound.min.js"></script>
     <script src="$ThemeDir/global/vendor/typeahead-js/typeahead.jquery.min.js"></script>
+    <script src="$ThemeDir/javascript/autonumeric.min.js"></script>
 
     <%-- advanced panel --%>
     <script src="$ThemeDir/global/vendor/switchery/switchery.js"></script>
@@ -106,4 +107,4 @@
     <script src="$ThemeDir/global/js/Plugin/table.js"></script>
 
     <script src="$ThemeDir/javascript/{$mgeJS}.js"></script>
-    
+

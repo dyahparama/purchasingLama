@@ -121,7 +121,7 @@
                                                         value="$DraftRBDetail.NamaBarang" readonly autocomplete="off">
                                                 </td>
                                                 <td>
-                                                    <input name="jumlah[]" class="jumlah-po form-control jumlah-po-val" readonly
+                                                    <input name="jumlah[]" class="autonumeric jumlah-po form-control jumlah-po-val" readonly
                                                         value="$Jumlah" autocomplete="off">
                                                 </td>
                                                 <td>
@@ -131,18 +131,18 @@
                                                         value="$DraftRBDetail.SatuanID" autocomplete="off" type="hidden">
                                                 </td>
                                                 <td>
-                                                    <input name="harga[]" class="form-control harga-po-val" type="text"
+                                                    <input name="harga[]" class="autonumeric form-control harga-po-val" type="text"
                                                         value="$Harga" readonly autocomplete="off">
                                                 </td>
                                                 <td>
-                                                    <input name="subtotal[]" class="form-control subtotal-po-val" type="text"
+                                                    <input name="subtotal[]" class="autonumeric form-control subtotal-po-val" type="text"
                                                         value="$Total" autocomplete="off" readonly>
                                                 </td>
                                             </tr>
                                             <% end_loop %>
                                             <tr id="row-total">
                                                 <td colspan="5">Jumlah</td>
-                                                <td><input id="total-akhir-po" name="total-akhir-po" class="form-control" type="text" value="{$Total}"
+                                                <td><input id="total-akhir-po" name="total-akhir-po" class="autonumeric form-control" type="text" value="{$Total}"
                                                     autocomplete="off" readonly></td>
                                             </tr>
                                         </tbody>
@@ -193,7 +193,7 @@
                                                     <textarea class="form-control" name="keterangan-termin[]"></textarea>
                                                 </td>
                                                 <td>
-                                                    <input name="total-termin[]" class="form-control jumlah-termin required-field" type="number"
+                                                    <input name="total-termin[]" class="autonumeric form-control jumlah-termin required-field" type="number"
                                                         value="0" autocomplete="off">
                                                 </td>
                                                 <td>
@@ -215,13 +215,13 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                
+
                                 <div class="form-group form-material row">
                                     <div class="col-md-9">
                                         <button type="button" id="submit-po" class="btn-primary btn">Submit</button>
                                     </div>
                                 </div>
-                                
+
                             </form>
                         </div>
                     </div>

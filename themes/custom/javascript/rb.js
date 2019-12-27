@@ -101,7 +101,7 @@ $(document).on('click', '.delete-row', function () {
     // alert($('#table-body tr').length)
     let parent = $(this).parent().parent().parent().parent()
     // console.log(parent.html())
-    if (parent.find('tbody tr').length > 2) {
+    if (parent.find('tbody tr').length > 1) {
         // alert("Detailsss")
         let c = confirm("Apakah yakin akan menghapus data?")
         if (c)

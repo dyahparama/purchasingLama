@@ -215,11 +215,11 @@
 									<div class="col-md-5" id="forward-to">
 										<label class="col-md-3 col-form-label">Forward To :</label>
 										<div class="col-md-9">
-											<select id="select-forward-to" class="form-control" name="jabatan-cabang"
-												data-plugin="select2">
-												<option>Pilih Pegawai</option>
+											<select id="select-forward-to" class="form-control" name="jabatan-cabang" data-plugin="select2"
+												>
+												<option value="">Pilih Pegawai</option>
 												<% loop $pegawai %>
-												<option <% if $Top.ApproveTo == '$ID' %> selected <% end_if %> value="$Pegawai.User().ID">
+												<option <% if $Top.ApproveTo == $Pegawai.User().ID %>selected<% end_if %> value="$Pegawai.User().ID">
 													$Pegawai.Nama</option>
 												<% end_loop %>
 											</select>

@@ -17,7 +17,10 @@
     min-width: 200px;
 }
 
-
+.site-menubar-fold .site-menu>.site-menu-item>a .site-menu-title{
+    visibility: initial;
+    opacity: 100%;
+}
 /* .form-material .form-control, .form-material .form-control.focus, .form-material .form-control:focus{
     background-image: linear-gradient(#b71c1c,#b71c1c),linear-gradient(#e0e0e0,#e0e0e0);
 }

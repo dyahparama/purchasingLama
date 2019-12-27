@@ -28,7 +28,7 @@ class POController extends PageController
         $termin = $PO->Termin();
         $siteconfig = SiteConfig::current_site_config();
         $totalTermin=0;
-        
+
         foreach ($termin as $value) {
             $totalTermin+=$value->Jumlah;
         }
@@ -43,7 +43,7 @@ class POController extends PageController
         ];
         //echo( $this->customise($data)->renderWith('PrintPDF'));
         // die;
-        
+
         $mpdf = new Mpdf();
         $mpdf->WriteHTML($this->customise($data)->renderWith('PrintPDF'));
         $mpdf->Output();
@@ -77,10 +77,10 @@ class POController extends PageController
                         'POPage', 'Page',
                     ));
             } else {
-                return $this->redirect(Director::absoluteBaseURL() . "po");
+                return $this->redirect(Director::absoluteBaseURL() . "ta");
             }
         } else {
-            return $this->redirect(Director::absoluteBaseURL() . "po");
+            return $this->redirect(Director::absoluteBaseURL() . "ta");
         }
     }
 
@@ -160,7 +160,7 @@ class POController extends PageController
             $po->Nama = $_REQUEST['nama_deliver'];
             $po->Alamat = $_REQUEST['alamat'];
             $po->Kontak = $_REQUEST['kontak'];
-            $po->SuratJalan = $_REQUEST['surat_jalan'];
+            // $po->SuratJalan = $_REQUEST['surat_jalan'];
             $idPO = $po->write();
 
             $jenisBarang = $_REQUEST['jenis_barangid'];
@@ -207,7 +207,7 @@ class POController extends PageController
                 $poTermin->write();
             }
 
-            return $this->redirect(Director::absoluteBaseURL() . "po/PoList");
+            return $this->redirect(Director::absoluteBaseURL() . "ta");
         }
     }
 
@@ -231,7 +231,7 @@ class POController extends PageController
             'url'  => 'searchcosting',
             'siteParent' => "PO",
             'siteChild' => $curStat,
-            'linkNew' => "/draf-rb"
+            // 'linkNew' => "/draf-rb"
         ];
 
         return $this->customise($data)
@@ -389,13 +389,99 @@ class POController extends PageController
         $columns = $this->getCustomColumns('drb');
         $params_array = [];
         parse_str($filter_record, $params_array);
-
-        $result = PO::get();
+        $count_all = PO::get()->innerJoin("rb", "\"rb\".\"ID\" = \"po\".\"RBID\"")->innerJoin("draftrb", "\"draftrb\".\"ID\" = \"po\".\"draftrbID\"");
+        $result = PO::get()->innerJoin("rb", "\"rb\".\"ID\" = \"po\".\"RBID\"")->innerJoin("draftrb", "\"draftrb\".\"ID\" = \"po\".\"draftrbID\"");
         // ->limit($length, $start)
         // ->sort($columns[$fieldsort]['ColumnDb'] . ' ' . $typesort);
+        // Filter
+            $params_array = [];
+            parse_str($filter_record, $params_array);
 
+            // unset every empty parameters
+            if(!empty($params_array['Tgl']))
+                $tgl = AddOn::convertDate($params_array['Tgl']);
+            if(!empty($params_array['jenisper']))
+                $jenis = $params_array['jenisper'];
+            if(!empty($params_array['jbarang']))
+                $jbarang = $params_array['jbarang'];
+            if(!empty($params_array['Kode']))
+                $kodepo = $params_array['Kode'];
+            if(!empty($params_array['KodeDRB']))
+                $KodeDRB = $params_array['KodeDRB'];
+            if(!empty($params_array['KodeRB']))
+                $KodeRB = $params_array['KodeRB'];
+            if(!empty($params_array['statusid']))
+                $statusid = $params_array['statusid'];
+
+            unset($params_array['Tgl']);
+            unset($params_array['jenisper']);
+            unset($params_array['jbarang']);
+            unset($params_array['Kode']);
+            unset($params_array['KodeDRB']);
+            unset($params_array['KodeRB']);
+
+            foreach ($params_array as $key => $value) {
+                if(empty($params_array[$key]))
+                    unset($params_array[$key]);
+            }
+            if (!empty($tgl)) {
+                $result = $result->where("po.Tgl <= '{$tgl}'");
+                $count_all->where("po.Tgl <= '{$tgl}'");
+            }
+            if (!empty($jenis)) {
+                $result = $result->where("draftrb.Jenis = '{$jenis}'");
+                $count_all = $count_all->where("draftrb.Jenis = '{$jenis}'");
+            }
+            if (!empty($jbarang)) {
+                $result = $result
+                ->innerJoin("draftrbdetail", "\"draftrbdetail\".\"DraftRBID\" = \"draftrb\".\"ID\"")
+                ->where("draftrbdetail.JenisID = '{$jbarang}'");
+                $count_all = $count_all
+                ->innerJoin("draftrbdetail", "\"draftrbdetail\".\"DraftRBID\" = \"draftrb\".\"ID\"")
+                ->where("draftrbdetail.JenisID = '{$jbarang}'");
+            }
+            if (!empty($kodepo)) {
+                $result = $result->where("Kode like '%{$kodepo}%'");
+                $count_all->where("Kode like '%{$kodepo}%'");
+            }
+            if (!empty($KodeDRB)) {
+                $result = $result->where("draftrb.Kode like '%{$KodeDRB}%'");
+                $count_all->where("draftrb.Kode like '%{$KodeDRB}%'");
+            }
+            if (!empty($KodeRB)) {
+                $result = $result->where("rb.Kode like '%{$KodeRB}%'");
+                $count_all->where("rb.Kode like '%{$KodeRB}%'");
+            }
+            if (!empty($statusid)) {
+                $result = $result->where("DraftRB.StatusID = '{$statusid}'");
+                $count_all->where("DraftRB.StatusID = '{$statusid}'");
+            }
+        // sorting
+        $column_sorted = $columns[$fieldsort]['ColumnDb'];
+        $result = $result->sort($column_sorted . ' ' . $typesort);
+        if ($column_sorted == "pemohon") {
+            $result = $result->sort(['Pemohon.Pegawai.Nama' => $typesort]);
+        }
+        if ($column_sorted == "KodeDRB") {
+            $result = $result->sort(['DraftRB.Kode' => $typesort]);
+        }
+        if ($column_sorted == "KodeRB") {
+            $result = $result->sort(['RB.Kode' => $typesort]);
+        }
+        if ($column_sorted == "Jenis") {
+            $result = $result->sort(['DraftRB.Jenis' => $typesort]);
+        }
+        if ($column_sorted == "status") {
+            $result = $result->sort(['DraftRB.Status.Status' => $typesort]);
+        }
+        if ($column_sorted == "jcabang") {
+            $result = $result->sort(['DraftRB.PegawaiPerJabatan.Jabatan.Nama' => $typesort]);
+        }
+        if ($column_sorted == "jbarang") {
+            $result = $result->sort(['DraftRB.PegawaiPerJabatan.Jabatan.Nama' => $typesort]);
+        }
         // count all data (by filter otherwise)
-        $count_all = PO::get()->count();
+        $count_all = $result->count();
 
         $arr = array();
         foreach ($result as $row) {
@@ -408,7 +494,7 @@ class POController extends PageController
 
                 foreach ($columns as $col) {
                     $drafrb_det = DraftRBDetail::get()->where("DraftRBID = " . $row->DraftRB()->ID);
-
+                    $drafrb1 = DraftRB::get()->byID($row->DraftRB()->ID);
                     if ($col['ColumnDb'] == 'jcabang') {
                         $jab = $row->DraftRB()->PegawaiPerJabatan()->Jabatan()->Nama;
                         $cab = $row->DraftRB()->PegawaiPerJabatan()->Cabang()->Nama;
@@ -484,6 +570,7 @@ class POController extends PageController
         $result = array(
             'data' => $arr,
             'params_arr' => $params_array,
+            'column_sort'=> $column_sorted,
             'recordsTotal' => $count_all,
             'recordsFiltered' => $count_all,
             'sql' => $result['sql']

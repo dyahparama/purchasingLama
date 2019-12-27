@@ -156,7 +156,7 @@
               <tr>
                 <% if $Columns %>
                     <% loop $Columns %>
-                      <th data-title="$ColumnTb">$ColumnTb</th>
+                      <th style="vertical-align: middle;" data-title="$ColumnTb">$ColumnTb</th>
                     <% end_loop %>
                 <% end_if %>
                 <th data-title="Action">Action</th>

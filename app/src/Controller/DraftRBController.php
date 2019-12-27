@@ -146,7 +146,7 @@ class DraftRBController extends PageController {
         $historyForward = HistoryForwarding::get()->where("DraftRBID = {$drb->ID}");
 		foreach ($historyApproval as $value) {
 			$history->push([
-				"Created"=>$this::FormatDate("H:i d/m/Y",$value->Created) ,
+				"Created"=>$this::FormatDate("d/m/Y H:i",$value->Created) ,
 				"By"=>$value->ApprovedBy()->Pegawai()->Nama ."[".$this::getJabatanFromStatus($value->Status()->ID)."]",
 				"Status"=>$value->Status()->Status,
 				"Note"=>$value->Note]);
@@ -154,7 +154,7 @@ class DraftRBController extends PageController {
 
 		foreach ($historyForward as $value) {
 			$history->push([
-				"Created"=>$this::FormatDate("H:i d/m/Y",$value->Created) ,
+				"Created"=>$this::FormatDate("d/m/Y H:i",$value->Created) ,
 				"By"=>$value->ForwardForm()->Pegawai()->Nama ."[Pengirim]",
 				"Status"=>"Dikirim ke ".$value->ForwardTo()->Pegawai()->Nama,
 				"Note"=>$value->Note]);
@@ -245,7 +245,7 @@ class DraftRBController extends PageController {
 	}
 
 	public function saveDetailFile() {
-		
+
 
 		$upload = new Upload();
 		$file = Penawaran::create();
@@ -360,7 +360,7 @@ class DraftRBController extends PageController {
 		$drafRB = DraftRB::get()->sort("ID", "DESC")->limit(1);
 		$drb = DraftRB::get()->byID($_POST["id"]);
 		$cek = DraftRB::get()->byID($_POST["idNow"]);
-		
+
 			$newDrb = $cek;
 			foreach ($newDrb->Detail() as $key) {
 				$key->delete();

@@ -12,7 +12,7 @@
                     <!-- Example Horizontal Form -->
                     <div class="example-wrap">
                         <div class="example">
-                            <form action="{$BaseHref}/lpb/doPostLPB" id="form-lpb" method="post">
+                            <form action="{$BaseHref}lpb/doPostLPB" id="form-lpb" method="post">
                             <input type="hidden" value="{$PO.ID}" name="POID">
                                 <div class="form-group form-material row">
                                     <label class="col-md-3 col-form-label">Kode LPB :</label>
@@ -108,7 +108,8 @@
                                         <tbody id="table-body">
                                             <% loop $Detail %>
                                             <tr class="table-row">
-                                                <input type="hidden" value="$ID" name="detail_id[]"> 
+                                                <input type="hidden" value="$ID" name="detail_id[]">
+                                                <input type="hidden" value="$DetailPerSupplierID" name="detail_sup[]">
                                                 <td class="jenis-barang">
                                                     <input type="hidden" name="parentid[]" value="$ID">
                                                     <input type="hidden" name="jenis_barangid[]" value="$JenisID">
@@ -121,11 +122,11 @@
                                                 </td>
                                                 <td>
                                                     <input name="jumlah[]" class="form-control jumlah-lpb" readonly
-                                                    value="$Top.countLPB($ID)" autocomplete="off">
+                                                    value="$Top.countLPB($DetailPerSupplierID)" autocomplete="off">
                                                 </td>
                                                 <td>
                                                     <input name="jumlah_diterima[]" type="number" class="jumlah-diterima-lpb form-control"
-                                                        value="$Top.countLPB($ID)" autocomplete="off">
+                                                        value="$Top.countLPB($DetailPerSupplierID)" autocomplete="off">
                                                 </td>
                                                 <td>
                                                     <input type="hidden" name="satuanid[]" value="$SatuanID">

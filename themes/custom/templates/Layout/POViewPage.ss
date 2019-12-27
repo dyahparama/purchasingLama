@@ -106,7 +106,7 @@
                                             <% loop $Detail %>
                                             <tr class="table-row">
                                                 <td class="jenis-barang">
-                                                    <input name="jenis_barangid[]" class="form-control" 
+                                                    <input name="jenis_barangid[]" class="form-control"
                                                         value="$Jenis.Nama" readonly autocomplete="off">
                                                 </td>
                                                 <td>
@@ -114,26 +114,26 @@
                                                         value="$NamaBarang" readonly autocomplete="off">
                                                 </td>
                                                 <td>
-                                                    <input name="jumlah[]" class="jumlah-po form-control jumlah-po-val" readonly
-                                                        value="$Jumlah" autocomplete="off">
+                                                    <input name="jumlah[]" class="autonumeric jumlah-po form-control jumlah-po-val" readonly
+                                                        value="$Top.MoneyFormat("", $Jumlah)" autocomplete="off">
                                                 </td>
                                                 <td>
                                                     <input name="satuanid[]" class="jumlah-po form-control jumlah-po-val" readonly
                                                         value="$Satuan.Nama" autocomplete="off">
                                                 </td>
                                                 <td>
-                                                    <input name="harga[]" class="form-control harga-po-val" type="text"
-                                                        value="$Harga" readonly autocomplete="off">
+                                                    <input name="harga[]" class="autonumeric form-control harga-po-val" type="text"
+                                                        value="$Top.MoneyFormat("", $Harga)" readonly autocomplete="off">
                                                 </td>
                                                 <td>
-                                                    <input name="subtotal[]" class="form-control subtotal-po-val" type="text"
-                                                        value="$Total" autocomplete="off" readonly>
+                                                    <input name="subtotal[]" class="autonumeric form-control subtotal-po-val" type="text"
+                                                        value="$Top.MoneyFormat("", $Total)" autocomplete="off" readonly>
                                                 </td>
                                             </tr>
                                             <% end_loop %>
                                             <tr id="row-total">
                                                 <td colspan="5">Jumlah</td>
-                                                <td><input id="total-akhir-po" name="total-akhir-po" class="form-control" type="text" value="{$PO.Total}"
+                                                <td><input id="total-akhir-po" name="total-akhir-po" class="autonumeric form-control" type="text" value="{$Top.MoneyFormat("", $PO.Total)}"
                                                     autocomplete="off" readonly></td>
                                             </tr>
                                         </tbody>
@@ -170,14 +170,14 @@
                                                     <input class="form-control" readonly="" id="tgl-termin" name="tgl-termin[]" value="$Tanggal.Nice" type="text">
                                                 </td>
                                                 <td>
-                                                    <input class="form-control" id="tgl-termin" name="tgl-termin[]" value="$Jenis" type="text">
+                                                    <input readonly class="form-control" id="tgl-termin" name="tgl-termin[]" value="$Jenis" type="text">
                                                 </td>
                                                 <td>
-                                                    <textarea class="form-control" name="keterangan-termin[]">$Keterangan</textarea>
+                                                    <textarea readonly class="form-control" name="keterangan-termin[]">$Keterangan</textarea>
                                                 </td>
                                                 <td>
-                                                    <input name="total-termin[]" class="form-control jumlah-termin required-field" type="number"
-                                                        value="$Jumlah" autocomplete="off">
+                                                    <input readonly name="total-termin[]" class="form-control jumlah-termin required-field" type="text"
+                                                        value="$Top.MoneyFormat("", $Jumlah)" autocomplete="off">
                                                 </td>
                                             </tr>
                                              <% end_loop %>
@@ -192,13 +192,13 @@
                                         </tbody> -->
                                     </table>
                                 </div>
-                                
+
                                 <!-- <div class="form-group form-material row">
                                     <div class="col-md-9">
                                         <button type="button" id="submit-po" class="btn-primary btn">Submit</button>
                                     </div>
                                 </div> -->
-                                
+
                             </form>
                         </div>
                     </div>

@@ -44,6 +44,9 @@ class MyTaskController extends PageController {
 		$IsBuat = 0;
 		$jumlahrb = 0;
 		$jumlahpo = 0;
+		$totalview = 0;
+		$terimapesan = 0;
+		$totalgenerate = 0;
 		$jumlahdraft = 0;
 		$jumlahlpb = 0;
 		// print_r($rb);
@@ -117,28 +120,44 @@ class MyTaskController extends PageController {
 				$jumlahrb++;
 			}
 			if (($key->DraftRB()->Status()->ID == 9 || $key->DraftRB()->Status()->ID == 10) && $shownya == 1) {
-				$temp2['ID'] = $key->ID;
-				$temp2['Tgl'] = date('d/m/Y', strtotime($key->Tgl));
-				$temp2['Kode'] = $key->Kode;
-				$temp2['Deadline'] = date('d/m/Y', strtotime($key->DraftRB()->Deadline));
-				$temp2['Atasan'] = $key->DraftRB()->PegawaiPerJabatan()->Jabatan()->Nama . " / " . $key->DraftRB()->PegawaiPerJabatan()->Cabang()->Nama;
-				$temp2['Pemohon'] = $key->DraftRB()->Pemohon()->Pegawai()->Nama;
-				$temp2['Jenis'] = $key->DraftRB()->Jenis;
-				$detail = DraftRBDetail::get()->where('DraftRBID = ' . $key->DraftRB()->ID)->limit(1);
-				foreach ($detail as $key1) {
-					$temp2['JenisBarang'] = $key1->Jenis()->Nama;
-				}
-				$detailnya = DetailRBPerSupplier::get()->where('RBID = ' . $key->ID);
+				$totalview = 0;
+				$totalgenerate = 0;
 				$temp2['isi'] = $key->GetSuplier($key->ID);
-				$temp1['view_link'] = 'po/ApprovePage/' . $key->ID;
-				$temp2['Status'] = $key->DraftRB()->Status()->Status;
-				$show2->push($temp2);
-				// echo "<pre>";
-				// var_dump($temp2);
-				// die;
-				$jumlahpo++;
+				foreach ($temp2['isi'] as $key100) {
+					if($key100->IsPo == 1){
+						$totalview++;
+					}
+					if($key100->IsPo == 0){
+						$totalgenerate++;
+					}
+				}
+				// echo $totalview." ".$totalgenerate."<br>";
+				if($totalgenerate!=0){
+					$temp2['totalview'] =$totalview;
+					$temp2['totalgenerate'] = $totalgenerate;
+					$temp2['ID'] = $key->ID;
+					$temp2['Tgl'] = date('d/m/Y', strtotime($key->Tgl));
+					$temp2['Kode'] = $key->Kode;
+					$temp2['Deadline'] = date('d/m/Y', strtotime($key->DraftRB()->Deadline));
+					$temp2['Atasan'] = $key->DraftRB()->PegawaiPerJabatan()->Jabatan()->Nama . " / " . $key->DraftRB()->PegawaiPerJabatan()->Cabang()->Nama;
+					$temp2['Pemohon'] = $key->DraftRB()->Pemohon()->Pegawai()->Nama;
+					$temp2['Jenis'] = $key->DraftRB()->Jenis;
+					$detail = DraftRBDetail::get()->where('DraftRBID = ' . $key->DraftRB()->ID)->limit(1);
+					foreach ($detail as $key1) {
+						$temp2['JenisBarang'] = $key1->Jenis()->Nama;
+					}
+					$detailnya = DetailRBPerSupplier::get()->where('RBID = ' . $key->ID);
+					// $temp2['view_link'] = 'po/ApprovePage/' . $key->ID;
+					$temp2['Status'] = $key->DraftRB()->Status()->Status;
+					$show2->push($temp2);
+					// echo "<pre>";
+					// var_dump($temp2);
+					// die;
+					$jumlahpo++;
+				}
 			}
 		}
+		// die();
 		foreach ($draftrbnya as $key) {
 			if ($key->Status()->ID <= 5) {
 				$temp['ID'] = $key->ID;
@@ -169,26 +188,38 @@ class MyTaskController extends PageController {
 					$temp3['Tgl'] = date('d/m/Y', strtotime($key5->Tgl));
 					$temp3['Suplier'] = $key5->NamaSupplier;
 					// $temp3['isi'] = $key5->GetPO($key->ID);
-					$lpbbuat = lpb::get()->where('POID = '.$key5->ID)->first();
+					$lpbbuat = lpb::get()->where('POID = '.$key5->ID);
 					// echo $lpbbuat->ID;
 					// echo $key5->ID;
 					// die();
 					// echo "<pre>";
 					// print_r($lpbbuat);
 					// die();
+					$temp3['showbuatlpb']=0;
 					$temp3['IsBuat'] = 0;
-					if(isset($lpbbuat->ID)){
+					if(isset($lpbbuat->first()->ID)){
 						$temp3['IsBuat'] = 1;
 						$temp3['tutup_po'] = 'new/tutup_po/' . $key5->ID;
-						$temp3['isi'] =$lpbbuat->Getdetail($lpbbuat->ID);
+						foreach ($lpbbuat as $keynyu) {
+							// echo $keynyu->POID."<br>";
+							$temp3['isi']=$keynyu->Getdetail($keynyu->ID);
+						}
+						if(isset($temp3['isi'])){
+							foreach ($temp3['isi'] as $keynya) {
+								if($keynya->JumlahTerima>=$keynya->Jumlah){
+									$temp3['showbuatlpb'] =1;
+								}
+							}
+						}
 					}
-					// echo $temp3['IsBuat'];
+					// echo $temp3['IsBuat']."<br>";
 					// die();
 					$temp3['view_link'] = 'lpb/ApprovePage/' . $key5->ID;
 					$show3->push($temp3);
 					$jumlahlpb++;
 			}
 		}
+		// die();
 		// echo "<pre>";
 		// var_dump($config);
 		// die();

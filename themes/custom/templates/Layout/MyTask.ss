@@ -215,12 +215,14 @@
 				                  	<div class="btn-group">
 										<a type="button" class="btn btn-default viewlpb" shownya='0' idnya="$ID"><i class="text-info fa fa-eye"></i> Lihat Detail</a>
 									</div>
+									<% if $showbuatlpb == 0 %>
 									<div class="btn-group">
 										<a type="button" href="{$BaseHref}$view_link" class="btn btn-default"><i class="text-info fa fa-eye"></i> Buat LPB</a>
 									</div>
 									<div class="btn-group">
 										<a data-po="{$BaseHref}$tutup_po" href="javascript:void(0)" type="button" class="btn btn-danger delete button-tutup-po"><i class="text-info fa fa-eye"></i> Tutup PO</a>
 									</div>
+									<% end_if %>
 								</td>
 								<% else %>
 								<td>
@@ -249,7 +251,7 @@
 			                	<td>$NamaBarang</td>
 			                	<td>$Jumlah</td>
 			                	<td>$JumlahTerima</td>
-			                	<% if $JumlahTerima  < $Jumlah %>
+			                	<% if $JumlahTerima >= $Jumlah %>
 			                	<td></td>
 			                	<% else %>
 			                	<td>

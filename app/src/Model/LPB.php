@@ -3,6 +3,7 @@ use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Assets\Image;
 use SilverStripe\ORM\ValidationException;
+use SilverStripe\ORM\DB;
 
 class LPB extends DataObject
 {
@@ -46,13 +47,33 @@ class LPB extends DataObject
         foreach ($detailnya as $key) {
             if ($key->NamaBarang != '') {
                 $temp['NamaBarang'] = $key->NamaBarang;
-                $temp['Jumlah'] = $key->Jumlah;
-                $temp['JumlahTerima'] = $key->JumlahTerima;
+                $temp['Jumlah'] = self::countLPB1($key->DetailPerSupplierID);
+                $temp['JumlahTerima'] = self::countLPB2($key->DetailPerSupplierID);
                 $temp['view_linknya'] = 'lpb/view/' . $ID;
                 $temp['view_link'] = 'lpb/ApprovePage/' . $key->LPB()->PO()->ID;
                 $asu->push($temp);
             }
         }
         return $asu;
+    }
+
+    public static function countLPB1($id) {
+        $jumlah1 = DB::query("SELECT SUM(Jumlah) FROM detailrbpersupplier WHERE ID = {$id}")->value();
+
+        if (!$jumlah1) {
+            $jumlah1 = 0;
+        }
+
+        return $jumlah1;
+    }
+    public static function countLPB2($id)
+    {
+        $jumlah2 = DB::query("SELECT SUM(JumlahTerima) FROM lpbdetail WHERE DetailPerSupplierID = {$id}")->value();
+
+        if (!$jumlah2) {
+            $jumlah2= 0;
+        }
+
+        return $jumlah2;
     }
 }

@@ -50,7 +50,7 @@ class RBController extends PageController
                 $history =  new ArrayList();
                 foreach ($historyApproval as $value) {
                     $history->push([
-                        "Created"=>$this::FormatDate("H:i d/m/Y",$value->Created) ,
+                        "Created"=>$this::FormatDate("d/m/Y H:i",$value->Created) ,
                         "By"=>$value->ApprovedBy()->Pegawai()->Nama ."[".$this::getJabatanFromStatus($value->Status()->ID)."]",
                         "Status"=>$value->Status()->Status,
                         "Note"=>$value->Note]);
@@ -58,7 +58,7 @@ class RBController extends PageController
 
                 foreach ($historyForward as $value) {
                     $history->push([
-                        "Created"=>$this::FormatDate("H:i d/m/Y",$value->Created) ,
+                        "Created"=>$this::FormatDate("d/m/Y H:i",$value->Created) ,
                         "By"=>$value->ForwardForm()->Pegawai()->Nama ."[Pengirim]",
                         "Status"=>"Dikirim ke ".$value->ForwardTo()->Pegawai()->Nama,
                         "Note"=>$value->Note]);
@@ -88,10 +88,10 @@ class RBController extends PageController
                     'RBPage', 'Page',
                 ));
             } else {
-                return $this->redirect(Director::absoluteBaseURL()."rb");
+                return $this->redirect(Director::absoluteBaseURL()."ta");
             }
         } else {
-            return $this->redirect(Director::absoluteBaseURL()."rb");
+            return $this->redirect(Director::absoluteBaseURL()."ta");
         }
     }
 
@@ -272,7 +272,7 @@ class RBController extends PageController
             PageController::forwardDrb($note, $rb->DraftRB(), $user_id, $_REQUEST['user_forward']);
         }
     }
-    return $this->redirect(Director::absoluteBaseURL()."rb");
+    return $this->redirect(Director::absoluteBaseURL()."ta");
 }
 }
 
@@ -448,6 +448,7 @@ function getData()
 
 function searchRb()
 {
+    // echo  "Tolol";
         // ============ filter bawaan datatable
     $pk = 'ID';
 
@@ -459,19 +460,72 @@ function searchRb()
     $typesort = (isset($_REQUEST['order'][0]['dir'])) ? $_REQUEST['order'][0]['dir'] : 'DESC';
     $fieldsort = (isset($_REQUEST['columns'][$columnsort]['data']) && $_REQUEST['columns'][$columnsort]['data']) ? $_REQUEST['columns'][$columnsort]['data'] : 0;
         // ============ end filter
-
         // SETTING INI
     $columns = $this->getCustomColumns('rb');
     $params_array = [];
     parse_str($filter_record, $params_array);
+
+    $kode = (isset($params_array['kodeRb'])) ? $params_array['kodeRb'] : "";
+    $status = (isset($params_array['statusid'])) ? $params_array['statusid'] : "";
+    $jenis = (isset($params_array['jenisper'])) ? $params_array['jenisper'] : "";
+    $pemohon = (isset($params_array['pemohonid'])) ? $params_array['pemohonid'] : "";
+    $tgl = (isset($params_array['tgl'])) ? $params_array['tgl'] : "";
+    $deskripsi = (isset($params_array['deskripsi'])) ? $params_array['deskripsi'] : "";
+    $jbarang = (isset($params_array['jbarang'])) ? $params_array['jbarang'] : "";
+
 
     $result = DraftRB::get()->innerJoin("rb", "\"draftrb\".\"ID\" = \"rb\".\"draftrbID\"");
         // ->limit($length, $start)
         // ->sort($columns[$fieldsort]['ColumnDb'] . ' ' . $typesort);
 
         // count all data (by filter otherwise)
-    $count_all = $result->count();
+    if ($kode != "") {
+        $result = $result->where("rb.Kode LIKE '%{$kode}%'");
+    }
+    if ($status != "") {
+        $result = $result->where("StatusID = '{$status}'");
+    }
+    if ($jenis != "") {
+        $result = $result->where("Jenis = '{$jenis}'");
+    }
+    // if ($pemohon != "") {
+    //     $result = $result->where("PemohonID = '{$pemohon}'");
+    // }
+    if ($tgl != "") {
+        $tgl = PageController::FormatDate("Y-m-d H:i:s", $tgl);
+        $result = $result->where("TglSubmit = '{$pemohon}'");
+    }
+    if ($deskripsi != "") {
+        $result = $result
+        ->innerJoin("draftrbdetail", "\"draftrbdetail\".\"DraftRBID\" = \"rb\".\"ID\"")
+        ->where("draftrbdetail.Deskripsi LIKE '%{$deskripsi}%'");
+    }
+    if ($jbarang != "") {
+        $result = $result
+        ->innerJoin("draftrbdetail", "\"draftrbdetail\".\"DraftRBID\" = \"rb\".\"ID\"")
+        ->where("draftrbdetail.JenisID = '{$jbarang}'");
+    }
 
+
+    $column_sorted = $columns[$fieldsort]['ColumnDb'];
+			$result = $result->sort($column_sorted . ' ' . $typesort);
+			if ($column_sorted == "jcabang") {
+				$result = $result->sort(['PegawaiPerJabatan.Jabatan.Nama' => $typesort]);
+			}
+			if ($column_sorted == "pemohon") {
+				$result = $result->sort(['Pemohon.Pegawai.Nama' => $typesort]);
+			}
+			if ($column_sorted == "status") {
+				$result = $result->sort(['Status.Status' => $typesort]);
+			}
+            if ($column_sorted == "ForwardToID") {
+				$result = $result->sort(['ForwardTo.Pegawai.Nama' => $typesort]);
+			}
+			// count all data (by filter otherwise)
+			$count_all = $result->count();
+
+			// limit offset
+			$result = $result->limit($length, $start);
     $arr = array();
 
     foreach ($result as $row) {
@@ -512,11 +566,11 @@ function searchRb()
                 $temp[] = $status;
             } elseif ($col['ColumnDb'] == 'ForwardToID') {
                 $ForwardTo = $row->ForwardTo()->Pegawai()->Nama;
-                if(!$ForwardTo){
-                    $last_pos = $this->getPosisiTerakhir($row);
+                // if(!$ForwardTo){
+                //     $last_pos = $this->getPosisiTerakhir($row);
 
-                    $ForwardTo = StatusPermintaanBarang::get()->byID($last_pos->StatusID + 1)->Status;
-                }
+                //     $ForwardTo = StatusPermintaanBarang::get()->byID($last_pos->StatusID + 1)->Status;
+                // }
 
                 /*echo $row->ID."</br>";
                 echo $last_pos->ApprovedByID."</br>";*/
@@ -544,6 +598,7 @@ function searchRb()
 
     $result = array(
         'data' => $arr,
+        'column_sort'=> $column_sorted,
         'params_arr' => $params_array,
         'recordsTotal' => $count_all,
         'recordsFiltered' => $count_all,

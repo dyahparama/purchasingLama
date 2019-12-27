@@ -36,7 +36,7 @@ class LPBController extends PageController
             'user' => 'User',
             'Columns' => new ArrayList($this->getCustomColumns('lpb')),
             'siteParent'=>"List LPB",
-            'linkNew'=>"lpb/ApprovePage",
+            // 'linkNew'=>"lpb/ApprovePage",
             "mgeJS" => "list-lpb"
         ];
 
@@ -48,6 +48,7 @@ class LPBController extends PageController
 
     public function doPostLPB()
     {
+        // var_dump($_REQUEST['tgl-lpb']);die;
         if (isset($_REQUEST['tgl-lpb']) && $_REQUEST['tgl-lpb'] != "") {
             $note = "";
 
@@ -69,7 +70,7 @@ class LPBController extends PageController
             $harga = $_REQUEST['harga'];
             $subtotal = $_REQUEST['subtotal'];
             $parentid = $_REQUEST['parentid'];
-            $detailPerSupplier = $_REQUEST['detail_id'];
+            $detailPerSupplier = $_REQUEST['detail_sup'];
 
             foreach ($jenisBarang as $key => $val) {
                 $poDetail = new LPBDetail();
@@ -88,7 +89,7 @@ class LPBController extends PageController
                 $poDetail->write();
             }
 
-            return $this->redirect(Director::absoluteBaseURL()."lpb");
+            return $this->redirect(Director::absoluteBaseURL()."ta");
         }
     }
 
@@ -183,7 +184,7 @@ class LPBController extends PageController
                         array(
                             'ColumnTb' => 'Kode Rb',
                             'ColumnDb' => 'koderb',
-                            'Type' => 'Date',
+                            'Type' => 'Varchar',
                             'Required' => true
                         ),
                         array(
@@ -236,10 +237,66 @@ class LPBController extends PageController
         $params_array = [];
         parse_str($filter_record, $params_array);
 
+        $kodeLPB = (isset($params_array['kodeLpb'])) ? $params_array['kodeLpb'] : "";
+        $kodePO = (isset($params_array['kodePo'])) ? $params_array['kodePo'] : "";
+        $kodeRB = (isset($params_array['kodeRb'])) ? $params_array['kodeRb'] : "";
+        $kodeDRB = (isset($params_array['kodeDraftRb'])) ? $params_array['kodeDraftRb'] : "";
+        $vendor = (isset($params_array['vendor'])) ? $params_array['vendor'] : "";
+        $tgl = (isset($params_array['tgl'])) ? $params_array['tgl'] : "";
+
         $result = LPB::get();
+
+        // var_dump($kodePO);die;
+
+        if ($kodeLPB != "") {
+            $result = $result->where("Kode LIKE '%{$kodeLPB}%'");
+        }
+        if ($kodePO != "") {
+            $result = $result
+            ->innerJoin("po", "\"po\".\"ID\" = \"lpb\".\"POID\"")
+            ->where("po.Kode LIKE '%{$kodePO}%'");
+        }
+        if ($kodeRB != "") {
+            $result = $result
+            ->innerJoin("po", "\"po\".\"ID\" = \"lpb\".\"POID\"")
+            ->innerJoin("rb", "\"po\".\"RBID\" = \"rb\".\"ID\"")
+            ->where("rb.Kode LIKE '%{$kodeRB}%'");
+        }
+        if ($kodeDRB != "") {
+            $result = $result
+            ->innerJoin("po", "\"po\".\"ID\" = \"lpb\".\"POID\"")
+            ->innerJoin("rb", "\"po\".\"RBID\" = \"rb\".\"ID\"")
+            ->innerJoin("draftrb", "\"rb\".\"DraftRBID\" = \"draftrb\".\"ID\"")
+            ->where("draftrb.Kode LIKE '%{$kodeDRB}%'");
+        }
+        if ($tgl != "") {
+            $tgl = PageController::FormatDate("Y-m-d H:i:s", $tgl);
+            $result = $result->where("Tgl LIKE '%{$tgl}%'");
+        }
 
         // count all data (by filter otherwise)
         $count_all = LPB::get()->count();
+
+
+        $column_sorted = $columns[$fieldsort]['ColumnDb'];
+			$result = $result->sort($column_sorted . ' ' . $typesort);
+			if ($column_sorted == "kodepo") {
+				$result = $result->sort(['PO.Kode' => $typesort]);
+			}
+			if ($column_sorted == "koderb") {
+				$result = $result->sort(['PO.RB.Kode' => $typesort]);
+			}
+			if ($column_sorted == "kodedrb") {
+				$result = $result->sort(['PO.RB.DraftRB.Kode' => $typesort]);
+            }
+            if ($column_sorted == "supplier") {
+				$result = $result->sort(['PO.NamaSupplier' => $typesort]);
+			}
+			// count all data (by filter otherwise)
+			$count_all = $result->count();
+
+			// limit offset
+			$result = $result->limit($length, $start);
 
         $arr = array();
         foreach ($result as $row) {
@@ -253,6 +310,8 @@ class LPBController extends PageController
                 if ($col['ColumnDb'] == 'kodepo') {
                     $kode = $row->PO()->Kode;
                     $temp[] = $kode;
+                }elseif($col['Type'] == 'Date'){
+						$temp[] = date('d-m-Y', strtotime($row->{$col['ColumnDb']}));
                 }elseif ($col['ColumnDb'] == 'koderb') {
                     $kode = $row->PO()->RB()->Kode;
                     $temp[] = $kode;
@@ -285,6 +344,7 @@ class LPBController extends PageController
         // die;
         $result = array(
             'data' => $arr,
+            'column_sort'=> $column_sorted,
             'params_arr' => $params_array,
             'recordsTotal' => $count_all,
             'recordsFiltered' => $count_all,

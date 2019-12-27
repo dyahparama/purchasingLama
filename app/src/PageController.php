@@ -39,7 +39,7 @@ namespace {
 		protected function init() {
 			Requirements::themedCSS('custom');
 			parent::init();
-		
+
 		}
 		public static function getBaseURL() {
 			return Director::absoluteBaseURL();
@@ -202,6 +202,9 @@ namespace {
 			$history->StatusID = '13';
 			$history->write();
 			$drb->StatusID = '13';
+			$drb->ApproveToID = '0';
+			$drb->ForwardToID = '0';
+			$drb->AssistenApproveToID = '0';
 			$drb->write();
 		}
 
@@ -343,7 +346,7 @@ namespace {
 				return (["user" => $target, "status" => $targetStatus, "asisten"=>$asisten]);
 				break;
 			case 7:
-				
+
 					$targetStatus = 8;
 					$target = $siteconfig->KepalaFinance()->ID;
 					$asisten = $siteconfig->AsistenFinance()->ID;
@@ -422,7 +425,7 @@ namespace {
 				$drb->AssistenApproveTo = $siteconfig->AsistenPembelian()->ID;
 				}
 				$drb->write();
-				
+
 			}
 
 		public function getUsername() {
@@ -447,7 +450,7 @@ namespace {
 			$cabangLokal = $pegawaiPerJabatan->Cabang();
 			$cabangRegion = $pegawaiPerJabatan->Cabang()->Regional();
 			$cabangPusat = $pegawaiPerJabatan->Cabang()->Pusat();
-			$cabangRegionID = $cabangRegion->ID; 
+			$cabangRegionID = $cabangRegion->ID;
 			$kacabLokalID = $cabangLokal->Kacab()->ID;
 			$kacabLokalNama = $cabangLokal->Kacab()->Pegawai()->Nama;
 			// var_dump([$cabangRegionID,$jenisID]);
@@ -458,7 +461,7 @@ namespace {
 			$kacabRegion = $cabangRegion->Kacab();
 			$kacabRegionID = $kacabRegion->ID;
 			$kacabRegionNama =  $kacabRegion->Pegawai()->Nama;
-			//$kadepPusat = Jenis 
+			//$kadepPusat = Jenis
 			//header("Content-Type:Application/json");
 			echo "<pre>";
 			  var_dump([
@@ -517,7 +520,21 @@ namespace {
 				$jumlahrb++;
 			}
 			if (($key->DraftRB()->Status()->ID == 9 || $key->DraftRB()->Status()->ID == 10) && $shownya == 1) {
-				$jumlahpo++;
+				$totalview = 0;
+				$totalgenerate = 0;
+				$temp2['isi'] = $key->GetSuplier($key->ID);
+				foreach ($temp2['isi'] as $key100) {
+					if($key100->IsPo == 1){
+						$totalview++;
+					}
+					if($key100->IsPo == 0){
+						$totalgenerate++;
+					}
+				}
+				// echo $totalview." ".$totalgenerate."<br>";
+				if($totalgenerate==0){
+					$jumlahpo++;
+				}
 			}
 		}
 		foreach ($draftrbnya as $key) {

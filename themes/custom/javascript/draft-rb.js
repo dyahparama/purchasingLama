@@ -254,23 +254,28 @@ $(document).ready(function() {
                 from: $("#user-now").val(),
                 draft: $("#nomor").val()
             };
-            //console.log(data);
-            $.ajax({
-                url: baseURL+"draf-rb/approve",
-                type: "post", //form method
-                data: data,
-                dataType: "json",
-                beforeSend: function() {},
-                success: function(result) {
-                    alert('Berhasil simpan')
-                    location.reload();
-                },
-                complete: function(result) {
-                    location.reload();
-
-                },
-                error: function(xhr, Status, err) {}
-            });
+            
+            if (data.respond == 'forward' && data.forward=="") {
+                alert("Masukan tujuan Forward To !");
+            }else{
+                $.ajax({
+                    url: baseURL+"draf-rb/approve",
+                    type: "post", //form method
+                    data: data,
+                    dataType: "json",
+                    beforeSend: function() {},
+                    success: function(result) {
+                        alert('Berhasil simpan')
+                        window.location.href = baseURL+"ta";
+                    },
+                    complete: function(result) {
+                        window.location.href = baseURL+"ta";
+    
+                    },
+                    error: function(xhr, Status, err) {}
+                });
+            }
+           
         });
         $("#clear-data").click(function (e) { 
             let nomor = $("#draf-rb-id").data("id");

@@ -363,8 +363,27 @@
 				}
 
 			}
+
+			// sorting
+			$column_sorted = $columns[$fieldsort]['ColumnDb'];
+			$result = $result->sort($column_sorted . ' ' . $typesort);
+			if ($column_sorted == "pemohon") {
+				$result = $result->sort(['Pemohon.Pegawai.Nama' => $typesort]);
+			}
+			if ($column_sorted == "jcabang") {
+				$result = $result->sort(['PegawaiPerJabatan.Jabatan.Nama' => $typesort]);
+			}
+			if ($column_sorted == "status") {
+				$result = $result->sort(['Status.Status' => $typesort]);
+			}
+			if ($column_sorted == "ForwardToID") {
+				$result = $result->sort(['ForwardTo.Pegawai.Nama' => $typesort]);
+			}
 			// count all data (by filter otherwise)
-			$count_all = $count_all->count();
+			$count_all = $result->count();
+
+			// limit offset
+			$result = $result->limit($length, $start);
 
 			$arr = array();
 			foreach ($result as $row) {
@@ -396,11 +415,11 @@
 					}elseif ($col['ColumnDb'] == 'ForwardToID') {
 						$ForwardTo = $row->ForwardTo()->Pegawai()->Nama;
 						
-						if(!$ForwardTo){
-		                    $last_pos = $this->getPosisiTerakhir($row);
+						// if(!$ForwardTo){
+		    //                 $last_pos = $this->getPosisiTerakhir($row);
 
-		                    $ForwardTo = StatusPermintaanBarang::get()->byID($last_pos->StatusID + 1)->Status;
-		                }
+		    //                 $ForwardTo = StatusPermintaanBarang::get()->byID($last_pos->StatusID + 1)->Status;
+		    //             }
 
 						$temp[] = $ForwardTo;
 					}elseif($col['Type'] == 'Date')
@@ -428,6 +447,7 @@
 			// die;
 			$result = array(
 				'data' => $arr,
+				'column_sort'=> $column_sorted,
 				'params_arr' => $params_array,
 				'recordsTotal' => $count_all,
 				'recordsFiltered' => $count_all,

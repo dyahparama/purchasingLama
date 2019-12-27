@@ -1,3 +1,11 @@
+// const formatCur = {
+//     decimalCharacter: ",",
+//     decimalCharacterAlternative: ",",
+//     digitGroupSeparator: "."
+//     // currencySymbolPlacement    : AutoNumeric.options.currencySymbolPlacement.suffix,
+//     // roundingMethod             : AutoNumeric.options.roundingMethod.halfUpSymmetric,
+// };
+
 var table;
 let baseURL=$("#baseURL").data("url");
 var uri_segment = 'po';
@@ -5,6 +13,8 @@ var column_name = $(document).find('#datatable1 > thead > tr');
 var cur_status = $(document).find('#cur_status').text();
 let id_pemohon = 0;
 var params = [];
+
+// new AutoNumeric('.autonumeric', formatCur)
 
 function getData(jenis, status){
     var data = function () {
@@ -142,10 +152,16 @@ $(document).ready(function(){
         'processing': true,
         'serverSide': true,
         // 'responsive': true,
-        'columnDefs': [{
+        'columnDefs': [
+        {
             targets: 7,
             render: $.fn.dataTable.render.ellipsis( 25, true )
-        }],
+        },
+        {
+            targets: [7,9],
+            orderable: false
+        }
+        ],
         // 'order': [[0,'desc']],
         // <%-- 'pagingType': 'full_numbers', --%>
         // <%-- 'lengthMenu'    : [5, 10, 15, 20], --%>

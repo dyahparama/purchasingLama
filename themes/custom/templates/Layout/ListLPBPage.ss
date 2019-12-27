@@ -7,7 +7,7 @@
       <div id="filterPanel">
         <div class="panel-heading">
           <h3 class="panel-title">
-          	Filter 
+          	Filter
           </h3>
           <div class="panel-actions panel-actions-keep">
             <a class="panel-action icon md-minus" aria-controls="exampleTransparentBody" aria-expanded="true" data-toggle="panel-collapse" aria-hidden="true"></a>
