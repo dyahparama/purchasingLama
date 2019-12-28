@@ -8,7 +8,8 @@ class RB extends DataObject {
 	private static $db = [
 		'Kode' => 'Varchar(10)',
 		'Tgl' => 'Date',
-		'Total' => 'Double',
+        'Total' => 'Double',
+        'Note' => 'Text'
 	];
 	private static $indexes = [
 		'Kode' => [

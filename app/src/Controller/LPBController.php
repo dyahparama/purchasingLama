@@ -273,6 +273,11 @@ class LPBController extends PageController
             $tgl = PageController::FormatDate("Y-m-d H:i:s", $tgl);
             $result = $result->where("Tgl LIKE '%{$tgl}%'");
         }
+        if ($vendor != "") {
+            $result = $result
+            ->innerJoin("po", "\"po\".\"ID\" = \"lpb\".\"POID\"")
+            ->where("po.NamaSupplier LIKE '%{$vendor}%'");
+        }
 
         // count all data (by filter otherwise)
         $count_all = LPB::get()->count();

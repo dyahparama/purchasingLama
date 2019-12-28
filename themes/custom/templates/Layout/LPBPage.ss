@@ -126,7 +126,7 @@
                                                 </td>
                                                 <td>
                                                     <input name="jumlah_diterima[]" type="number" class="jumlah-diterima-lpb form-control"
-                                                        value="$Top.countLPB($DetailPerSupplierID)" autocomplete="off">
+                                                        value="$Top.countLPB($DetailPerSupplierID)" min="0" autocomplete="off">
                                                 </td>
                                                 <td>
                                                     <input type="hidden" name="satuanid[]" value="$SatuanID">

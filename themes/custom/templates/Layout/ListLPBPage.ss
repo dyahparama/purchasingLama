@@ -78,13 +78,14 @@
               <!-- Example Color -->
               <div>
                 <p>Supplier</p>
-                <div class="example">
+                <%-- <div class="example">
                   <div class="select2-primary">
                     <select class="form-control" id="vendor" name="vendor" data-plugin="select2" data-placeholder="Pilih Supplier" data-allow-clear="true">
                       <option></option>
                     </select>
                   </div>
-                </div>
+                </div> --%>
+                <input type="text" name="vendor" class="form-control" id="vendor">
 
               </div>
               <!-- End Example Color -->

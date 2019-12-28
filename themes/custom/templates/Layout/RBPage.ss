@@ -160,8 +160,8 @@
                                                 </td>
                                                 <td>
                                                     <button
-                                                    class="btn btn-primary waves-effect waves-classic btn-xs btn-info"
-                                                    type="button" data-target="#modal-detail_$ID"
+                                                    class="btn btn-primary waves-effect waves-classic btn-xs btn-info view-detail"
+                                                    type="button" data-target="#modal-detail_$ID" data-id="$ID"
                                                     data-toggle="modal">
                                                     View Detail
                                                 </button>
@@ -346,7 +346,7 @@
                                                 </td>
                                                 <td>
                                                     <input name="jumlah[$ID][]"
-                                                    class="form-control jumlah-detail" type="number"
+                                                    class="form-control jumlah-detail jumlah-detail-{$ID}" type="number"
                                                     value="0" autocomplete="off">
                                                 </td>
                                                 <td>
