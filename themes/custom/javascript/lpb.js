@@ -54,19 +54,31 @@ $(document).on('keyup', '.jumlah-diterima-lpb', function () {
 $("#submit-lpb").click(function(e) {
         let pass = true;
         let data = $("#form-lpb").serializeArray();
-        data.forEach(element => {
-            if ((element.value == "" && !element.name.includes("kode_supplier"))
-                && (element.value == "" && !element.name.includes("Pemohon"))
-                && (element.value == "" && !element.name.includes("user_forward"))
-                && (element.value == "" && !element.name.includes("keterangan"))
-                ) {
-                pass = false;
+        let cekJumlahTerima = true;
+        $(document).find(".jumlah-diterima-lpb").each(function() {
+            
+            if (!$(this).val() || $(this).val() == "0") {
+                cekJumlahTerima = false;
             }
         });
-        console.log(data);
-        if (pass) {
-            $("#form-lpb").submit();
+        if (!cekJumlahTerima) {
+            alert("jumlah terima tidak boleh 0");
         } else {
-            alert("data belum lengkap");
+            data.forEach(element => {
+                if ((element.value == "" && !element.name.includes("kode_supplier"))
+                    && (element.value == "" && !element.name.includes("Pemohon"))
+                    && (element.value == "" && !element.name.includes("user_forward"))
+                    && (element.value == "" && !element.name.includes("keterangan"))
+                    && (element.value == "" && !element.name.includes("note"))
+                    && (element.value == "" && !element.name.includes("surat_jalan"))
+                    ) {
+                    pass = false;
+                }
+            });
+            if (pass) {
+                alert("asas");
+            } else {
+                alert("data belum lengkap");
+            }
         }
     });

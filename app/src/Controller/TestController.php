@@ -57,12 +57,12 @@
 			$jabatan = PegawaiPerJabatan::get()->
 				where("PegawaiID = ".$pegawai->ID);
 
-			// iterate over jabatan 
+			// iterate over jabatan
 			$temp_teams_perjab = [];
 			foreach ($jabatan as $jab) {
 				// var_dump($jab);
-				$temp_jab_userid = PegawaiPerJabatan::get()->where("JabatanID != " . $jab->ID . " AND CabangID = " . $jab->CabangID . " AND DepartemenID = " . $jab->DepartemenID); 
-				// $temp_jab_userid = PegawaiPerJabatan::get()->where("(JabatanID != " . $jab->ID . " AND Jabatan <> 0) AND CabangID = " . $jab->CabangID . " AND DepartemenID = " . $jab->DepartemenID); 
+				$temp_jab_userid = PegawaiPerJabatan::get()->where("JabatanID != " . $jab->ID . " AND CabangID = " . $jab->CabangID . " AND DepartemenID = " . $jab->DepartemenID);
+				// $temp_jab_userid = PegawaiPerJabatan::get()->where("(JabatanID != " . $jab->ID . " AND Jabatan <> 0) AND CabangID = " . $jab->CabangID . " AND DepartemenID = " . $jab->DepartemenID);
 
 				$jab = $temp_jab_userid->first()->Departemen()->Nama;
 				$cab = $temp_jab_userid->first()->Cabang()->Nama;
@@ -72,7 +72,7 @@
 					 $temp_jab_userid
 				;
 			}
-			
+
 			// get draft rb master
 			$draft_rb = DraftRB::get();
 
@@ -80,12 +80,12 @@
 	    		switch ($jenis) {
 	    			case 'kddrb':
 		    			$temp = $draft_rb->where("PemohonID = {$pegawai->ID}");
-						
+
 						if ($cur_status == "Teams") {
 							$teams = PegawaiPerJabatan::get()->where("CabangID = " . $jabatan->first()->CabangID . " AND DepartemenID = " . $jabatan->first()->DepartemenID);
 
 							$pegawai_id = AddOn::groupConcat($teams, 'Pegawai.User.ID');
-							$temp = $draft_rb->where("PemohonID IN ($pegawai_id)"); 
+							$temp = $draft_rb->where("PemohonID IN ($pegawai_id)");
 						}
 
 	    				$data = AddOn::getSpecColumn($temp->toNestedArray(), 'Kode');
@@ -107,10 +107,10 @@
 								foreach ($temp_jab as $jab_inside) {
 									$pegawai = $jab_inside->Pegawai();
 									$user = User::get()->where("PegawaiID = {$pegawai->ID}")->first();
-									$temp[$user->ID] = $pegawai->Nama;							
+									$temp[$user->ID] = $pegawai->Nama;
 								}
 
-								$temp_teams[$key] = $temp;  
+								$temp_teams[$key] = $temp;
 							}
 
 							$temp = $temp_teams;
@@ -271,12 +271,15 @@
 			if(!empty($params_array['jbarang']))
 				$jbarang = $params_array['jbarang'];
 			if(!empty($params_array['deskripsi']))
-				$deskripsi = $params_array['deskripsi'];
+                $deskripsi = $params_array['deskripsi'];
+            if(!empty($params_array['Kode']))
+				$kode = $params_array['Kode'];
 
 			unset($params_array['Tgl']);
 			unset($params_array['Jenis']);
 			unset($params_array['jbarang']);
 			unset($params_array['deskripsi']);
+			unset($params_array['kode']);
 
 			foreach ($params_array as $key => $value) {
 				if(empty($params_array[$key]))
@@ -310,7 +313,7 @@
 
 			$result = $result->filterAny($params_array);
 			$count_all = $count_all->filterAny($params_array);
-			
+
 			if (!empty($tgl)) {
 				$result = $result->where("Tgl <= '{$tgl}'");
 				$count_all->where("Tgl <= '{$tgl}'");
@@ -318,12 +321,16 @@
 			if (!empty($jenis)) {
 				$result = $result->where("Jenis = '{$jenis}'");
 				$count_all = $count_all->where("Jenis = '{$jenis}'");
+            }
+            if (!empty($kode)) {
+				$result = $result->where("Kode LIKE '%{$kode}%'");
+				$count_all = $count_all->where("Kode LIKE '%{$kode}%'");
 			}
 			if (!empty($jbarang)) {
 				$draft_rb_id = AddOn::groupConcat($result, 'ID');
 				if ($draft_rb_id) {
 					$sql = "SELECT DISTINCT GROUP_CONCAT(rb.ID) FROM draftrb rb
-						LEFT OUTER JOIN draftrbdetail drb ON rb.ID = drb.DraftRBID 
+						LEFT OUTER JOIN draftrbdetail drb ON rb.ID = drb.DraftRBID
 						WHERE rb.ID IN({$draft_rb_id}) AND drb.JenisID = {$jbarang}";
 
 					// var_dump($sql);
@@ -345,7 +352,7 @@
 				$draft_rb_id = AddOn::groupConcat($result, 'ID');
 				if ($draft_rb_id) {
 					$sql = "SELECT DISTINCT GROUP_CONCAT(rb.ID) FROM draftrb rb
-						LEFT OUTER JOIN draftrbdetail drb ON rb.ID = drb.DraftRBID 
+						LEFT OUTER JOIN draftrbdetail drb ON rb.ID = drb.DraftRBID
 						WHERE rb.ID IN({$draft_rb_id}) AND drb.Deskripsi LIKE '%{$deskripsi}%'";
 
 					// var_dump($sql);
@@ -414,7 +421,7 @@
 						$temp[] = $status;
 					}elseif ($col['ColumnDb'] == 'ForwardToID') {
 						$ForwardTo = $row->ForwardTo()->Pegawai()->Nama;
-						
+
 						// if(!$ForwardTo){
 		    //                 $last_pos = $this->getPosisiTerakhir($row);
 

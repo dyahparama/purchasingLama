@@ -106,5 +106,5 @@
     <script src="$ThemeDir/global/js/Plugin/selectable.js"></script>
     <script src="$ThemeDir/global/js/Plugin/table.js"></script>
 
-    <script src="$ThemeDir/javascript/{$mgeJS}.js"></script>
+    <script defer src="$ThemeDir/javascript/{$mgeJS}.js"></script>
 

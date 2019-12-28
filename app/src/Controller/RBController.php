@@ -168,6 +168,11 @@ class RBController extends PageController
             $rb = RB::get()->byID($rbID);
             $detailDraftRB = $rb->DraftRB()->Detail();
 
+            $note = "";
+            if (isset($_REQUEST['note']) && $_REQUEST['note'] != "") {
+                $note = $_REQUEST['note'];
+            }
+
             $namaSupplier = $_REQUEST['nama_supplier'];
             $kodeSupplier = $_REQUEST['kode_supplier'];
             $jumlah = $_REQUEST['jumlah'];
@@ -221,6 +226,7 @@ class RBController extends PageController
 
                 $rb->Tgl = AddOn::convertDateToDatabase($tglRB);
                 $rb->Total = $grandTotal;
+                $rb->Note = $note;
                 $rb->write();
 
                 $arquivo = array();
