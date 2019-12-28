@@ -162,8 +162,8 @@ $(document).ready(function(){
             'zeroRecords': 'Maaf data tidak ditemukan',
             'info': 'Menampilkan halaman _PAGE_ dari _PAGES_ halaman',
             'infoEmpty': 'Tidak ada data',
-            // 'processing':  'Sedang memproses permintaan anda...',
-            'processing':  '<img src="' + baseURL + 'public/_resources/themes/custom/images/spinner.gif"></img>',
+            'processing':  'Sedang memproses permintaan anda...',
+            'processing':  '<img src="' + baseURL + '_resources/themes/custom/images/spinner.gif"></img>',
             'infoFiltered': '(filter dari _MAX_ total data)',
             'searchPlaceholder': 'Cari data ?',
             'paginate': {
