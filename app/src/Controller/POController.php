@@ -134,6 +134,8 @@ class POController extends PageController
         if (isset($_REQUEST['tgl-po']) && $_REQUEST['tgl-po'] != "") {
             $note = "";
 
+            var_dump($_REQUEST['total-akhir-termin']);die;
+
             if (isset($_REQUEST['note']) && $_REQUEST['note'] != "")
                 $note = $_REQUEST['note'];
 

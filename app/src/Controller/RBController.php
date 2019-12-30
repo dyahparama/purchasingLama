@@ -162,6 +162,8 @@ class RBController extends PageController
 
     public function doSubmitRB()
     {
+        var_dump($_POST);
+        die;
         if (isset($_REQUEST['RBID']) && $_REQUEST['RBID'] != "") {
             $submitMode = $_REQUEST['SubmitMode'];
             $rbID = $_REQUEST['RBID'];

@@ -1,10 +1,13 @@
-// const formatCur = {
-//     decimalCharacter: ",",
-//     decimalCharacterAlternative: ",",
-//     digitGroupSeparator: "."
-//     // currencySymbolPlacement    : AutoNumeric.options.currencySymbolPlacement.suffix,
-//     // roundingMethod             : AutoNumeric.options.roundingMethod.halfUpSymmetric,
-// };
+const formatCur = {
+    decimalCharacter: ",",
+    decimalCharacterAlternative: ",",
+    decimalPlaces: 0,
+    digitGroupSeparator: ".",
+    unformatOnHover: false,
+    unformatOnSubmit: true,
+    // currencySymbolPlacement    : AutoNumeric.options.currencySymbolPlacement.suffix,
+    // roundingMethod             : AutoNumeric.options.roundingMethod.halfUpSymmetric,
+}
 
 var table;
 let baseURL=$("#baseURL").data("url");
@@ -13,8 +16,6 @@ var column_name = $(document).find('#datatable1 > thead > tr');
 var cur_status = $(document).find('#cur_status').text();
 let id_pemohon = 0;
 var params = [];
-
-// new AutoNumeric('.autonumeric', formatCur)
 
 function getData(jenis, status){
     var data = function () {
@@ -37,6 +38,7 @@ function getData(jenis, status){
 }
 
 $(document).ready(function(){
+    new AutoNumeric.multiple('.autonumeric', formatCur)
     // Submit Form
     $('#form_filter').submit(function(evt, ui){
         evt.preventDefault();
@@ -210,7 +212,7 @@ $(document).on('click', "#add-detail-termin", function (e) {
                     <textarea class="form-control" name="keterangan-termin[]"></textarea>
                 </td>
                 <td>
-                    <input name="total-termin[]" class="form-control jumlah-termin required-field" type="number"
+                    <input name="total-termin[]" class="autonumeric form-control jumlah-termin required-field"
                         value="0" autocomplete="off">
                 </td>
                 <td>
@@ -222,6 +224,7 @@ $(document).on('click', "#add-detail-termin", function (e) {
                 </td>
             </tr>`);
         $('.tgl').datepicker();
+        new AutoNumeric.multiple('.autonumeric',null , formatCur)
 });
 
 $(document).on('click', '.delete-row-termin', function () {
@@ -232,7 +235,7 @@ $(document).on('click', '.delete-row-termin', function () {
       no + 1;
       // max++;
       $('.jumlah-termin').each(function(){
-            jumlahAkhir += parseInt($(this).val())
+            jumlahAkhir += parseInt(AutoNumeric.unformat($(this).val(), formatCur))
         })
         $('#total-akhir-termin-po').val(jumlahAkhir)
   } else {
@@ -243,14 +246,16 @@ $(document).on('click', '.delete-row-termin', function () {
 $(document).on('keyup', '.jumlah-termin', function(){
      let jumlahAkhir = 0
     $('.jumlah-termin').each(function(){
-            jumlahAkhir += parseInt($(this).val())
+            jumlahAkhir += parseInt(AutoNumeric.unformat($(this).val(), formatCur))
         })
-        $('#total-akhir-termin-po').val(jumlahAkhir)
+        // $('#total-akhir-termin-po').val(AutoNumeric.format(10000, formatCur))
+        AutoNumeric.set($('#total-akhir-termin-po')[0], jumlahAkhir)
 })
 
 
 
 $("#submit-po").click(function(e) {
+    AutoNumeric.unformatAndSet(".autonumeric", formatCur)
         let pass = true;
         let data = $("#form-po").serializeArray();
         if ($('#total-akhir-termin-po').val() != $('#total-akhir-po').val()) {

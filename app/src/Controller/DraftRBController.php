@@ -217,7 +217,7 @@ class DraftRBController extends PageController {
 		//$drb->Kode = $_POST["nomor"];
 		$drb->Tgl = $this->dateFormat($_POST["tgl"], "/", "-");
 		$drb->PemohonID = $_SESSION['user_id'];
-		$drb->JenisID = $_POST["jenis"];
+		$drb->Jenis = $_POST["jenis"];
 		$drb->Deadline = $_POST["tgl-butuh"];
 		$drb->Alasan = $_POST["alasan"];
 		$drb->Notes = $_POST["note"];

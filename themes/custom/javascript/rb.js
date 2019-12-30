@@ -1,7 +1,22 @@
+const formatCur = {
+    decimalCharacter: ",",
+    decimalCharacterAlternative: ",",
+    decimalPlaces: 0,
+    digitGroupSeparator: ".",
+    unformatOnSubmit: true,
+    unformatOnHover: false
+    // currencySymbolPlacement    : AutoNumeric.options.currencySymbolPlacement.suffix,
+    // roundingMethod             : AutoNumeric.options.roundingMethod.halfUpSymmetric,
+}
 let baseURL = $("#baseURL").data("url");
 var uri_segment = "rb";
 var draftRBDetailID = 0;
 var penawaranRow = 0;
+var formatNumber = new AutoNumeric.multiple('.autonumeric', formatCur);
+
+$(document).ready(function () {
+    //formatNumber.update({});
+});
 
 $(".add-detail").on("click", function() {
     let parent = $(this)
@@ -25,6 +40,18 @@ $(".add-detail").on("click", function() {
             source: substringMatcher(states)
         }
     );
+    // formatNumber.forEach(element => {
+    //     element.remove();
+    // });
+    //console.log(parent.find("tr").last());
+    let indexFormat = [2,3,4];
+    parent.find("tr").last().find("td").each(function (indexInArray, valueOfElement) { 
+        if (indexFormat.includes(indexInArray)) {
+            new AutoNumeric($(this).find("input")[0],formatCur);
+        }
+    });
+    //formatNumber = new AutoNumeric.multiple('.autonumeric', formatCur);
+    
 });
 
 $(document).on("click", ".close-modal", function() {
@@ -48,6 +75,7 @@ $(".close-modal").click(function(e) {
 });
 
 $(document).on("keyup", ".harga-detail, .jumlah-detail", function() {
+   
     let parentRow = $(this)
         .parent()
         .parent();
@@ -68,14 +96,20 @@ $(document).on("keyup", ".harga-detail, .jumlah-detail", function() {
     //     }
     // }
 
-    let jumlah = parentRow.find(".jumlah-detail").val()
-        ? parentRow.find(".jumlah-detail").val()
-        : 0;
-    let harga = parentRow.find(".harga-detail").val()
-        ? parentRow.find(".harga-detail").val()
-        : 0;
-    parentRow.find(".subtotal-detail").val(jumlah * harga);
-
+    // let jumlah = parentRow.find(".jumlah-detail").val()
+    //     ? parentRow.find(".jumlah-detail").val()
+    //     : 0;
+    // let harga = parentRow.find(".harga-detail").val()
+    //     ? parentRow.find(".harga-detail").val()
+    //     : 0;
+    
+    let jumlah = parseFloat(AutoNumeric.unformat(parentRow.find(".jumlah-detail")[0], formatCur));
+    let harga = parseFloat(AutoNumeric.unformat(parentRow.find(".harga-detail")[0], formatCur));
+    
+        //alert(AutoNumeric.getNumber(parentRow.find(".subtotal-detail")[0]));
+    //parentRow.find(".subtotal-detail").val(jumlah * harga);
+    AutoNumeric.set(parentRow.find(".subtotal-detail")[0],jumlah * harga);
+    console.log(parseFloat(AutoNumeric.unformat(parentRow.find(".subtotal-detail")[0], formatCur)));
     let subTotalAkhir = 0;
     parentTable.find(".subtotal-detail").each(function() {
         subTotalAkhir += parseInt($(this).val());
@@ -86,13 +120,16 @@ $(document).on("keyup", ".harga-detail, .jumlah-detail", function() {
     $(document)
         .find(".subtotal-detail")
         .each(function() {
-            grandTotal += parseInt($(this).val());
+            //grandTotal += parseInt($(this).val());
+            grandTotal +=parseFloat(AutoNumeric.unformat($(this)[0], formatCur))
         });
-    console.log(grandTotal);
-    $("#grand-total").val(grandTotal);
+    //$("#grand-total").val(grandTotal);
+    AutoNumeric.set($("#grand-total")[0],grandTotal);
+    
 });
 
 $(document).on("change", ".supplier-nama", function() {
+    
     if ($(this).val()) {
         let parent = $(this).closest("tr");
         $.ajax({
@@ -114,6 +151,7 @@ $(document).on("change", ".supplier-nama", function() {
 });
 
 $(document).on("click", ".delete-row", function() {
+    
     // alert($('#table-body tr').length)
     let parent = $(this)
         .parent()
@@ -132,6 +170,7 @@ $(document).on("click", ".delete-row", function() {
     } else {
         alert("Detail harus ada");
     }
+    
 });
 
 var substringMatcher = function(strs) {
@@ -181,6 +220,7 @@ $(document).on("click", ".radio-respond", function() {
 });
 
 $(".add-detail-penawaran").on("click", function() {
+    
     penawaranRow += 1;
     let parent = $(this)
         .parent()
@@ -204,9 +244,11 @@ $(".add-detail-penawaran").on("click", function() {
         '[]">';
     html += "</div>";
     $(".penawaran-file-td:last .td-input-file").html(html);
+    
 });
 
 $(document).on("click", ".delete-detail-penawaran", function() {
+    
     // alert($('#table-body tr').length)
     let parent = $(this)
         .parent()
@@ -225,6 +267,7 @@ $(document).on("click", ".delete-detail-penawaran", function() {
     } else {
         alert("Detail harus ada");
     }
+    
 });
 
 $(document).on("change", ".penawaran-file", function() {
@@ -250,6 +293,7 @@ $(document).on("change", ".penawaran-file", function() {
 
         parent_td.append(html);
     }
+    
 });
 
 $(document).on("click", ".penawaran-file-button", function() {
@@ -261,10 +305,11 @@ $("#submit-master").click(function(e) {
     let pass = true;
     let data = $("#form-rb").serializeArray();
 
-    let jumlahDisetujui = $(".jumlah_total_" + draftRBDetailID).val();
+    //let jumlahDisetujui = $(".jumlah_total_" + draftRBDetailID).val();
+    let jumlahDisetujui = parseFloat(AutoNumeric.unformat($(".jumlah_total_" + draftRBDetailID)[0], formatCur))
     let jumlahDisetujuiDetail = 0;
     $(".jumlah-detail-" + draftRBDetailID).each(function(index, element) {
-        jumlahDisetujuiDetail+= parseFloat($(this).val());
+        jumlahDisetujuiDetail+=parseFloat(AutoNumeric.unformat($(this)[0], formatCur))
     });
 
     console.log(jumlahDisetujui,jumlahDisetujuiDetail,jumlahDisetujuiDetail == jumlahDisetujui);
@@ -288,10 +333,11 @@ $("#submit-master").click(function(e) {
         if (pass) {
             $("#form-rb").submit();
         } else {
+            console.log(data);
             alert("data belum lengkap");
         }
     }
-
+    
 });
 
 $(".view-detail").click(function(e) {

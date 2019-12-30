@@ -81,7 +81,7 @@
 									<label class="col-md-3 col-form-label">*Jenis Permintaan :</label>
 									<div class="col-md-9">
 										<select class="form-control" name="jenis" data-plugin="select2" required="">
-											<option>Pilih Event</option>
+											<option value="">Pilih Event</option>
 											<option <% if $jenis=="Event" %>selected<% end_if %> value="Event">Event</>
 											<option <% if $jenis=="Non Event" %>selected<% end_if %> value="Non Event">
 												Non-Event</option>
