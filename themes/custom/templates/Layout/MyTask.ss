@@ -163,7 +163,7 @@
 			                	<td></td>
 			                	<td>$NamaSupplier</td>
 			                	<td>$Kode</td>
-			                	<td>$Total</td>
+			                	<td class="autonumeric">$Total</td>
 			                	<td>
 			                		<% if $view_link!='' %>
 			                		<% if $IsPo == 1 %>
@@ -249,8 +249,8 @@
 			                <tr class="showdetaillpb$Up.ID no-sort" style="display: none;">
 			                	<td></td>
 			                	<td>$NamaBarang</td>
-			                	<td>$Jumlah</td>
-			                	<td>$JumlahTerima</td>
+			                	<td class="autonumeric">$Jumlah</td>
+			                	<td class="autonumeric">$JumlahTerima</td>
 			                	<% if $JumlahTerima >= $Jumlah %>
 			                	<td></td>
 			                	<% else %>

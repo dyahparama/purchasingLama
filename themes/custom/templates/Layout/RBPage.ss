@@ -346,17 +346,17 @@
                                                 </td>
                                                 <td>
                                                     <input name="jumlah[$ID][]"
-                                                    class="form-control jumlah-detail jumlah-detail-{$ID} autonumeric" type="text"
+                                                    class="autonumeric form-control jumlah-detail jumlah-detail-{$ID} autonumeric" type="text"
                                                     value="0" autocomplete="off">
                                                 </td>
                                                 <td>
                                                     <input name="harga[$ID][]"
-                                                    class="form-control harga-detail autonumeric" type="text"
+                                                    class="autonumeric form-control harga-detail autonumeric" type="text"
                                                     value="0" autocomplete="off">
                                                 </td>
                                                 <td>
                                                     <input name="subtotal[$ID][]"
-                                                    class="form-control subtotal-detail autonumeric" type="text"
+                                                    class="autonumeric form-control subtotal-detail autonumeric" type="text"
                                                     autocomplete="off" readonly>
                                                 </td>
                                                 <td>
@@ -386,17 +386,17 @@
                                                 </td>
                                                 <td>
                                                     <input name="jumlah[$ID][]"
-                                                    class="form-control jumlah-detail" type="number"
+                                                    class="autonumeric form-control jumlah-detail" type="number"
                                                     autocomplete="off" readonly value="$Jumlah">
                                                 </td>
                                                 <td>
                                                     <input name="harga[$ID][]"
-                                                    class="form-control harga-detail" type="number"
+                                                    class="autonumeric form-control harga-detail" type="number"
                                                     value="$Harga" readonly autocomplete="off">
                                                 </td>
                                                 <td>
                                                     <input name="subtotal[$ID][]"
-                                                    class="form-control subtotal-detail" value="$Total" type="text"
+                                                    class="autonumeric form-control subtotal-detail" value="$Total" type="text"
                                                     autocomplete="off" readonly>
                                                 </td>
                                                 <td>

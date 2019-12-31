@@ -8,6 +8,12 @@ use SilverStripe\Control\Director;
 
 class AddOn
 {
+    public static function unformatNumber($str) {
+        $num = str_replace('.', '', $str);
+        $num = str_replace(',', '.', $num);
+        return $num;
+    }
+
     public static function convertDate($date, $format = 'Y-m-d')
     {
         $date = date('Y-m-d', strtotime(str_replace('/', '-', $date)));

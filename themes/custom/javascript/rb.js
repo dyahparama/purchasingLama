@@ -1,21 +1,24 @@
-const formatCur = {
-    decimalCharacter: ",",
-    decimalCharacterAlternative: ",",
-    decimalPlaces: 0,
-    digitGroupSeparator: ".",
-    unformatOnSubmit: true,
-    unformatOnHover: false
-    // currencySymbolPlacement    : AutoNumeric.options.currencySymbolPlacement.suffix,
-    // roundingMethod             : AutoNumeric.options.roundingMethod.halfUpSymmetric,
-}
+// const formatCur = {
+//     decimalCharacter: ",",
+//     decimalCharacterAlternative: ",",
+//     decimalPlaces: 0,
+//     digitGroupSeparator: ".",
+//     unformatOnSubmit: true,
+//     unformatOnHover: false
+//     // currencySymbolPlacement    : AutoNumeric.options.currencySymbolPlacement.suffix,
+//     // roundingMethod             : AutoNumeric.options.roundingMethod.halfUpSymmetric,
+// }
+const formatCur = {mDec:0, aSep:'.', aDec:','}
 let baseURL = $("#baseURL").data("url");
 var uri_segment = "rb";
 var draftRBDetailID = 0;
 var penawaranRow = 0;
-var formatNumber = new AutoNumeric.multiple('.autonumeric', formatCur);
+// var formatNumber = new AutoNumeric.multiple('.autonumeric', formatCur);
 
 $(document).ready(function () {
-    //formatNumber.update({});
+    $('.autonumeric').each(function(){
+        $(this).autoNumeric('init', formatCur)
+    })
 });
 
 $(".add-detail").on("click", function() {
@@ -44,12 +47,15 @@ $(".add-detail").on("click", function() {
     //     element.remove();
     // });
     //console.log(parent.find("tr").last());
-    let indexFormat = [2,3,4];
-    parent.find("tr").last().find("td").each(function (indexInArray, valueOfElement) { 
-        if (indexFormat.includes(indexInArray)) {
-            new AutoNumeric($(this).find("input")[0],formatCur);
-        }
-    });
+    // let indexFormat = [2,3,4];
+    // parent.find("tr").last().find("td").each(function (indexInArray, valueOfElement) { 
+    //     if (indexFormat.includes(indexInArray)) {
+    //         new AutoNumeric($(this).find("input")[0],formatCur);
+    //     }
+    // });
+    $('.autonumeric').each(function(){
+        $(this).autoNumeric('init', formatCur)
+    })
     //formatNumber = new AutoNumeric.multiple('.autonumeric', formatCur);
     
 });
@@ -103,28 +109,28 @@ $(document).on("keyup", ".harga-detail, .jumlah-detail", function() {
     //     ? parentRow.find(".harga-detail").val()
     //     : 0;
     
-    let jumlah = parseFloat(AutoNumeric.unformat(parentRow.find(".jumlah-detail")[0], formatCur));
-    let harga = parseFloat(AutoNumeric.unformat(parentRow.find(".harga-detail")[0], formatCur));
+    let jumlah = parseFloat(parentRow.find(".jumlah-detail").autoNumeric('get'));
+    let harga = parseFloat(parentRow.find(".harga-detail").autoNumeric('get'));
     
         //alert(AutoNumeric.getNumber(parentRow.find(".subtotal-detail")[0]));
     //parentRow.find(".subtotal-detail").val(jumlah * harga);
     AutoNumeric.set(parentRow.find(".subtotal-detail")[0],jumlah * harga);
-    console.log(parseFloat(AutoNumeric.unformat(parentRow.find(".subtotal-detail")[0], formatCur)));
+    console.log(parseFloat(parentRow.find(".subtotal-detail").autoNumeric('get')));
     let subTotalAkhir = 0;
     parentTable.find(".subtotal-detail").each(function() {
-        subTotalAkhir += parseInt($(this).val());
+        subTotalAkhir += parseInt($(this).autoNumeric('get'));
     });
-    parentTable.find(".subtotal-akhir").val(subTotalAkhir);
+    parentTable.find(".subtotal-akhir").autoNumeric('set', subTotalAkhir);
 
     let grandTotal = 0;
     $(document)
         .find(".subtotal-detail")
         .each(function() {
             //grandTotal += parseInt($(this).val());
-            grandTotal +=parseFloat(AutoNumeric.unformat($(this)[0], formatCur))
+            grandTotal +=parseFloat(A$(this).autoNumeric('get'))
         });
     //$("#grand-total").val(grandTotal);
-    AutoNumeric.set($("#grand-total")[0],grandTotal);
+    // AutoNumeric.set($("#grand-total")[0],grandTotal);
     
 });
 
@@ -306,10 +312,10 @@ $("#submit-master").click(function(e) {
     let data = $("#form-rb").serializeArray();
 
     //let jumlahDisetujui = $(".jumlah_total_" + draftRBDetailID).val();
-    let jumlahDisetujui = parseFloat(AutoNumeric.unformat($(".jumlah_total_" + draftRBDetailID)[0], formatCur))
+    let jumlahDisetujui = parseFloat($(".jumlah_total_" + draftRBDetailID).autoNumeric('get'))
     let jumlahDisetujuiDetail = 0;
     $(".jumlah-detail-" + draftRBDetailID).each(function(index, element) {
-        jumlahDisetujuiDetail+=parseFloat(AutoNumeric.unformat($(this)[0], formatCur))
+        jumlahDisetujuiDetail+=parseFloat($(this).autoNumeric('get'))
     });
 
     console.log(jumlahDisetujui,jumlahDisetujuiDetail,jumlahDisetujuiDetail == jumlahDisetujui);

@@ -77,11 +77,11 @@ class LPBController extends PageController
 
                 $poDetail->JenisID = $jenisBarang[$key];
                 $poDetail->NamaBarang = $namaBarang[$key];
-                $poDetail->Jumlah = $jumlah[$key];
-                $poDetail->JumlahTerima = $jumlahDiterima[$key];
+                $poDetail->Jumlah = AddOn::unformatNumber($jumlah[$key]);
+                $poDetail->JumlahTerima = AddOn::unformatNumber($jumlahDiterima[$key]);
                 $poDetail->SatuanID = $satuan[$key];
-                $poDetail->Harga = $harga[$key];
-                $poDetail->Total = $subtotal[$key];
+                $poDetail->Harga = AddOn::unformatNumber($harga[$key]);
+                $poDetail->Total = AddOn::unformatNumber($subtotal[$key]);
                 $poDetail->LPBID = $idPO;
                 $poDetail->DetailPOID = $parentid[$key];
                 $poDetail->DetailPerSupplierID = $detailPerSupplier[$key];

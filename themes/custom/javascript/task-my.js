@@ -1,3 +1,11 @@
+const formatCur = {mDec:0, aSep:'.', aDec:','}
+
+$(document).ready(function () {
+    $('.autonumeric').each(function(){
+        $(this).autoNumeric('init', formatCur)
+    })
+});
+
 $(document).on("click", "[data-toggle='tab']", function() {
     let link = $(this).attr('aria-controls');
     $('.tab-pane').hide();

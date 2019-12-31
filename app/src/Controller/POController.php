@@ -134,7 +134,7 @@ class POController extends PageController
         if (isset($_REQUEST['tgl-po']) && $_REQUEST['tgl-po'] != "") {
             $note = "";
 
-            var_dump($_REQUEST['total-akhir-termin']);die;
+            // var_dump(AddOn::unformatNumber($_REQUEST['total-akhir-termin']));die;
 
             if (isset($_REQUEST['note']) && $_REQUEST['note'] != "")
                 $note = $_REQUEST['note'];
@@ -151,7 +151,7 @@ class POController extends PageController
             $drb->write();
             $po = new PO();
             $po->Tgl = AddOn::convertDateToDatabase($tgl);
-            $po->Total = $_REQUEST['total-akhir-po'];
+            $po->Total = AddOn::unformatNumber($_REQUEST['total-akhir-po']);
             $po->DraftRBID = $draftRBID;
             $po->RBID = $RBID;
             $po->TerimaLPBID = $_REQUEST['TerimaLPBID'];
@@ -178,10 +178,10 @@ class POController extends PageController
 
                 $poDetail->JenisID = $jenisBarang[$key];
                 $poDetail->NamaBarang = $namaBarang[$key];
-                $poDetail->Jumlah = $jumlah[$key];
+                $poDetail->Jumlah = AddOn::unformatNumber($jumlah[$key]);
                 $poDetail->SatuanID = $satuan[$key];
-                $poDetail->Harga = $harga[$key];
-                $poDetail->Total = $subtotal[$key];
+                $poDetail->Harga = AddOn::unformatNumber($harga[$key]);
+                $poDetail->Total = AddOn::unformatNumber($subtotal[$key]);
                 $poDetail->POID = $idPO;
                 $poDetail->DetailPerSupplierID = $parentid[$key];
 
@@ -203,7 +203,7 @@ class POController extends PageController
                 $poTermin->Tanggal = $tgl[$key];
                 $poTermin->Jenis = $jenis[$key];
                 $poTermin->Keterangan = $keterangan[$key];
-                $poTermin->Jumlah = $total[$key];
+                $poTermin->Jumlah = AddOn::unformatNumber($total[$key]);
                 $poTermin->POID = $idPO;
 
                 $poTermin->write();

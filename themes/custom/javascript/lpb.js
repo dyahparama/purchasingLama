@@ -1,3 +1,11 @@
+const formatCur = {mDec:0, aSep:'.', aDec:','}
+
+$(document).ready(function(){
+    $('.autonumeric').each(function(){
+        $(this).autoNumeric('init', formatCur)
+    })
+})
+
 $(document).on('change', '#nama-supplier', function(){
     if ($(this).val()) {
         $.ajax({
@@ -25,30 +33,30 @@ $(document).on('change', '#nama-supplier', function(){
 
 $(document).on('change', '.jumlah-diterima-lpb', function () {
     let parent = $(this).parent().parent()
-    let jumlahKirim = parent.find(".jumlah-lpb").val() ? parent.find(".jumlah-lpb").val() : 0
-    let jumlahTerima = parent.find(".jumlah-diterima-lpb").val() ? parent.find(".jumlah-diterima-lpb").val() : 0
+    let jumlahKirim = parent.find(".jumlah-lpb").val() ? parent.find(".jumlah-lpb").autoNumeric('get') : 0
+    let jumlahTerima = parent.find(".jumlah-diterima-lpb").val() ? parent.find(".jumlah-diterima-lpb").autoNumeric('get') : 0
 
     console.log(jumlahKirim)
     console.log(jumlahTerima)
 
     if (parseFloat(jumlahKirim) < parseFloat(jumlahTerima)) {
         alert("Jumlah diterima salah")
-        $(this).val(parseInt(jumlahKirim))
+        $(this).autoNumeric('set', jumlahKirim)
     }
 })
 
 $(document).on('keyup', '.jumlah-diterima-lpb', function () {
     let parent = $(this).parent().parent()
-    let harga = parent.find(".harga-lpb").val() ? parent.find(".harga-lpb").val() : 0
-    let jumlah = parent.find(".jumlah-diterima-lpb").val() ? parent.find(".jumlah-diterima-lpb").val() : 0
+    let harga = parent.find(".harga-lpb").val() ? parent.find(".harga-lpb").autoNumeric('get') : 0
+    let jumlah = parent.find(".jumlah-diterima-lpb").val() ? parent.find(".jumlah-diterima-lpb").autoNumeric('get') : 0
     let total = harga * jumlah
-    parent.find('.subtotal-lpb').val(total)
+    parent.find('.subtotal-lpb').autoNumeric('set', total)
 
     let totalakhir = 0
     $('.subtotal-lpb').each(function () {
-        totalakhir += parseInt($(this).val())
+        totalakhir += parseInt($(this).autoNumeric('get'))
     })
-    $('#total-akhir-lpb').val(totalakhir)
+    $('#total-akhir-lpb').autoNumeric('set', totalakhir)
 })
 
 $("#submit-lpb").click(function(e) {

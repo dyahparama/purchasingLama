@@ -50,7 +50,7 @@ class RBController extends PageController
                 $history =  new ArrayList();
                 foreach ($historyApproval as $value) {
                     $history->push([
-                        "Created"=>$this::FormatDate("d/m/Y H:i",$value->Created) ,
+                        "Created"=>$this::FormatDate("d/m/Y H:i",$value->Created),
                         "By"=>$value->ApprovedBy()->Pegawai()->Nama ."[".$this::getJabatanFromStatus($value->Status()->ID)."]",
                         "Status"=>$value->Status()->Status,
                         "Note"=>$value->Note]);
@@ -179,7 +179,7 @@ class RBController extends PageController
             $kodeSupplier = $_REQUEST['kode_supplier'];
             $jumlah = $_REQUEST['jumlah'];
             $harga = $_REQUEST['harga'];
-            $total = $_REQUEST['subtotal'];
+            $total = AddOn::unformatNumber($_REQUEST['subtotal']);
             $keterangan = $_REQUEST['keterangan'];
             $tglRB = $_REQUEST["tgl-rb"];
 
@@ -191,7 +191,7 @@ class RBController extends PageController
             foreach ($namaBarang as $key => $value) {
                 $draftRBDetail = DraftRBDetail::get()->byID($key);
                 $draftRBDetail->NamaBarang = $namaBarang[$key];
-                $draftRBDetail->JumlahDisetujui = $jumlahDisetujui[$key];
+                $draftRBDetail->JumlahDisetujui = AddOn::unformatNumber($jumlahDisetujui[$key]);
                 $draftRBDetail->Spesifikasi = $sepesifikasiBarang[$key];
                 $draftRBDetail->KodeInventaris = $kodeInvetaris[$key];
                 $draftRBDetail->write();
@@ -209,9 +209,9 @@ class RBController extends PageController
                         $detailRBPerSupplier = new DetailRBPerSupplier();
                         $detailRBPerSupplier->NamaSupplier = $namaSupplier[$key][$key2];
                         $detailRBPerSupplier->KodeSupplier = $kodeSupplier[$key][$key2];
-                        $detailRBPerSupplier->Jumlah = $jumlah[$key][$key2];
-                        $detailRBPerSupplier->Harga = $harga[$key][$key2];
-                        $detailRBPerSupplier->Total = $total[$key][$key2];
+                        $detailRBPerSupplier->Jumlah = AddOn::unformatNumber($jumlah[$key][$key2]);
+                        $detailRBPerSupplier->Harga = AddOn::unformatNumber($harga[$key][$key2]);
+                        $detailRBPerSupplier->Total = AddOn::unformatNumber($total[$key][$key2]);
                         $detailRBPerSupplier->Keterangan = $keterangan[$key][$key2];
                         $detailRBPerSupplier->DraftRBDetailID = $key;
                         $detailRBPerSupplier->RBID = $rbID;
@@ -222,7 +222,7 @@ class RBController extends PageController
                             $isTPS = true;
                         }
 
-                        $grandTotal += (float) $total[$key][$key2];
+                        $grandTotal += (float) AddOn::unformatNumber($total[$key][$key2]);
                     };
                 };
 

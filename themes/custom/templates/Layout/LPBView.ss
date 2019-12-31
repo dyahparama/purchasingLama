@@ -77,11 +77,11 @@
                                                         value="$NamaBarang" readonly autocomplete="off">
                                                 </td>
                                                 <td>
-                                                    <input name="jumlah[]" class="form-control jumlah-lpb" readonly
+                                                    <input name="jumlah[]" class="autonumeric form-control jumlah-lpb" readonly
                                                     value="$Jumlah" autocomplete="off">
                                                 </td>
                                                 <td>
-                                                    <input name="jumlah_diterima[]" type="number" class="jumlah-diterima-lpb form-control"
+                                                    <input name="jumlah_diterima[]" class="autonumeric jumlah-diterima-lpb form-control"
                                                         value="$JumlahTerima" readonly autocomplete="off">
                                                 </td>
                                                 <td>
@@ -90,11 +90,11 @@
                                                     value="$Satuan.Nama" autocomplete="off">
                                                 </td>
                                                 <td>
-                                                    <input name="harga[]" class="form-control harga-lpb" type="text"
+                                                    <input name="harga[]" class="autonumeric form-control harga-lpb" type="text"
                                                         value="$Harga" readonly autocomplete="off" value="$Harga">
                                                 </td>
                                                 <td>
-                                                    <input name="subtotal[]" class="form-control subtotal-lpb" type="text"
+                                                    <input name="subtotal[]" class="autonumeric form-control subtotal-lpb" type="text"
                                                         value="$Total" autocomplete="off" readonly>
                                                 </td>
                                             </tr>

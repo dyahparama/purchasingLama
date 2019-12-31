@@ -121,11 +121,11 @@
                                                         value="$NamaBarang" autocomplete="off">
                                                 </td>
                                                 <td>
-                                                    <input name="jumlah[]" class="form-control jumlah-lpb" readonly
+                                                    <input name="jumlah[]" class="autonumeric form-control jumlah-lpb" readonly
                                                     value="$Top.countLPB($DetailPerSupplierID)" autocomplete="off">
                                                 </td>
                                                 <td>
-                                                    <input name="jumlah_diterima[]" type="number" class="jumlah-diterima-lpb form-control"
+                                                    <input name="jumlah_diterima[]" class="autonumeric jumlah-diterima-lpb form-control"
                                                         value="$Top.countLPB($DetailPerSupplierID)" min="0" autocomplete="off">
                                                 </td>
                                                 <td>
@@ -134,7 +134,7 @@
                                                     value="$Satuan.Nama" autocomplete="off">
                                                 </td>
                                                 <td>
-                                                    <input name="harga[]" class="form-control harga-lpb" type="text"
+                                                    <input name="harga[]" class="autonumeric form-control harga-lpb" type="text"
                                                         value="$Harga" readonly autocomplete="off" value="$Harga">
                                                 </td>
                                                 <%-- <td>
@@ -146,14 +146,14 @@
                                                         readonly autocomplete="off">
                                                 </td> --%>
                                                 <td>
-                                                    <input name="subtotal[]" class="form-control subtotal-lpb" type="text"
+                                                    <input name="subtotal[]" class="autonumeric form-control subtotal-lpb" type="text"
                                                         value="$Top.multiply($Top.countLPB($ID), $Harga)" autocomplete="off" readonly>
                                                 </td>
                                             </tr>
                                             <% end_loop %>
                                             <tr id="row-total">
                                                 <td colspan="6">Jumlah</td>
-                                                <td><input id="total-akhir-lpb" name="total" class="form-control" type="text" value="{$TotalAkhir}"
+                                                <td><input id="total-akhir-lpb" name="total" class="autonumeric form-control" type="text" value="{$TotalAkhir}"
                                                     autocomplete="off" readonly></td>
                                                 <td></td>
                                                 <td></td>
