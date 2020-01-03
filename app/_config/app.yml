@@ -1,3 +1,7 @@
 Silverstripe\SiteConfig\SiteConfig:
   extensions:
     - CustomSiteConfig
+
+SilverStripe\Security\Group:
+  extensions:
+    - GroupExtension

@@ -42,7 +42,7 @@
                                             <input class="form-control" id="tgl-draft" name="tgl-rb"
                                             data-date-format="dd/mm/yyyy"
                                             value="$DraftRB.Tgl.format(dd/MM/yyyy)" readonly data-plugin="datepicker"
-                                            type="text">
+                                            type="text" data-min-date="20/12/2019">
                                             <% else %>
                                             <input class="form-control" id="tgl-draft" name="tgl-rb"
                                             data-date-format="dd/mm/yyyy" data-now="$dateNow"

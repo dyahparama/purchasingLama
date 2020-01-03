@@ -105,6 +105,14 @@ class Pegawai extends DataObject
         return new RequiredFields(array("Nama", "NoInduk", "Alamat", "TempatLahir", "TglLahir", "NoTelp", "NoWa"));
     }
 
+    public function onBeforeWrite()
+    {
+        if ($this->Jabatans()->count() == 0) {
+            throw new ValidationException("Staff harus memiliki jabatan");
+        }
+        parent::onBeforeWrite();
+    }
+
     public function getCMSFields()
     {
         $fields = new FieldList();
@@ -128,12 +136,12 @@ class Pegawai extends DataObject
             'Jabatan Staff',
             $this->Jabatans(),
             GridFieldConfig::create()
-                ->addComponent(new GridFieldButtonRow('before'))
-                ->addComponent(new GridFieldToolbarHeader())
-                ->addComponent(new GridFieldTitleHeader())
-                ->addComponent(new GridFieldEditableColumns())
-                ->addComponent(new GridFieldDeleteAction())
-                ->addComponent(new GridFieldAddNewInlineButton())
+            ->addComponent(new GridFieldButtonRow('before'))
+            ->addComponent(new GridFieldToolbarHeader())
+            ->addComponent(new GridFieldTitleHeader())
+            ->addComponent(new GridFieldEditableColumns())
+            ->addComponent(new GridFieldDeleteAction())
+            ->addComponent(new GridFieldAddNewInlineButton())
         );
 
         $grid->getConfig()->getComponentByType(GridFieldEditableColumns::class)->setDisplayFields(array(

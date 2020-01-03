@@ -15,6 +15,10 @@ var draftRBDetailID = 0;
 var penawaranRow = 0;
 // var formatNumber = new AutoNumeric.multiple('.autonumeric', formatCur);
 
+// $('#tgl-draft').datepicker({
+//     minDate: new Date()
+// })
+
 $(document).ready(function () {
     $('.autonumeric').each(function(){
         $(this).autoNumeric('init', formatCur)

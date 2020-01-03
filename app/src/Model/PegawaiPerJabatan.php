@@ -30,34 +30,43 @@ class PegawaiPerJabatan extends DataObject
         'Departemen' => Departemen::class
     ];
 
-    // private static $owns = [
-	// 	'logo'
-    // ];
-
+    
     private static $searchable_fields = [
         'Nama',
         'NoInduk',
         'Email',
         'Penempatan'
-     ];
+    ];
 
-     private static $field_labels = [
+    private static $field_labels = [
         'Nama'=>'Nama',
         'NoInduk'=>'No. Induk Pegawai',
         'NoTelp'=>'No. Hp',
-     ];
+    ];
 
-     private static $summary_fields = [
+    private static $summary_fields = [
         'Nama',
         'NoInduk',
         'Alamat',
         'NoTelp',
-     ];
+    ];
 
-     public function getPegawaiJabatan()
-     {
-         return $this->Jabatan->Nama . '/' . $this->Cabang->Nama;  
-     }
+    public function getPegawaiJabatan()
+    {
+       return $this->Jabatan->Nama . '/' . $this->Cabang->Nama;  
+    }
 
-
+    public function onBeforeWrite()
+    {
+        if (!$this->JabatanID) {
+            throw new ValidationException("Jabatan staff harus ada. ");
+        }
+        if (!$this->CabangID) {
+            throw new ValidationException("Cabang staff harus ada. ");
+        }
+        if (!$this->DepartemenID) {
+            throw new ValidationException("Departemen staff harus ada. ");
+        }
+        parent::onBeforeWrite();
+    }
 }
