@@ -28,6 +28,7 @@ use Symbiote\GridFieldExtensions\GridFieldExtensions;
 use SilverStripe\Forms\GridField\GridFieldDataColumns;
 use Silverstripe\Forms\GridField\GridFieldComponent;
 use SilverStripe\Forms\GridField\GridFieldDetailForm;
+use Silverstripe\Security\Permission;
 
 class StrukturCabang extends DataObject
 {
@@ -288,5 +289,25 @@ class StrukturCabang extends DataObject
         } else {
             return new RequiredFields(array("Kode", "Nama", "Jenis"));
         }
+    }
+
+    function canView($member = null) {
+        // return true;
+        return Permission::check('Cabang_Read');
+    }
+
+    function canEdit($member = null) {
+        // return true;
+        return Permission::check('Cabang_Update');
+    }
+
+    function canDelete($member = null) {
+        // return true;
+        return Permission::check('Cabang_Delete');
+    }
+
+    function canCreate($member = null, $context = []) {
+        // return true;
+        return Permission::check('Cabang_Create');
     }
 }

@@ -3,6 +3,7 @@
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Assets\Image;
 use SilverStripe\ORM\ValidationException;
+use Silverstripe\Security\Permission;
 
 class Departemen extends DataObject
 {
@@ -57,5 +58,25 @@ class Departemen extends DataObject
             }
         }
         parent::onBeforeWrite();
+    }
+
+    function canView($member = null) {
+        // return true;
+        return Permission::check('Departemen_Read');
+    }
+
+    function canEdit($member = null) {
+        // return true;
+        return Permission::check('Departemen_Update');
+    }
+
+    function canDelete($member = null) {
+        // return true;
+        return Permission::check('Departemen_Delete');
+    }
+
+    function canCreate($member = null, $context = []) {
+        // return true;
+        return Permission::check('Departemen_Create');
     }
 }

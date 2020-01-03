@@ -11,6 +11,7 @@ use SilverStripe\Forms\ReadonlyField;
 use SilverStripe\Forms\TabSet;
 use SilverStripe\ORM\DB;
 use SilverStripe\View\Parsers\HTMLValue;
+use Silverstripe\Security\Permission;
 
 class JenisBarang extends DataObject
 {
@@ -157,5 +158,25 @@ class JenisBarang extends DataObject
         }
 
         return $fields;
+    }
+
+    function canView($member = null) {
+        // return true;
+        return Permission::check('JenisBarang_Read');
+    }
+
+    function canEdit($member = null) {
+        // return true;
+        return Permission::check('JenisBarang_Update');
+    }
+
+    function canDelete($member = null) {
+        // return true;
+        return Permission::check('JenisBarang_Delete');
+    }
+
+    function canCreate($member = null, $context = []) {
+        // return true;
+        return Permission::check('JenisBarang_Create');
     }
 }

@@ -11,6 +11,7 @@ use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\TabSet;
 use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\ReadonlyField;
+use SilverStripe\Security\Member;
 
 class User extends DataObject
 {
@@ -23,7 +24,7 @@ class User extends DataObject
         "HakAkses" => HakAkses::class,
     ];
     private static $has_one = [
-        'Pegawai' => Pegawai::class,
+        'Pegawai' => Pegawai::class
     ];
     // private static $has_many = [
     //     'Moduls' => ModulData::class,
@@ -105,6 +106,6 @@ class User extends DataObject
     {
         $user = User::get()->innerJoin("pegawai", "\"pegawai\".\"ID\" = \"user\".\"PegawaiID\"");
         return $user;
-        
+
     }
 }

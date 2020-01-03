@@ -4,16 +4,16 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
 		<meta name="description" content="bootstrap material admin template">
 		<meta name="author" content="">
-		
+
 		<title>Dashboard | Purchasing System Material Admin Template</title>
 		<link rel="apple-touch-icon" href="$ThemeDir/assets/images/apple-touch-icon.png">
 		<link rel="shortcut icon" href="$ThemeDir/assets/images/favicon.ico">
-		
+
 		<!-- Stylesheets -->
 		<link rel="stylesheet" href="$ThemeDir/global/css/bootstrap.min.css">
 		<link rel="stylesheet" href="$ThemeDir/global/css/bootstrap-extend.min.css">
 		<link rel="stylesheet" href="$ThemeDir/assets/css/site.min.css">
-		
+
 		<link href="$ThemeDir/assets/skins/red.css" rel="stylesheet" type="text/css">
 		<!-- Plugins -->
 		<link rel="stylesheet" href="$ThemeDir/global/vendor/animsition/animsition.css">
@@ -27,8 +27,9 @@
 			<link rel="stylesheet" href="$ThemeDir/global/vendor/jvectormap/jquery-jvectormap.css">
 			<link rel="stylesheet" href="$ThemeDir/global/vendor/chartist-plugin-tooltip/chartist-plugin-tooltip.css">
 			<link rel="stylesheet" href="$ThemeDir/assets/examples/css/dashboard/v1.css">
-		
-		
+            <link rel="stylesheet" href="$ThemeDir/global/vendor/nestable/nestable.min.css">
+
+
 		<!-- Fonts -->
 		<link rel="stylesheet" href="$ThemeDir/global/fonts/material-design/material-design.min.css">
 		<link rel="stylesheet" href="$ThemeDir/global/fonts/brand-icons/brand-icons.min.css">
@@ -53,7 +54,7 @@
 
         <%-- typeahead --%>
         <link rel="stylesheet" href="$ThemeDir/global/vendor/typeahead-js/typeahead.css">
-		
+
 		<%-- advanced panel --%>
 	    <link rel="stylesheet" href="$ThemeDir/global/vendor/animsition/animsition.css">
 	    <link rel="stylesheet" href="$ThemeDir/global/vendor/asscrollable/asScrollable.css">
@@ -65,12 +66,12 @@
 		<!--[if lt IE 9]>
 		<script src="$ThemeDir/global/vendor/html5shiv/html5shiv.min.js"></script>
 		<![endif]-->
-		
+
 		<!--[if lt IE 10]>
 		<script src="$ThemeDir/global/vendor/media-match/media.match.min.js"></script>
 		<script src="$ThemeDir/global/vendor/respond/respond.min.js"></script>
 		<![endif]-->
-		
+
 		<!-- Scripts -->
 		<script src="$ThemeDir/global/vendor/breakpoints/breakpoints.js"></script>
 		<script>

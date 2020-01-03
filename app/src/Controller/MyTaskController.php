@@ -14,6 +14,8 @@ class MyTaskController extends PageController {
 		} else if (isset($_SESSION['user_id'])) {
 			$idnya = $_SESSION['user_id'];
 		}
+		// echo $idnya;
+		// die();
 		$show = new ArrayList();
 		$show1 = new ArrayList();
 		$show2 = new ArrayList();

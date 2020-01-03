@@ -5,3 +5,7 @@ Silverstripe\SiteConfig\SiteConfig:
 SilverStripe\Security\Group:
   extensions:
     - GroupExtension
+
+SilverStripe\Security\Member:
+  extensions:
+    - MemberExtension

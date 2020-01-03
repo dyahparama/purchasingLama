@@ -440,13 +440,36 @@
 
 				$view_link = Director::absoluteBaseURL().'draf-rb/ApprovePage/'.$id;
 				$delete_link = $this->Link().'deletereqcost/'.$id;
-
-				$temp[] = '
-				<div class="btn-group">
-				  <a href="'.$view_link.'" type="button" class="btn btn-default view"><i class="text-info fa fa-eye"></i> View</a>
-				  <!--<a href="'.$delete_link.'" type="button" class="btn btn-danger delete"><i class="text-info fa fa-eye"></i> Delete</a>-->
-				</div>
-				';
+				$drb =  DraftRB::get()->byID($id);
+				// $drb = $drb->sort('Created DESC')->first();
+				// echo $id;
+				// foreach ($drb as $key) {
+				// 	echo $drb->PegawaiPerJabatanID."<br>";
+				// 	echo $drb->PemohonID."<br>";
+				// }
+				// die();
+				// echo $drb->PegawaiPerJabatan()->Cabang()->Kacab()->ID." ";
+				$bataltarget = $drb->PegawaiPerJabatan()->Cabang()->Kacab()->ID;
+				// echo $bataltarget;
+				// die();
+				// $historyApproval=0;
+				$historyApproval = HistoryApproval::get()->where("DraftRBID = ".$id." AND ApprovedByID = ".$bataltarget)->count();
+				if($historyApproval>0){
+					$temp[] = '
+					<div class="btn-group">
+					  <a href="'.$view_link.'" type="button" class="btn btn-default view"><i class="text-info fa fa-eye"></i> View</a>
+					  <!--<a href="'.$delete_link.'" type="button" class="btn btn-danger delete"><i class="text-info fa fa-eye"></i> Delete</a>-->
+					</div>
+					';
+				}
+				else {
+					$temp[] = '
+					<div class="btn-group">
+					  <a href="'.$view_link.'" type="button" class="btn btn-default view"><i class="text-info fa fa-eye"></i> View</a>
+					  <a href="'.$delete_link.'" type="button" class="btn btn-danger delete"><i class="text-info fa fa-eye"></i> Batal </a>
+					</div>
+					';
+				}
 
 				$arr[] = $temp;
 			}

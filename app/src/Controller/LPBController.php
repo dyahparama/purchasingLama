@@ -6,13 +6,22 @@ use SilverStripe\Control\HTTPRequest;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\View\Requirements;
 use SilverStripe\ORM\DB;
+use SilverStripe\Security\Authenticator;
+use SilverStripe\Security\Member;
 
 
 class LPBController extends PageController
 {
     private static $allowed_actions = [
-        'getDetailBarang', 'ApprovePage', 'searchlpb', 'getData', 'doPostLPB', 'view'
+        'getDetailBarang', 'ApprovePage', 'searchlpb', 'getData', 'doPostLPB', 'view', 'tes'
     ];
+
+    public function tes() {
+        $member = Member::get()->byID(8)->checkPassword("12345");
+        var_dump($member->isValid());
+        // $tes = new Authenticator();
+        // var_dump($tes->checkPassword($member, "12345678"));
+    }
 
     public function view(HTTPRequest $request) {
         if (isset($request->params()["ID"])) {

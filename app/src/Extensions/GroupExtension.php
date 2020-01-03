@@ -21,20 +21,20 @@ class GroupExtension extends DataExtension
 {
 
     private static $db = [
-       
+
     ];
 
     private static $has_one = [
-      
+
     ];
 
     private static $has_many = [
-      
+
     ];
 
     public function updateCMSFields(FieldList $fields)
     {
         $fields->removeByName("ParentID");
-        $fields->removeByName("Permissions");
+        // $fields->removeByName("Permissions");
     }
 }

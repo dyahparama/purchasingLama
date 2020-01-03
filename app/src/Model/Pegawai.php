@@ -24,6 +24,7 @@ use Symbiote\GridFieldExtensions\GridFieldAddNewInlineButton;
 use Symbiote\GridFieldExtensions\GridFieldExtensions;
 use SilverStripe\Forms\GridField\GridFieldDataColumns;
 use Silverstripe\Forms\GridField\GridFieldComponent;
+use Silverstripe\Security\Permission;
 
 // 'Boolean': A boolean field (see: DBBoolean).
 // 'Currency': A number with 2 decimal points of precision, designed to store currency values (see: DBCurrency).
@@ -174,5 +175,25 @@ class Pegawai extends DataObject
         $fields->addFieldToTab("Root.Main", $grid);
 
         return $fields;
+    }
+
+    function canView($member = null) {
+        // return true;
+        return Permission::check('Staff_Read');
+    }
+
+    function canEdit($member = null) {
+        // return true;
+        return Permission::check('Staff_Update');
+    }
+
+    function canDelete($member = null) {
+        // return true;
+        return Permission::check('Staff_Delete');
+    }
+
+    function canCreate($member = null, $context = []) {
+        // return true;
+        return Permission::check('Staff_Create');
     }
 }

@@ -13,6 +13,7 @@ use SilverStripe\Forms\ReadonlyField;
 use SilverStripe\Forms\TabSet;
 use SilverStripe\AssetAdmin\Forms\UploadField;
 use SilverStripe\Forms\RequiredFields;
+use Silverstripe\Security\Permission;
 
 class Satuan extends DataObject
 {
@@ -77,5 +78,25 @@ class Satuan extends DataObject
         $fields->addFieldsToTab("Root.Main", new TextField("Nama", "Nama"));
 
         return $fields;
+    }
+
+    function canView($member = null) {
+        // return true;
+        return Permission::check('Satuan_Read');
+    }
+
+    function canEdit($member = null) {
+        // return true;
+        return Permission::check('Satuan_Update');
+    }
+
+    function canDelete($member = null) {
+        // return true;
+        return Permission::check('Satuan_Delete');
+    }
+
+    function canCreate($member = null, $context = []) {
+        // return true;
+        return Permission::check('Satuan_Create');
     }
 }

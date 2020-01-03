@@ -3,6 +3,7 @@
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Assets\Image;
 use SilverStripe\ORM\ValidationException;
+use Silverstripe\Security\Permission;
 
 class Jabatan extends DataObject
 {
@@ -56,5 +57,25 @@ class Jabatan extends DataObject
             }
         }
         parent::onBeforeWrite();
+    }
+
+    function canView($member = null) {
+        // return true;
+        return Permission::check('Jabatan_Read');
+    }
+
+    function canEdit($member = null) {
+        // return true;
+        return Permission::check('Jabatan_Update');
+    }
+
+    function canDelete($member = null) {
+        // return true;
+        return Permission::check('Jabatan_Delete');
+    }
+
+    function canCreate($member = null, $context = []) {
+        // return true;
+        return Permission::check('Jabatan_Create');
     }
 }

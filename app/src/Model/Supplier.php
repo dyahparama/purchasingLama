@@ -27,6 +27,7 @@ use Symbiote\GridFieldExtensions\GridFieldAddNewInlineButton;
 use Symbiote\GridFieldExtensions\GridFieldExtensions;
 use SilverStripe\Forms\GridField\GridFieldDataColumns;
 use Silverstripe\Forms\GridField\GridFieldComponent;
+use Silverstripe\Security\Permission;
 
 class LampiranKontrakFile extends File
 {
@@ -183,5 +184,25 @@ class Supplier extends DataObject
         if (!$this->ID) {
             $this->Kode = AddOn::createKode("Supplier", "Supplier");
         }
+    }
+
+    function canView($member = null) {
+        // return true;
+        return Permission::check('Supplier_Read');
+    }
+
+    function canEdit($member = null) {
+        // return true;
+        return Permission::check('Supplier_Update');
+    }
+
+    function canDelete($member = null) {
+        // return true;
+        return Permission::check('Supplier_Delete');
+    }
+
+    function canCreate($member = null, $context = []) {
+        // return true;
+        return Permission::check('Supplier_Create');
     }
 }
