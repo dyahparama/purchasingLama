@@ -286,7 +286,8 @@ class RBController extends PageController
 
 public function index(HTTPRequest $request)
 {
-    $curStat = "Me";
+    // $curStat = "Me";
+    $curStat = $request->param('ID');
     $data = [
         'cur_status' => $curStat,
         'user' => 'User',
@@ -462,6 +463,7 @@ function searchRb()
 
     $filter_record = (isset($_REQUEST['filter_record'])) ? $_REQUEST['filter_record'] : '';
     $start = (isset($_REQUEST['start'])) ? $_REQUEST['start'] : 0;
+    $cur_status = isset($_REQUEST['cur_status']) ? $_REQUEST['cur_status'] : 'Me';
     $length = (isset($_REQUEST['length'])) ? $_REQUEST['length'] : 10;
     $search = (isset($_REQUEST['search']['value'])) ? $_REQUEST['search']['value'] : '';
     $columnsort = (isset($_REQUEST['order'][0]['column'])) ? $_REQUEST['order'][0]['column'] : 0;
@@ -529,6 +531,11 @@ function searchRb()
             if ($column_sorted == "ForwardToID") {
 				$result = $result->sort(['ForwardTo.Pegawai.Nama' => $typesort]);
 			}
+            if($cur_status=='ApprovedMe'){
+                $Approved = HistoryApproval::get()->where("ApprovedByID = ".$user->ID);
+                $draftrbid = AddOn::groupConcat($Approved, 'DraftRB.ID');
+                $result = $result->where("DraftRBID IN ($draftrbid)");
+            }
 			// count all data (by filter otherwise)
 			$count_all = $result->count();
 
@@ -590,16 +597,28 @@ function searchRb()
 
             $idx++;
         }
-
+        $drb =  RB::get()->byID($id);
+        $siteconfig = SiteConfig::current_site_config();
         $view_link = Director::absoluteBaseURL().'rb/view/' . $id;
         $delete_link = $this->Link() . 'deletereqcost/' . $id;
-
-        $temp[] = '
-        <div class="btn-group">
-        <a href="' . $view_link . '" type="button" class="btn btn-default view"><i class="text-info fa fa-eye"></i> View</a>
-        <!--<a href="' . $delete_link . '" type="button" class="btn btn-danger delete"><i class="text-info fa fa-eye"></i> Delete</a>-->
-        </div>
-        ';
+        $bataltarget =  $siteconfig->KepalaPembelian()->ID;
+        $historyApproval = HistoryApproval::get()->where("DraftRBID = ".$id." AND ApprovedByID = ".$bataltarget." AND StatusID = ".$drb->DraftRB()->StatusID)->count();
+        if($historyApproval>0){
+            $temp[] = '
+            <div class="btn-group">
+              <a href="'.$view_link.'" type="button" class="btn btn-default view"><i class="text-info fa fa-eye"></i> View</a>
+              <!--<a href="'.$delete_link.'" type="button" class="btn btn-danger delete"><i class="text-info fa fa-eye"></i> Delete</a>-->
+            </div>
+            ';
+        }
+        else {
+            $temp[] = '
+            <div class="btn-group">
+              <a href="'.$view_link.'" type="button" class="btn btn-default view"><i class="text-info fa fa-eye"></i> View</a>
+              <a href="" type="button" class="btn btn-danger delete"><i class="text-info fa fa-eye"></i> Batal </a>
+            </div>
+            ';
+        }
 
         $arr[] = $temp;
     }

@@ -619,21 +619,7 @@ namespace {
             $idCabangRegional = $drb->PegawaiPerJabatan()->Cabang()->Regional()->ID;
             $idCabangPusat = $drb->PegawaiPerJabatan()->Cabang()->Pusat()->ID;
             $idJenis = $detail->Jenis()->ID;
-            // var_dump([$idCabangRegional,$idJenis]);
-            // var_dump(CabangJenisBarang::get()->where("CabangID = {$idCabangRegional} AND JenisBarangID = {$idJenis}")->first());
-            // die;
-            //$target = CabangJenisBarang::get()->where("CabangID = {$idCabangRegional} AND JenisBarangID = {$idJenis}")->first()->Kadep()->ID;
-
-            //var_dump($idCabangRegional);
-            // var_dump($idJenis);
-            // var_dump($idCabangRegional);
-            // die;
             switch ($status) {
-                case 1:
-                    $targetStatus = 1;
-                    $target = $kepalaCabang;
-                    return $target;
-                    break;
                 case 2:
                     $targetStatus = 2;
                     $target = CabangJenisBarang::get()->where("CabangID = {$idCabangRegional} AND JenisBarangID = {$idJenis}")->first()->Kadep()->ID;
@@ -642,32 +628,30 @@ namespace {
                     // var_dump($idJenis);
                     //             var_dump($target);
                     // die;
-                    $target = $kepalaCabang;
-                    return $target;
+                    return (["user" => $target, "status" => $targetStatus, "asisten" => $asisten]);
                     break;
                 case 3:
                     $targetStatus = 3;
                     $target = $cabangRegional->Kacab()->ID;
                     $asisten = $cabangRegional->Approver()->ID;
-                    return $target;
+                    return (["user" => $target, "status" => $targetStatus, "asisten" => $asisten]);
                     break;
                 case 4:
                     $targetStatus = 4;
                     $jenisBarang = CabangJenisBarang::get()->where("CabangID = {$idCabangPusat} AND JenisBarangID = {$idJenis}")->first()->JenisBarang();
                     $target = $jenisBarang->Kadep()->ID;
                     $asisten = $jenisBarang->Approver()->ID;
-                    return $target;
+                    return (["user" => $target, "status" => $targetStatus, "asisten" => $asisten]);
                     break;
                 case 5:
                     $targetStatus = 5;
                     $target = 0;
                     $asisten = 0;
-                    return $target;
+                    return (["user" => $target, "status" => $targetStatus, "asisten" => $asisten]);
                     break;
 
                 default:
                     break;
-
             }
         }
     }

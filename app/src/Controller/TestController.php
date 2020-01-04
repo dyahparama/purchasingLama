@@ -386,6 +386,11 @@
 			if ($column_sorted == "ForwardToID") {
 				$result = $result->sort(['ForwardTo.Pegawai.Nama' => $typesort]);
 			}
+			if($cur_status=='ApprovedMe'){
+				$Approved = HistoryApproval::get()->where("ApprovedByID = ".$user->ID);
+				$draftrbid = AddOn::groupConcat($Approved, 'DraftRB.ID');
+				$result = $result->where("ID IN ($draftrbid)");
+			}
 			// count all data (by filter otherwise)
 			$count_all = $result->count();
 
@@ -450,10 +455,11 @@
 				// die();
 				// echo $drb->PegawaiPerJabatan()->Cabang()->Kacab()->ID." ";
 				$bataltarget = $drb->PegawaiPerJabatan()->Cabang()->Kacab()->ID;
+				// $bataltarget = $this->getNextTargetBatal($drb);
 				// echo $bataltarget;
 				// die();
 				// $historyApproval=0;
-				$historyApproval = HistoryApproval::get()->where("DraftRBID = ".$id." AND ApprovedByID = ".$bataltarget)->count();
+				$historyApproval = HistoryApproval::get()->where("DraftRBID = ".$id." AND ApprovedByID = ".$bataltarget." AND StatusID = ".$drb->StatusID)->count();
 				if($historyApproval>0){
 					$temp[] = '
 					<div class="btn-group">
@@ -466,7 +472,7 @@
 					$temp[] = '
 					<div class="btn-group">
 					  <a href="'.$view_link.'" type="button" class="btn btn-default view"><i class="text-info fa fa-eye"></i> View</a>
-					  <a href="'.$delete_link.'" type="button" class="btn btn-danger delete"><i class="text-info fa fa-eye"></i> Batal </a>
+					  <a href="" type="button" class="btn btn-danger delete"><i class="text-info fa fa-eye"></i> Batal </a>
 					</div>
 					';
 				}

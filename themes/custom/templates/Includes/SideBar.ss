@@ -48,6 +48,11 @@
 					<span class="site-menu-title">Team</span>
 				  </a>
 				</li>
+				<li class="site-menu-item<% if $siteChild == 'Team' %> active<% end_if %>">
+				  <a class="animsition-link" href="{$BaseHref}list-drb/index/ApprovedMe">
+					<span class="site-menu-title">My Approved</span>
+				  </a>
+				</li>
 			  </ul>
 			</li>
 			<li class="site-menu-item has-sub<% if $siteParent == 'RB' %> active open<% end_if %>">
@@ -58,15 +63,20 @@
 					</a>
 				<ul class="site-menu-sub">
 				  <li class="site-menu-item<% if $siteChild == 'RB Me' %> active<% end_if %>">
-					<a class="animsition-link" href="{$BaseHref}rb">
+					<a class="animsition-link" href="{$BaseHref}rb/index/Me">
 					  <span class="site-menu-title">Me</span>
 					</a>
 				  </li>
 				  <li class="site-menu-item<% if $siteChild == 'RB Team' %> active<% end_if %>">
-					<a class="animsition-link" href="{$BaseHref}rb">
+					<a class="animsition-link" href="{$BaseHref}rb/index/Me">
 					  <span class="site-menu-title">Team</span>
 					</a>
 				  </li>
+				  <li class="site-menu-item<% if $siteChild == 'Team' %> active<% end_if %>">
+				  <a class="animsition-link" href="{$BaseHref}rb/index/ApprovedMe">
+					<span class="site-menu-title">My Approved</span>
+				  </a>
+				</li>
 				</ul>
 			  </li>
 			<li class="site-menu-item<% if $siteParent == 'PO' %> active open<% end_if %>">
