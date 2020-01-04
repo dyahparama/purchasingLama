@@ -160,23 +160,23 @@ class JenisBarang extends DataObject
         return $fields;
     }
 
-    function canView($member = null) {
-        // return true;
-        return Permission::check('JenisBarang_Read');
-    }
+//     function canView($member = null) {
+//         // return true;
+//         return Permission::check('JenisBarang_Read');
+//     }
 
-    function canEdit($member = null) {
-        // return true;
-        return Permission::check('JenisBarang_Update');
-    }
+//     function canEdit($member = null) {
+//         // return true;
+//         return Permission::check('JenisBarang_Update');
+//     }
 
-    function canDelete($member = null) {
-        // return true;
-        return Permission::check('JenisBarang_Delete');
-    }
+//     function canDelete($member = null) {
+//         // return true;
+//         return Permission::check('JenisBarang_Delete');
+//     }
 
-    function canCreate($member = null, $context = []) {
-        // return true;
-        return Permission::check('JenisBarang_Create');
-    }
-}
+//     function canCreate($member = null, $context = []) {
+//         // return true;
+//         return Permission::check('JenisBarang_Create');
+//     }
+// }

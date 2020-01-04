@@ -291,23 +291,23 @@ class StrukturCabang extends DataObject
         }
     }
 
-    function canView($member = null) {
-        // return true;
-        return Permission::check('Cabang_Read');
-    }
+    // function canView($member = null) {
+    //     // return true;
+    //     return Permission::check('Cabang_Read');
+    // }
 
-    function canEdit($member = null) {
-        // return true;
-        return Permission::check('Cabang_Update');
-    }
+    // function canEdit($member = null) {
+    //     // return true;
+    //     return Permission::check('Cabang_Update');
+    // }
 
-    function canDelete($member = null) {
-        // return true;
-        return Permission::check('Cabang_Delete');
-    }
+    // function canDelete($member = null) {
+    //     // return true;
+    //     return Permission::check('Cabang_Delete');
+    // }
 
-    function canCreate($member = null, $context = []) {
-        // return true;
-        return Permission::check('Cabang_Create');
-    }
+    // function canCreate($member = null, $context = []) {
+    //     // return true;
+    //     return Permission::check('Cabang_Create');
+    // }
 }

@@ -186,23 +186,23 @@ class Supplier extends DataObject
         }
     }
 
-    function canView($member = null) {
-        // return true;
-        return Permission::check('Supplier_Read');
-    }
+    // function canView($member = null) {
+    //     // return true;
+    //     return Permission::check('Supplier_Read');
+    // }
 
-    function canEdit($member = null) {
-        // return true;
-        return Permission::check('Supplier_Update');
-    }
+    // function canEdit($member = null) {
+    //     // return true;
+    //     return Permission::check('Supplier_Update');
+    // }
 
-    function canDelete($member = null) {
-        // return true;
-        return Permission::check('Supplier_Delete');
-    }
+    // function canDelete($member = null) {
+    //     // return true;
+    //     return Permission::check('Supplier_Delete');
+    // }
 
-    function canCreate($member = null, $context = []) {
-        // return true;
-        return Permission::check('Supplier_Create');
-    }
+    // function canCreate($member = null, $context = []) {
+    //     // return true;
+    //     return Permission::check('Supplier_Create');
+    // }
 }

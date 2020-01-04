@@ -59,23 +59,23 @@ class Jabatan extends DataObject
         parent::onBeforeWrite();
     }
 
-    function canView($member = null) {
-        // return true;
-        return Permission::check('Jabatan_Read');
-    }
+    // function canView($member = null) {
+    //     // return true;
+    //     return Permission::check('Jabatan_Read');
+    // }
 
-    function canEdit($member = null) {
-        // return true;
-        return Permission::check('Jabatan_Update');
-    }
+    // function canEdit($member = null) {
+    //     // return true;
+    //     return Permission::check('Jabatan_Update');
+    // }
 
-    function canDelete($member = null) {
-        // return true;
-        return Permission::check('Jabatan_Delete');
-    }
+    // function canDelete($member = null) {
+    //     // return true;
+    //     return Permission::check('Jabatan_Delete');
+    // }
 
-    function canCreate($member = null, $context = []) {
-        // return true;
-        return Permission::check('Jabatan_Create');
-    }
+    // function canCreate($member = null, $context = []) {
+    //     // return true;
+    //     return Permission::check('Jabatan_Create');
+    // }
 }

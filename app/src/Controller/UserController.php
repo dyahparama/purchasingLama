@@ -66,7 +66,7 @@ class UserController extends ContentController
             // die;
             @session_unset('error_login');
             // $_SESSION['user_nama'] = $user->Nama;
-            $_SESSION['user_id'] = $user->UserID;
+            $_SESSION['user_id'] = $user->ID;
             $_SESSION['user_email'] = $user->Email;
             return $this->redirect(Director::absoluteBaseURL()."ta/");
         }

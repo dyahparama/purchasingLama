@@ -80,23 +80,23 @@ class Satuan extends DataObject
         return $fields;
     }
 
-    function canView($member = null) {
-        // return true;
-        return Permission::check('Satuan_Read');
-    }
+    // function canView($member = null) {
+    //     // return true;
+    //     return Permission::check('Satuan_Read');
+    // }
 
-    function canEdit($member = null) {
-        // return true;
-        return Permission::check('Satuan_Update');
-    }
+    // function canEdit($member = null) {
+    //     // return true;
+    //     return Permission::check('Satuan_Update');
+    // }
 
-    function canDelete($member = null) {
-        // return true;
-        return Permission::check('Satuan_Delete');
-    }
+    // function canDelete($member = null) {
+    //     // return true;
+    //     return Permission::check('Satuan_Delete');
+    // }
 
-    function canCreate($member = null, $context = []) {
-        // return true;
-        return Permission::check('Satuan_Create');
-    }
+    // function canCreate($member = null, $context = []) {
+    //     // return true;
+    //     return Permission::check('Satuan_Create');
+    // }
 }

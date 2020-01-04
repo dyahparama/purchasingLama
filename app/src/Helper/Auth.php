@@ -37,25 +37,25 @@ class Auth
     {
         $email = $data["email"];
         $password = $data["password"];
-        // $hashPassword="";
-        // $salt = "";
-        // $user = User::get()->filter([
-        //     'email' => $email,
-        // ])->first();
-        // if(!is_null($user)){
-        //     $hashPassword = $user->Password;
-        //     $salt = $user->Salt;
-        // }
-
-        // $res = (new self)->checkEncrypt($hashPassword, $password, $salt);
-
-        $res = false;
-        $user = Member::get()->filter(['email' => $email])->first();
+        $hashPassword="";
+        $salt = "";
+        $user = User::get()->filter([
+            'email' => $email,
+        ])->first();
         if(!is_null($user)){
-            $res = $user->checkPassword($password)->isValid();
+            $hashPassword = $user->Password;
+            $salt = $user->Salt;
         }
 
-        return $res;
+        $res = (new self)->checkEncrypt($hashPassword, $password, $salt);
+
+        // $res = false;
+        // $user = Member::get()->filter(['email' => $email])->first();
+        // if(!is_null($user)){
+        //     $res = $user->checkPassword($password)->isValid();
+        // }
+
+        // return $res;
     }
     public function register($data)
     {

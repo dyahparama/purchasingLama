@@ -60,23 +60,23 @@ class Departemen extends DataObject
         parent::onBeforeWrite();
     }
 
-    function canView($member = null) {
-        // return true;
-        return Permission::check('Departemen_Read');
-    }
+    // function canView($member = null) {
+    //     // return true;
+    //     return Permission::check('Departemen_Read');
+    // }
 
-    function canEdit($member = null) {
-        // return true;
-        return Permission::check('Departemen_Update');
-    }
+    // function canEdit($member = null) {
+    //     // return true;
+    //     return Permission::check('Departemen_Update');
+    // }
 
-    function canDelete($member = null) {
-        // return true;
-        return Permission::check('Departemen_Delete');
-    }
+    // function canDelete($member = null) {
+    //     // return true;
+    //     return Permission::check('Departemen_Delete');
+    // }
 
-    function canCreate($member = null, $context = []) {
-        // return true;
-        return Permission::check('Departemen_Create');
-    }
+    // function canCreate($member = null, $context = []) {
+    //     // return true;
+    //     return Permission::check('Departemen_Create');
+    // }
 }
